@@ -1,0 +1,4 @@
+"use strict";
+
+const MESSAGE_LOG = 'MESSAGE_LOG';
+const MESSAGE_SHOW_PARK = 'MESSAGE_SHOW_PARK';

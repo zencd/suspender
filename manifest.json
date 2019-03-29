@@ -1,0 +1,57 @@
+{
+  "name": "AAA Suspender",
+  "version": "0.0.3",
+  "manifest_version": 2,
+  "description": "Better tab suspender",
+  "homepage_url": "http://extensionizr.com",
+  "icons": {
+    "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "common.js",
+      //"background.js",
+      //"background_cancel.js",
+      //"background_substitute.js",
+      "html2canvas.js"
+    ],
+    "persistent": true
+  },
+  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_title": "browser action demo",
+    "default_popup": "src/browser_action/browser_action.html"
+  },
+  "permissions": [
+    "tabs", 
+    "<all_urls>", 
+    "contextMenus", 
+    "webRequest", 
+    "webRequestBlocking", 
+    "webNavigation", 
+    "storage", 
+    "unlimitedStorage", 
+    "notifications"
+  ],
+  "web_accessible_resources": ["intercept_inject.js", "park.html"],
+  "content_scripts": [
+    {
+      "js": [
+        "common.js",
+        //"intercept_content.js",
+        //"intercept_inject.js"
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "matches": [
+        "<all_urls>"
+        ,"*://*/*"
+        //,"https://zencd.github.io/*"
+        //,"http://*/*"
+        //,"https://*/*"
+      ]
+    }
+  ]
+}
