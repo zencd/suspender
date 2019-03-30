@@ -1,9 +1,5 @@
 # suspender
 
-- Chrome prohibits redirects to data URI scheme: "Not allowed to navigate top frame to data URL"
-- https://stackoverflow.com/questions/4573956/taking-screenshot-using-javascript-for-chrome-extensions/4574782
-- https://gist.github.com/Rob--W/9654450
-
 ## todo p1
 
 - watch for tabs and suspend them after a timeout
@@ -16,5 +12,12 @@
 - iframed.html: minimize template
 - iframed.html: inline CSS to work smoothly even without the extension
 - minimize screenshot size when pixel ratio is 2+
-- make ext icons
+- make extension icons
 - iframed: substitute favicon (a data uri version probably)
+
+## refs
+
+- Chrome prohibits redirects to data URI scheme: "Not allowed to navigate top frame to data URL"
+- https://stackoverflow.com/questions/4573956/taking-screenshot-using-javascript-for-chrome-extensions/4574782
+- https://gist.github.com/Rob--W/9654450
+- https://developer.chrome.com/extensions/tabCapture#method-captureOffscreenTab
