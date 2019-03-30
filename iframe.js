@@ -1,9 +1,9 @@
-console.log("hi from iframe.js", chrome.extension);
+// console.log("hi from iframe.js", chrome.extension);
 
 const url = new URL(window.location.href);
 const tabId = parseInt(url.searchParams.get("tabId"));
 // console.log("MESSAGE_LOG", typeof MESSAGE_LOG);
-console.log("tabId", tabId);
+// console.log("tabId", tabId);
 
 const storageKey = 'screenshot.data-uri.tab.' + tabId;
 // const storageKey = 'xxx';
