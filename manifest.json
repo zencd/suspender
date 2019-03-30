@@ -25,33 +25,27 @@
     "unlimitedStorage", 
     "notifications"
   ],
-  "web_accessible_resources": ["intercept_inject.js", "park.html", "iframed.html", "iframed.css", "iframe.html"],
+  "web_accessible_resources": ["iframed.html", "iframed.css", "iframe.html"],
   "background": {
     "scripts": [
       "common.js",
-      //"background.js",
-      "background_cancel.js"
-      //"background_substitute.js",
-      //"html2canvas.js"
+      "background.js"
     ],
     "persistent": true
   },
   "content_scripts": [
     {
       "js": [
-        "jquery-3.3.1.min.js", // todo get rid of it
         "common.js",
-        //"intercept_content.js",
-        //"intercept_inject.js"
         "content.js"
       ],
       "run_at": "document_start",
       "matches": [
         //"<all_urls>",
         //"*://*/*",
-        "https://zencd.github.io/*"
-        //,"http://*/*"
-        //,"https://*/*"
+        //"https://zencd.github.io/*"
+        "http://*/*",
+        "https://*/*"
       ]
     }
   ]
