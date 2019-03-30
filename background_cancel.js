@@ -43,7 +43,7 @@
                 return {};
                 // return {cancel: true};
             },
-            {urls: ["<all_urls>"]},
+            {urls: ["http://*/*", "https://*/*"]},
             ["blocking"]
         );
 
@@ -57,12 +57,22 @@
         // logToCurrentTab('onContextMenuSuspend, tab:', tabId);
         chrome.tabs.get(tabId, function (tab) {
             logToCurrentTab("gonna reload", tab);
+            // todo check protocol is http(s)
             getSuspendedPageContent(tab.url, tab.title, function (dataUri) {
-                chrome.tabs.captureVisibleTab(null, {}, function (image) {
-                    tabIdsToSuspend[tabId] = true;
-                    tabDataUriToSuspend[tabId] = dataUri;
-                    chrome.tabs.reload(tab.id);
-                    // logToCurrentTab("chrome.tabs.reload", typeof chrome.tabs.reload)
+                chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                    const storageKey = 'screenshot.data-uri.tab.' + tabId;
+                    // const storageKey = 'xxx';
+                    logToCurrentTab("storageKey", storageKey);
+                    logToCurrentTab("imageDataUri", typeof imageDataUri);
+                    logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
+                    chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
+                        //  data saved
+                        logToCurrentTab("data saved");
+                        // logToCurrentTab("imageDataUri", imageDataUri);
+                        // tabIdsToSuspend[tabId] = true;
+                        // tabDataUriToSuspend[tabId] = dataUri;
+                        // chrome.tabs.reload(tab.id);
+                    });
                 });
             });
         });

@@ -9,9 +9,25 @@
     addMessageListener();
     // suspendThisTab();
 
+    // {
+    //     const key = 'xxx';
+    //     const storage = chrome.storage.sync;
+    //     const dic = {[key]: 123};
+    //     // dic[key] = 123;
+    //     console.log("dic", dic);
+    //     storage.set(dic, function () {
+    //         console.log("storage set!");
+    //         storage.get([key], function (items) {
+    //             console.log("storage items", items);
+    //             console.log("storage items.xxx", items[key]);
+    //         });
+    //     });
+    // }
+
     function suspendThisTab() {
         // document.title is empty here by some reason
-        getSuspendedPageContent(document.location.href, 'page title 6732', function () {});
+        getSuspendedPageContent(document.location.href, 'page title 6732', function () {
+        });
     }
 
     // setTimeout(function () {
