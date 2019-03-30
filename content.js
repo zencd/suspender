@@ -22,23 +22,24 @@
             });
     }
 
-    setTimeout(function () {
-        document.body.addEventListener('click', function () {
-            console.log("body clicked");
-            suspendThisTab();
-            // document.location.href = 'https://ya.ru/';
-            // $.get(url, function (data) {
-            //     console.log("Load was performed.", data);
-            // });
-        });
-    }, 300);
+    // setTimeout(function () {
+    //     document.body.addEventListener('click', function () {
+    //         console.log("body clicked");
+    //         suspendThisTab();
+    //         // document.location.href = 'https://ya.ru/';
+    //         // $.get(url, function (data) {
+    //         //     console.log("Load was performed.", data);
+    //         // });
+    //     });
+    // }, 300);
 
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-        console.log("Got message", msg.message);
         if (msg.message === MESSAGE_LOG) {
             const argArray = Object.values(msg.arguments);
             argArray.splice(0, 0, "BG:");
             logArray(argArray);
+        } else {
+            console.log("Got message", msg.message);
         }
     });
 
