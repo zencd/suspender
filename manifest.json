@@ -1,11 +1,14 @@
 {
+  "manifest_version": 2,
   "name": "AAA Suspender",
   "version": "0.0.3",
-  "manifest_version": 2,
   "description": "Better tab suspender",
-  "homepage_url": "http://extensionizr.com",
+  "author": "gmail@gmail.com",
+  //"homepage_url": "http://extensionizr.com",
   "icons": {
-    "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "default_locale": "en",
   "options_page": "options.html",
@@ -15,17 +18,21 @@
     "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [
-    "tabs", 
-    "<all_urls>", 
-    "contextMenus", 
-    "webRequest", 
-    "webRequestBlocking", 
-    "webNavigation", 
-    "storage", 
-    "unlimitedStorage", 
+    "tabs",
+    "<all_urls>",
+    "contextMenus",
+    "webRequest",
+    "webRequestBlocking",
+    "webNavigation",
+    "storage",
+    "unlimitedStorage",
     "notifications"
   ],
-  "web_accessible_resources": ["iframed.html", "iframed.css", "iframe.html"],
+  "web_accessible_resources": [
+    "iframed.html",
+    "iframed.css",
+    "iframe.html"
+  ],
   "background": {
     "scripts": [
       "common.js",
@@ -39,6 +46,7 @@
         "common.js",
         "content.js"
       ],
+      // todo try softer "run_at" modes
       "run_at": "document_start",
       "matches": [
         //"<all_urls>",
