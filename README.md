@@ -28,6 +28,10 @@
 - iframed: substitute favicon (a data uri version probably)
 - the data uri page: use a pale favicon to distinct suspended tabs easier
 
+## bugs
+
+- gmail cannot be suspended - it only refreshes
+
 ## refs
 
 - Chrome prohibits redirects to data URI scheme: "Not allowed to navigate top frame to data URL"

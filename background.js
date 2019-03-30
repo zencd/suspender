@@ -46,33 +46,31 @@
 
     }
 
-    function suspendTab(tabId) {
-        // logToCurrentTab('onContextMenuSuspend, tab:', tabId);
-        chrome.tabs.get(tabId, function (tab) {
-            logToCurrentTab("gonna reload", tab);
-            // todo check protocol is http(s)
-            getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-                chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                    const storageKey = 'screenshot.data-uri.tab.' + tabId;
-                    // const storageKey = 'xxx';
-                    logToCurrentTab("storageKey", storageKey);
-                    logToCurrentTab("imageDataUri", typeof imageDataUri);
-                    logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
-                    chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
-                        logToCurrentTab("data saved");
-                        // logToCurrentTab("imageDataUri", imageDataUri);
-                        const theKey = '' + tabId + '.' + tab.url;
-                        tabIdToSuspend[theKey] = true;
-                        tabDataUriToSuspend[theKey] = htmlDataUri;
-                        chrome.tabs.reload(tab.id);
-                    });
+    function suspendTab(tab) {
+        const tabId = tab.id;
+        logToCurrentTab("gonna reload", tab);
+        // todo check protocol is http(s)
+        getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
+            chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                const storageKey = 'screenshot.data-uri.tab.' + tabId;
+                // const storageKey = 'xxx';
+                logToCurrentTab("storageKey", storageKey);
+                logToCurrentTab("imageDataUri", typeof imageDataUri);
+                logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
+                chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
+                    logToCurrentTab("data saved");
+                    // logToCurrentTab("imageDataUri", imageDataUri);
+                    const theKey = '' + tabId + '.' + tab.url;
+                    tabIdToSuspend[theKey] = true;
+                    tabDataUriToSuspend[theKey] = htmlDataUri;
+                    chrome.tabs.reload(tab.id);
                 });
             });
         });
     }
 
     function onContextMenuSuspend(info, tab) {
-        suspendTab(tab.id)
+        suspendTab(tab)
     }
 
     function createContextMenu() {
