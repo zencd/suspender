@@ -26,7 +26,7 @@
 
     function suspendThisTab() {
         // document.title is empty here by some reason
-        getSuspendedPageContent(document.location.href, 'page title 6732', function () {
+        getSuspendedPageContent(123, document.location.href, 'page title 6732', function () {
         });
     }
 

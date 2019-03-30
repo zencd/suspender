@@ -58,7 +58,7 @@
         chrome.tabs.get(tabId, function (tab) {
             logToCurrentTab("gonna reload", tab);
             // todo check protocol is http(s)
-            getSuspendedPageContent(tab.url, tab.title, function (dataUri) {
+            getSuspendedPageContent(tab.id, tab.url, tab.title, function (dataUri) {
                 chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
                     const storageKey = 'screenshot.data-uri.tab.' + tabId;
                     // const storageKey = 'xxx';
@@ -69,9 +69,9 @@
                         //  data saved
                         logToCurrentTab("data saved");
                         // logToCurrentTab("imageDataUri", imageDataUri);
-                        // tabIdsToSuspend[tabId] = true;
-                        // tabDataUriToSuspend[tabId] = dataUri;
-                        // chrome.tabs.reload(tab.id);
+                        tabIdsToSuspend[tabId] = true;
+                        tabDataUriToSuspend[tabId] = dataUri;
+                        chrome.tabs.reload(tab.id);
                     });
                 });
             });

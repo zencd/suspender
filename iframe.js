@@ -11,8 +11,12 @@ const storageKey = 'screenshot.data-uri.tab.' + tabId;
 chrome.storage.local.get([storageKey], function (items) {
     // console.log("items", items);
     const dataUri = items[storageKey];
-    console.log("dataUri", dataUri);
-    document.body.style.backgroundImage = 'url(' + dataUri + ')';
+    // console.log("dataUri", dataUri);
+    if (dataUri) {
+        document.body.style.backgroundImage = 'url(' + dataUri + ')';
+    } else {
+        console.warn("no screenshot found for tab", tabId);
+    }
 });
 
 

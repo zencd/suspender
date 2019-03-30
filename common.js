@@ -18,8 +18,9 @@ function logToCurrentTab() {
     });
 }
 
-function getSuspendedPageContent(pageUrl, pageTitle, callback) {
+function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const tplUrl = chrome.runtime.getURL('iframed.html');
+    const iframeUrl = chrome.runtime.getURL('iframe.html') + '?tabId=' + tabId;
     console.log("tplUrl", tplUrl);
     fetch(tplUrl).then((response) => {
         response.text().then((htmlTplStr) => {
@@ -28,6 +29,7 @@ function getSuspendedPageContent(pageUrl, pageTitle, callback) {
                 '$TITLE$': pageTitle,
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': pageUrl,
+                '$IFRAME_URL$': iframeUrl,
             };
             console.log("tplVars", tplVars);
             const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
