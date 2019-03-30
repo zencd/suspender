@@ -25,7 +25,7 @@
     "unlimitedStorage", 
     "notifications"
   ],
-  "web_accessible_resources": ["intercept_inject.js", "park.html", "iframed.html", "iframe.html"],
+  "web_accessible_resources": ["intercept_inject.js", "park.html", "iframed.html", "iframed.css", "iframe.html"],
   "background": {
     "scripts": [
       "common.js",

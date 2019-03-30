@@ -20,6 +20,7 @@ function logToCurrentTab() {
 
 function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const tplUrl = chrome.runtime.getURL('iframed.html');
+    const cssUrl = chrome.runtime.getURL('iframed.css');
     const iframeUrl = chrome.runtime.getURL('iframe.html') + '?tabId=' + tabId;
     console.log("tplUrl", tplUrl);
     fetch(tplUrl).then((response) => {
@@ -30,6 +31,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': pageUrl,
                 '$IFRAME_URL$': iframeUrl,
+                '$CSS_URL$': cssUrl,
             };
             console.log("tplVars", tplVars);
             const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
