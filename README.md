@@ -5,15 +5,28 @@
 - watch for tabs and suspend them after a timeout
 - remove screenshots from storage when tab closed
 
+## todo options
+
+- never suspend pinned tabs
+- never suspend tabs that contain unsaved form inputs
+- never suspend tabs that are playing audio
+- never suspend active tab in each window
+- never suspend tabs when offline
+- never suspend tabs when connected to power source
+- whitelist
+- automatically unsuspend tab when it is viewed
+- implement themes
+- sync settings between different systems 
+
 ## todo p3
 
 - minimize permissions
-- remove h2c.js, html2canvas.js
 - iframed.html: minimize template
 - iframed.html: inline CSS to work smoothly even without the extension
 - minimize screenshot size when pixel ratio is 2+
 - make extension icons
 - iframed: substitute favicon (a data uri version probably)
+- the data uri page: use a pale favicon to distinct suspended tabs easier
 
 ## refs
 
