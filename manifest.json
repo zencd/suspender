@@ -8,16 +8,6 @@
     "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"
   },
   "default_locale": "en",
-  "background": {
-    "scripts": [
-      "common.js",
-      //"background.js",
-      //"background_cancel.js",
-      //"background_substitute.js",
-      "html2canvas.js"
-    ],
-    "persistent": true
-  },
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icons/icon19.png",
@@ -35,10 +25,21 @@
     "unlimitedStorage", 
     "notifications"
   ],
-  "web_accessible_resources": ["intercept_inject.js", "park.html"],
+  "web_accessible_resources": ["intercept_inject.js", "park.html", "iframed.html"],
+  "background": {
+    "scripts": [
+      "common.js",
+      //"background.js",
+      "background_cancel.js"
+      //"background_substitute.js",
+      //"html2canvas.js"
+    ],
+    "persistent": true
+  },
   "content_scripts": [
     {
       "js": [
+        "jquery-3.3.1.min.js",
         "common.js",
         //"intercept_content.js",
         //"intercept_inject.js"
@@ -46,9 +47,9 @@
       ],
       "run_at": "document_start",
       "matches": [
-        "<all_urls>"
-        ,"*://*/*"
-        //,"https://zencd.github.io/*"
+        //"<all_urls>",
+        //"*://*/*",
+        "https://zencd.github.io/*"
         //,"http://*/*"
         //,"https://*/*"
       ]
