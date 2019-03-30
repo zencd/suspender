@@ -1,0 +1,6 @@
+#!/bin/bash
+all() {
+    echo -n "data:text/html;base64,"
+    openssl base64 < "$1" | tr -d '\n'
+}
+all "$1" | pbcopy
