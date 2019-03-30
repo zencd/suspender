@@ -29,7 +29,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
             let tplVars = {
                 '$TITLE$': pageTitle,
                 '$LINK_URL$': pageUrl,
-                '$LINK_TEXT$': pageUrl,
+                '$LINK_TEXT$': toReadableUrl(pageUrl),
                 '$IFRAME_URL$': iframeUrl,
                 '$CSS_URL$': cssUrl,
             };
@@ -65,4 +65,25 @@ function expandStringTemplate(tplContent, vars) {
         }
     }
     return res;
+}
+
+function cutFromBeginning(inp, pattern) {
+    if (!inp) {
+        return inp;
+    }
+    return inp.startsWith(pattern) ? inp.substring(pattern.length) : inp;
+}
+
+function cutFromEnd(inp, pattern) {
+    if (!inp) {
+        return inp;
+    }
+    return inp.endsWith(pattern) ? inp.substring(0, inp.length - pattern.length) : inp;
+}
+
+function toReadableUrl(s) {
+    s = cutFromBeginning(s, 'http://');
+    s = cutFromBeginning(s, 'https://');
+    s = cutFromBeginning(s, 'www.');
+    return cutFromEnd(s, '/');
 }
