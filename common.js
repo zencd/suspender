@@ -8,7 +8,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const tplUrl = chrome.runtime.getURL('iframed.html');
     const cssUrl = chrome.runtime.getURL('iframed.css');
     const iframeUrl = chrome.runtime.getURL('iframe.html?tabId=' + tabId);
-    console.log("tplUrl", tplUrl);
+    // console.log("tplUrl", tplUrl);
     fetch(tplUrl).then((response) => {
         response.text().then((htmlTplStr) => {
             // console.log("htmlTplStr bytes", htmlTplStr.length);
@@ -19,12 +19,12 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
                 '$IFRAME_URL$': iframeUrl,
                 '$CSS_URL$': cssUrl,
             };
-            console.log("tplVars", tplVars);
+            // console.log("tplVars", tplVars);
             const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
             // console.log("htmlStr:", htmlStr);
             const b64 = b64EncodeUnicode(htmlStr);
             const dataUri = 'data:text/html;base64,' + b64;
-            console.log("dataUri", dataUri);
+            // console.log("dataUri", dataUri);
             callback(dataUri);
             // document.location.href = dataUri;
         });
@@ -32,7 +32,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
 }
 
 function TabList() {
-    this.tabById = {}; // tab id => Tab object
+    this.tabById = {}; // tab id => TabHandle object
     this.currentTabs = {}; // window id => tab id
     return this;
 }
@@ -41,7 +41,7 @@ TabList.prototype = {
     get: function (tabId) {
         let tab = this.tabById[tabId];
         if (!tab) {
-            tab = new Tab(tabId);
+            tab = new TabHandle(tabId);
             this.tabById[tabId] = tab;
         }
         // console.log("get returning", tab);
@@ -63,7 +63,7 @@ TabList.prototype = {
     },
 };
 
-function Tab(tabId) {
+function TabHandle(tabId) {
     this.tabId = tabId;
     this.url = null;
     this.lastSeen = null; // Date
@@ -76,7 +76,7 @@ function Tab(tabId) {
     return this;
 }
 
-Tab.prototype = {
+TabHandle.prototype = {
     updateFromChromeTab: function (chromeTab) {
         this.active = chromeTab.active;
         this.audible = chromeTab.audible;
