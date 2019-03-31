@@ -27,6 +27,7 @@
 - make extension icons
 - iframed: substitute favicon (a data uri version probably)
 - the data uri page: use a pale favicon to distinct suspended tabs easier
+- try detect scrollbar presence and cut it off, or take screenshot without it initially
 
 ## bugs
 
