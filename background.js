@@ -8,22 +8,25 @@
 
     const tabs = new TabList();
 
-    let suspendTimeoutSeconds = 60;
+    const settings = {
+        suspendTimeoutSeconds: 60,
+        suspendActiveTabs: false,
+    };
 
     initContextMenu();
     initWebRequestListeners();
     initTabListeners();
     initTabWatchTimer();
 
-    function suspendOldTabs() {
+    function findOldTabsAndSuspendThem() {
         const now = new Date();
-        let tt = tabs.getAllTabs();
-        // logToCurrentTab("getAllTabs:", tt.length);
+        const tt = tabs.getAllTabs();
         for (let i = 0; i < tt.length; i++) {
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
-            // logToCurrentTab("tab", tabObj, 'diffSec', diffSec);
-            if (diffSec >= suspendTimeoutSeconds && !tabObj.active && !tabObj.suspended) {
+            const timeoutOk = diffSec >= settings.suspendTimeoutSeconds;
+            const activeTabOk = settings.suspendActiveTabs || !tabObj.active;
+            if (timeoutOk && activeTabOk && !tabObj.suspended) {
                 console.log("suspending tab", tabObj);
                 chrome.tabs.get(tabObj.tabId, function (chrTab) {
                     suspendTab(chrTab);
@@ -33,8 +36,8 @@
     }
 
     function initTabWatchTimer() {
-        setInterval(suspendOldTabs, 60 * 1000);
-        setTimeout(suspendOldTabs, 1000); // temp
+        setInterval(findOldTabsAndSuspendThem, 60 * 1000);
+        setTimeout(findOldTabsAndSuspendThem, 1000); // temp
     }
 
     function initWebRequestListeners() {
