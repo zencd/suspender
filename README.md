@@ -10,7 +10,7 @@
 - never suspend pinned tabs
 - never suspend tabs that contain unsaved form inputs
 - never suspend tabs that are playing audio
-- never suspend active tab in each window
+- never suspend active tabs
 - never suspend tabs when offline
 - never suspend tabs when connected to power source
 - whitelist
