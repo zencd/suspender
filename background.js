@@ -6,8 +6,11 @@
     const tabIdToSuspend = {};
     const tabDataUriToSuspend = {};
 
+    const tabs = new TabList();
+
     createContextMenu();
     addWebRequestListeners();
+    addTabListeners();
 
     function addWebRequestListeners() {
         chrome.webRequest.onBeforeRequest.addListener(function (details) {
@@ -46,6 +49,15 @@
 
     }
 
+    function addTabListeners() {
+        chrome.tabs.onActivated.addListener(function(activeInfo) {
+            // https://developer.chrome.com/extensions/tabs#event-onActivated
+            logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
+            console.log("tab activated", activeInfo.windowId, activeInfo.tabId);
+            tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
+        });
+    }
+
     function suspendTab(tab) {
         const tabId = tab.id;
         logToCurrentTab("gonna reload", tab);
@@ -63,7 +75,7 @@
                     const theKey = '' + tabId + '.' + tab.url;
                     tabIdToSuspend[theKey] = true;
                     tabDataUriToSuspend[theKey] = htmlDataUri;
-                    chrome.tabs.reload(tab.id);
+                    chrome.tabs.reload(tab.id, {bypassCache:false});
                 });
             });
         });

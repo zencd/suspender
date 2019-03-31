@@ -87,3 +87,29 @@ function toReadableUrl(s) {
     s = cutFromBeginning(s, 'www.');
     return cutFromEnd(s, '/');
 }
+
+function TabList() {
+    this.tabById = {};
+    return this;
+}
+
+TabList.prototype = {
+    get: function (tabId) {
+        let tab = this.tabById[tabId];
+        if (!tab) {
+            tab = new Tab(tabId);
+        }
+        return tab;
+    },
+    tabActivated: function (windowId, tabId) {
+
+    },
+};
+
+function Tab(tabId) {
+    this.tabId = tabId;
+    return this;
+}
+
+Tab.prototype = {
+};

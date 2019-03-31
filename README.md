@@ -40,4 +40,9 @@
 - https://gist.github.com/Rob--W/9654450
 - https://developer.chrome.com/extensions/tabCapture#method-captureOffscreenTab
 
+## pro
+
+- honest, precise screenshots
+- screenshots reflects page as user left it, not just capturing page's top
+- extension uninstall does not discard suspended tabs
 - N times faster than TGS
