@@ -13,8 +13,10 @@ function logToCurrentTab() {
     const logArgs = arguments;
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         const msg = {message: MESSAGE_LOG, arguments: logArgs};
-        chrome.tabs.sendMessage(tabs[0].id, msg, function (response) {
-        });
+        if (tabs.length > 0) {
+            chrome.tabs.sendMessage(tabs[0].id, msg, function (response) {
+            });
+        }
     });
 }
 
@@ -89,7 +91,8 @@ function toReadableUrl(s) {
 }
 
 function TabList() {
-    this.tabById = {};
+    this.tabById = {}; // tab id => Tab object
+    this.currentTabs = {}; // window id => tab id
     return this;
 }
 
@@ -98,16 +101,32 @@ TabList.prototype = {
         let tab = this.tabById[tabId];
         if (!tab) {
             tab = new Tab(tabId);
+            this.tabById[tabId] = tab;
         }
+        // console.log("get returning", tab);
         return tab;
     },
-    tabActivated: function (windowId, tabId) {
-
+    tabActivated: function (windowId, curTabId) {
+        const prevTabId = this.currentTabs[windowId];
+        this.currentTabs[windowId] = curTabId;
+        if (prevTabId && prevTabId !== curTabId) {
+            const prevTab = this.get(prevTabId);
+            prevTab.lastSeen = new Date();
+            prevTab.active = false;
+        }
+        const curTab = this.get(curTabId);
+        curTab.active = true;
+    },
+    getAllTabs: function () {
+        return Object.values(this.tabById);
     },
 };
 
 function Tab(tabId) {
     this.tabId = tabId;
+    this.lastSeen = null;
+    this.active = false;
+    this.suspended = false;
     return this;
 }
 

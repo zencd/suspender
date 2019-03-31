@@ -46,3 +46,5 @@
 - screenshots reflects page as user left it, not just capturing page's top
 - extension uninstall does not discard suspended tabs
 - N times faster than TGS
+- no user tracking
+- works well on retina
