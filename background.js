@@ -70,36 +70,69 @@
 
     function initTabListeners() {
         chrome.tabs.onActivated.addListener(function (activeInfo) {
+            // Fires when the active tab in a window changes.
             // https://developer.chrome.com/extensions/tabs#event-onActivated
-            logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
-            console.log("tab activated", activeInfo.windowId, activeInfo.tabId);
+            // logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
             tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
+            chrome.tabs.get(activeInfo.tabId, function (tab) {
+                console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, tab.url);
+            });
+        });
+        chrome.tabs.onAttached.addListener(function (tabId, attachInfo) {
+            // Fired when a tab is attached to a window
+            console.log("onAttached:", tabId, attachInfo);
+        });
+        chrome.tabs.onDetached.addListener(function (tabId, detachInfo) {
+            // Fired when a tab is detached from a window
+            console.log("onDetached", tabId, detachInfo);
+        });
+        chrome.tabs.onCreated.addListener(function (tab) {
+            // Fired when a tab is created. Note that the tab's URL may not be set at the time this event is fired,
+            // but you can listen to onUpdated events so as to be notified when a URL is set.
+            console.log("onCreated", tab);
+            const myTab = tabs.get(tab.id);
+            myTab.updateFromChromeTab(tab);
+        });
+        chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+            // Fired when a tab is updated.
+            console.log("onUpdated", tabId, changeInfo, tab);
+            const myTab = tabs.get(tabId);
+            myTab.updateFromChromeTab(changeInfo);
+        });
+        chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
+            // Fired when a tab is replaced with another tab due to prerendering or instant.
+            console.log("onReplaced", "addedTabId", addedTabId, "removedTabId", removedTabId);
+        });
+        chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+            // Fired when a tab is closed.
+            console.log("onRemoved", tabId, removeInfo);
         });
     }
 
     function suspendTab(tab) {
-        if (tab.url.startsWith('http://') || tab.url.startsWith('https://')) {
-            const tabId = tab.id;
-            logToCurrentTab("gonna reload", tab);
-            getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-                chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                    const storageKey = 'screenshot.data-uri.tab.' + tabId;
-                    // const storageKey = 'xxx';
-                    logToCurrentTab("storageKey", storageKey);
-                    logToCurrentTab("imageDataUri", typeof imageDataUri);
-                    // logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
-                    chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
-                        logToCurrentTab("data saved");
-                        // logToCurrentTab("imageDataUri", imageDataUri);
-                        const theKey = '' + tabId + '.' + tab.url;
-                        tabIdToSuspend[theKey] = true;
-                        tabDataUriToSuspend[theKey] = htmlDataUri;
-                        console.log("reloading", tab.url);
-                        chrome.tabs.reload(tab.id, {bypassCache: false});
-                    });
+        if (!isUrlSuspendable(tab.url)) {
+            return;
+        }
+        const tabId = tab.id;
+        logToCurrentTab("gonna reload", tab);
+        getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
+            chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                const storageKey = 'screenshot.data-uri.tab.' + tabId;
+                // const storageKey = 'xxx';
+                logToCurrentTab("storageKey", storageKey);
+                logToCurrentTab("imageDataUri", typeof imageDataUri);
+                // logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
+                chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
+                    logToCurrentTab("data saved");
+                    // logToCurrentTab("imageDataUri", imageDataUri);
+                    const theKey = '' + tabId + '.' + tab.url;
+                    tabIdToSuspend[theKey] = true;
+                    tabDataUriToSuspend[theKey] = htmlDataUri;
+                    console.log("reloading", tab.url);
+                    chrome.tabs.reload(tab.id, {bypassCache: false});
                 });
             });
-        }
+        });
     }
 
     function onContextMenuSuspend(info, tab) {

@@ -35,6 +35,7 @@
   ],
   "background": {
     "scripts": [
+      "utils.js",
       "common.js",
       "background.js"
     ],
@@ -43,6 +44,7 @@
   "content_scripts": [
     {
       "js": [
+        "utils.js",
         "common.js",
         "content.js"
       ],
