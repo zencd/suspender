@@ -10,7 +10,8 @@
 
     const settings = {
         suspendTimeoutSeconds: 60,
-        suspendActiveTabs: false,
+        suspendActive: false,
+        suspendPinned: false,
     };
 
     initContextMenu();
@@ -25,7 +26,8 @@
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
             const timeoutOk = diffSec >= settings.suspendTimeoutSeconds;
-            const activeTabOk = settings.suspendActiveTabs || !tabObj.active;
+            const activeTabOk = settings.suspendActive || !tabObj.active;
+            // const pinnedOk = !settings.suspendPinned
             if (timeoutOk && activeTabOk && !tabObj.suspended) {
                 console.log("suspending tab", tabObj);
                 chrome.tabs.get(tabObj.tabId, function (chrTab) {
@@ -36,8 +38,8 @@
     }
 
     function initTabWatchTimer() {
-        setInterval(findOldTabsAndSuspendThem, 60 * 1000);
-        setTimeout(findOldTabsAndSuspendThem, 1000); // temp
+        // setInterval(findOldTabsAndSuspendThem, 60 * 1000);
+        // setTimeout(findOldTabsAndSuspendThem, 1000); // temp
     }
 
     function initWebRequestListeners() {
