@@ -39,6 +39,7 @@
 - https://stackoverflow.com/questions/4573956/taking-screenshot-using-javascript-for-chrome-extensions/4574782
 - https://gist.github.com/Rob--W/9654450
 - https://developer.chrome.com/extensions/tabCapture#method-captureOffscreenTab
+- http://html2canvas.hertzen.com/configuration/
 
 ## pro
 
