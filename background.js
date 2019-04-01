@@ -9,7 +9,7 @@
     const tabs = new TabList();
 
     const settings = {
-        suspendTimeoutSeconds: 60,
+        suspendTimeoutSeconds: 30,
         suspendActive: false,
         suspendPinned: false,
     };
@@ -18,6 +18,7 @@
     initWebRequestListeners();
     initTabListeners();
     initTabWatchTimer();
+    initMessageListener();
 
     function findOldTabsAndSuspendThem() {
         const now = new Date();
@@ -28,7 +29,9 @@
             const timeoutOk = diffSec >= settings.suspendTimeoutSeconds;
             const activeTabOk = settings.suspendActive || !tabObj.active;
             // const pinnedOk = !settings.suspendPinned
-            if (timeoutOk && activeTabOk && !tabObj.suspended) {
+            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended;
+            console.log("tab", tabObj.url, "suspending?", doSuspend);
+            if (doSuspend) {
                 console.log("suspending tab", tabObj);
                 chrome.tabs.get(tabObj.tabId, function (chrTab) {
                     suspendTab(chrTab);
@@ -117,21 +120,28 @@
         logToCurrentTab("gonna reload", tab);
         getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
             chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                const storageKey = 'screenshot.data-uri.tab.' + tabId;
-                // const storageKey = 'xxx';
-                logToCurrentTab("storageKey", storageKey);
-                logToCurrentTab("imageDataUri", typeof imageDataUri);
-                // logToCurrentTab("imageDataUri", imageDataUri.substring(0, 40));
-                chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
-                    logToCurrentTab("data saved");
-                    // logToCurrentTab("imageDataUri", imageDataUri);
-                    const theKey = '' + tabId + '.' + tab.url;
-                    tabIdToSuspend[theKey] = true;
-                    tabDataUriToSuspend[theKey] = htmlDataUri;
-                    console.log("reloading", tab.url);
-                    chrome.tabs.reload(tab.id, {bypassCache: false});
-                });
+                suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
             });
+            // chrome.tabs.sendMessage(tab.id, {
+            //     message: MESSAGE_TAKE_SCREENSHOT,
+            //     htmlDataUri: htmlDataUri,
+            //     tabId: tab.id,
+            //     tabUrl: tab.url,
+            // });
+        });
+
+    }
+
+    function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri) {
+        const storageKey = 'screenshot.data-uri.tab.' + tabId;
+        chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
+            logToCurrentTab("data saved");
+            // logToCurrentTab("imageDataUri", imageDataUri);
+            const theKey = '' + tabId + '.' + tabUrl;
+            tabIdToSuspend[theKey] = true;
+            tabDataUriToSuspend[theKey] = htmlDataUri;
+            console.log("reloading", tabUrl);
+            chrome.tabs.reload(tabId, {bypassCache: false});
         });
     }
 
@@ -147,4 +157,12 @@
         });
     }
 
+    function initMessageListener() {
+        chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+            if (msg.message === MESSAGE_SCREENSHOT_READY) {
+                console.log("screenshot is ready!!!", msg);
+                suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri);
+            }
+        });
+    }
 }());

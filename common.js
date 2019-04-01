@@ -1,5 +1,8 @@
 "use strict";
 
+const MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
+const MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
+
 function isUrlSuspendable(url) {
     return url.startsWith('http://') || url.startsWith('https://');
 }
@@ -9,11 +12,11 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const cssUrl = chrome.runtime.getURL('iframed.css');
     const iframeUrl = chrome.runtime.getURL('iframe.html?tabId=' + tabId);
     // console.log("tplUrl", tplUrl);
-    fetch(tplUrl).then((response) => {
+    fetch(tplUrl).then((response) => { // todo fetch it once
         response.text().then((htmlTplStr) => {
             // console.log("htmlTplStr bytes", htmlTplStr.length);
             let tplVars = {
-                '$TITLE$': pageTitle,
+                '$TITLE$': '*' + pageTitle,
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': toReadableUrl(pageUrl),
                 '$IFRAME_URL$': iframeUrl,

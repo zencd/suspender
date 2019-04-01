@@ -47,6 +47,24 @@
                 const argArray = Object.values(msg.arguments);
                 argArray.splice(0, 0, "BG:");
                 logArray(argArray);
+            } else if (msg.message === MESSAGE_TAKE_SCREENSHOT) {
+                console.log("msg", msg);
+                const root = document.body;
+                console.log("root", root);
+                // sendResponse({xxx: 123});
+                html2canvas(root).then(canvas => {
+                    console.log("canvas", canvas);
+                    const imageDataUri = canvas.toDataURL();
+                    // console.log("imageDataUri", imageDataUri);
+                    // sendResponse({imageDataUri: imageDataUri});
+                    chrome.runtime.sendMessage(null, {
+                        message: MESSAGE_SCREENSHOT_READY,
+                        imageDataUri: imageDataUri,
+                        htmlDataUri: msg.htmlDataUri,
+                        tabId: msg.tabId,
+                        tabUrl: msg.tabUrl,
+                    });
+                });
             } else {
                 console.log("Got message", msg.message);
             }

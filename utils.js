@@ -32,7 +32,6 @@ function expandStringTemplate(tplContent, vars) {
     let res = tplContent;
     for (let key in vars) {
         if (vars.hasOwnProperty(key)) {
-            console.log("res", typeof res);
             res = res.replaceAll(key, vars[key]);
         }
     }
