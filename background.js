@@ -119,15 +119,15 @@
         const tabId = tab.id;
         logToCurrentTab("gonna reload", tab);
         getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-            chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
-            });
-            // chrome.tabs.sendMessage(tab.id, {
-            //     message: MESSAGE_TAKE_SCREENSHOT,
-            //     htmlDataUri: htmlDataUri,
-            //     tabId: tab.id,
-            //     tabUrl: tab.url,
+            // chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+            //     suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
             // });
+            chrome.tabs.sendMessage(tab.id, {
+                message: MESSAGE_TAKE_SCREENSHOT,
+                htmlDataUri: htmlDataUri,
+                tabId: tab.id,
+                tabUrl: tab.url,
+            });
         });
 
     }
