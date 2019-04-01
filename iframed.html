@@ -28,4 +28,14 @@
     </div>
 </div>
 </body>
+
+<script>
+    window.addEventListener('blur', function () {
+        // detect click on the iframe, and proceed to the URL
+        if (document.activeElement === document.querySelector('iframe')) {
+            window.location.href = document.querySelector('.link a').href;
+        }
+    });
+</script>
+
 </html>
