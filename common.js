@@ -4,7 +4,7 @@ const MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
 const MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
 
 function isUrlSuspendable(url) {
-    return url.startsWith('http://') || url.startsWith('https://');
+    return url && (url.startsWith('http://') || url.startsWith('https://'));
 }
 
 function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
@@ -67,9 +67,9 @@ TabList.prototype = {
 };
 
 function TabHandle(tabId) {
-    this.tabId = tabId;
+    this.id = tabId;
     this.url = null;
-    this.lastSeen = null; // Date
+    this.lastSeen = new Date(); // Date
     this.active = false;
     this.suspended = false;
     this.audible = false;

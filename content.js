@@ -43,12 +43,12 @@
 
     function addMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+            console.log("received msg", msg);
             if (msg.message === MESSAGE_LOG) {
                 const argArray = Object.values(msg.arguments);
                 argArray.splice(0, 0, "BG:");
                 logArray(argArray);
             } else if (msg.message === MESSAGE_TAKE_SCREENSHOT) {
-                console.log("msg", msg);
                 const root = document.body;
                 console.log("root", root);
                 // sendResponse({xxx: 123});

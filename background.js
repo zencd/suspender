@@ -9,7 +9,8 @@
     const tabs = new TabList();
 
     const settings = {
-        suspendTimeoutSeconds: 30,
+        // suspendTimeoutSeconds: 15 * 60,
+        suspendTimeoutSeconds: 2,
         suspendActive: false,
         suspendPinned: false,
     };
@@ -19,6 +20,7 @@
     initTabListeners();
     initTabWatchTimer();
     initMessageListener();
+    inspectExistingTabs();
 
     function findOldTabsAndSuspendThem() {
         const now = new Date();
@@ -26,15 +28,16 @@
         for (let i = 0; i < tt.length; i++) {
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
-            const timeoutOk = diffSec >= settings.suspendTimeoutSeconds;
+            const timeoutOk = tabObj.lastSeen && diffSec >= settings.suspendTimeoutSeconds;
             const activeTabOk = settings.suspendActive || !tabObj.active;
+            const schemaOk = isUrlSuspendable(tabObj.url);
             // const pinnedOk = !settings.suspendPinned
-            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended;
+            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk;
             console.log("tab", tabObj.url, "suspending?", doSuspend);
             if (doSuspend) {
                 console.log("suspending tab", tabObj);
-                chrome.tabs.get(tabObj.tabId, function (chrTab) {
-                    suspendTab(chrTab);
+                chrome.tabs.get(tabObj.id, function (chrTab) {
+                    suspendTab(chrTab, false);
                 });
             }
         }
@@ -42,7 +45,7 @@
 
     function initTabWatchTimer() {
         // setInterval(findOldTabsAndSuspendThem, 60 * 1000);
-        // setTimeout(findOldTabsAndSuspendThem, 1000); // temp
+        setTimeout(findOldTabsAndSuspendThem, 9000); // temp
     }
 
     function initWebRequestListeners() {
@@ -69,6 +72,16 @@
             {urls: ["http://*/*", "https://*/*"]},
             ["blocking"]
         );
+    }
+
+    function inspectExistingTabs() {
+        chrome.tabs.getAllInWindow(null, function (chromeTabs) {
+            for (let i = 0; i < chromeTabs.length; i++) {
+                const tab = chromeTabs[i];
+                const myTab = tabs.get(tab.id);
+                myTab.updateFromChromeTab(tab);
+            }
+        });
     }
 
     function initTabListeners() {
@@ -112,22 +125,28 @@
         });
     }
 
-    function suspendTab(tab) {
+    function suspendTab(tab, isActiveTab) {
+        console.log("suspendTab", tab);
         if (!isUrlSuspendable(tab.url)) {
             return;
         }
-        const tabId = tab.id;
-        logToCurrentTab("gonna reload", tab);
+        console.log("gonna reload", tab);
         getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-            // chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-            //     suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
-            // });
-            chrome.tabs.sendMessage(tab.id, {
-                message: MESSAGE_TAKE_SCREENSHOT,
-                htmlDataUri: htmlDataUri,
-                tabId: tab.id,
-                tabUrl: tab.url,
-            });
+            console.log("htmlDataUri", htmlDataUri);
+            if (isActiveTab) {
+                chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                    suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
+                });
+            } else {
+                const tabId = tab.id;
+                console.log("tabId", tabId);
+                chrome.tabs.sendMessage(tabId, {
+                    message: MESSAGE_TAKE_SCREENSHOT,
+                    htmlDataUri: htmlDataUri,
+                    tabId: tabId,
+                    tabUrl: tab.url,
+                });
+            }
         });
 
     }
@@ -146,7 +165,7 @@
     }
 
     function onContextMenuSuspend(info, tab) {
-        suspendTab(tab)
+        suspendTab(tab, true);
     }
 
     function initContextMenu() {
