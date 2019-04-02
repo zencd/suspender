@@ -173,6 +173,7 @@
         chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
             // Fired when a tab is closed.
             console.log("onRemoved", tabId, removeInfo);
+            tabs.removeById(tabId);
         });
     }
 
@@ -228,6 +229,17 @@
         findOldTabsAndSuspendThem();
     }
 
+    function onContextMenuDebugTabs(info, tab) {
+        console.log("===== DEBUG =====");
+        const tt = tabs.getAllTabs();
+        for (let i = 0; i < tt.length; i++) {
+            const tab = tt[i];
+            const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
+            console.log("-", tab.id, tab.url);
+            console.log(" ", 'suspended:', tab.suspended, 'active:', tab.active, 'pinned:', tab.pinned, "lastSeen", ls, "sec ago");
+        }
+    }
+
     function initContextMenu() {
         chrome.contextMenus.create({
             title: "Suspend",
@@ -238,6 +250,11 @@
             title: "Suspend Old Tabs",
             contexts: ["page"],
             onclick: onContextMenuSuspendAllTabs
+        });
+        chrome.contextMenus.create({
+            title: "Debug Tabs",
+            contexts: ["page"],
+            onclick: onContextMenuDebugTabs
         });
     }
 

@@ -64,6 +64,9 @@ TabList.prototype = {
     getAllTabs: function () {
         return Object.values(this.tabById);
     },
+    removeById: function(tabId) {
+        delete this.tabById[tabId];
+    },
 };
 
 function TabHandle(tabId) {
