@@ -11,8 +11,8 @@
     const OLD_TAB_CHECK_INTERVAL_SECONDS = 60 * 1000;
 
     const settings = {
-        // suspendTimeoutSeconds: 15 * 60,
-        suspendTimeoutSeconds: 4,
+        suspendTimeoutSeconds: 15 * 60,
+        // suspendTimeoutSeconds: 4,
         suspendActive: false,
         suspendPinned: false,
     };

@@ -14,8 +14,10 @@ chrome.storage.local.get([storageKey], function (items) {
     const dataUri = items[storageKey];
     // console.log("dataUri", dataUri);
     if (dataUri) {
-        console.log("time consumed", (new Date() - d1));
+        console.log("time consumed 1", (new Date() - d1));
         document.body.style.backgroundImage = 'url(' + dataUri + ')';
+        // document.querySelector('img').src = dataUri;
+        console.log("time consumed 2", (new Date() - d1));
     } else {
         console.warn("no screenshot found for tab", tabId);
     }
