@@ -19,6 +19,7 @@
   },
   "permissions": [
     "tabs",
+    "activeTab",
     "<all_urls>",
     "contextMenus",
     "webRequest",

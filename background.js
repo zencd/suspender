@@ -8,9 +8,11 @@
 
     const tabs = new TabList();
 
+    const OLD_TAB_CHECK_INTERVAL_SECONDS = 60 * 1000;
+
     const settings = {
         // suspendTimeoutSeconds: 15 * 60,
-        suspendTimeoutSeconds: 2,
+        suspendTimeoutSeconds: 4,
         suspendActive: false,
         suspendPinned: false,
     };
@@ -22,6 +24,15 @@
     initMessageListener();
     inspectExistingTabs();
 
+    // const tt = tabs.getAllTabs();
+    // console.log("tt", tt.length);
+    // for (let i = 0; i < tt.length; i++) {
+    //     const tabObj = tt[i];
+    //     chrome.tabs.executeScript(tabObj.id, {file: "content.js"});
+    //     console.log("tab injected", tabObj);
+    // }
+    // setInterval(findAllTabsAndMessageThem, 10 * 1000);
+
     function findOldTabsAndSuspendThem() {
         const now = new Date();
         const tt = tabs.getAllTabs();
@@ -29,23 +40,36 @@
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
             const timeoutOk = tabObj.lastSeen && diffSec >= settings.suspendTimeoutSeconds;
-            const activeTabOk = settings.suspendActive || !tabObj.active;
+            const activeTabOk = settings.suspendActive || (!settings.suspendActive && !tabObj.active);
             const schemaOk = isUrlSuspendable(tabObj.url);
-            // const pinnedOk = !settings.suspendPinned
-            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk;
-            console.log("tab", tabObj.url, "suspending?", doSuspend);
+            const pinnedOk = settings.suspendPinned || (!settings.suspendPinned && !tabObj.pinned);
+            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk && pinnedOk;
+            // const doSuspend = (tabObj.url === 'https://zencd.github.io/charted/');
+            // console.log("tab", tabObj.url, "suspending?", doSuspend);
             if (doSuspend) {
                 console.log("suspending tab", tabObj);
-                chrome.tabs.get(tabObj.id, function (chrTab) {
-                    suspendTab(chrTab, false);
+                suspendTab(tabObj, false);
+            }
+        }
+    }
+
+    function findAllTabsAndMessageThem() {
+        const now = new Date();
+        const tt = tabs.getAllTabs();
+        for (let i = 0; i < tt.length; i++) {
+            const tabObj = tt[i];
+            if (isUrlSuspendable(tabObj.url)) {
+                const msg = {message: 'HELLO'};
+                console.log("sending HELLO to", tabObj.id, tabObj.url);
+                chrome.tabs.sendMessage(tabObj.id, msg, function (response) {
                 });
             }
         }
     }
 
     function initTabWatchTimer() {
-        // setInterval(findOldTabsAndSuspendThem, 60 * 1000);
-        setTimeout(findOldTabsAndSuspendThem, 9000); // temp
+        setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_SECONDS);
+        // setTimeout(findOldTabsAndSuspendThem, 9000); // temp
     }
 
     function initWebRequestListeners() {
@@ -77,11 +101,38 @@
     function inspectExistingTabs() {
         chrome.tabs.getAllInWindow(null, function (chromeTabs) {
             for (let i = 0; i < chromeTabs.length; i++) {
-                const tab = chromeTabs[i];
-                const myTab = tabs.get(tab.id);
-                myTab.updateFromChromeTab(tab);
+                const chrTab = chromeTabs[i];
+                const myTab = tabs.get(chrTab.id);
+                myTab.updateFromChromeTab(chrTab);
+                injectContentScriptIntoTab(chrTab);
             }
         });
+    }
+
+    function injectContentScriptIntoTab(chrTab) {
+        if (isUrlSuspendable(chrTab.url)) {
+            // console.log("injecting into", chrTab);
+            chrome.tabs.executeScript(chrTab.id, {
+                file: "html2canvas.js",
+                runAt: "document_start"
+            }, function (injectResult1) {
+                chrome.tabs.executeScript(chrTab.id, {
+                    file: "utils.js",
+                    runAt: "document_start"
+                }, function (injectResult2) {
+                    chrome.tabs.executeScript(chrTab.id, {
+                        file: "common.js",
+                        runAt: "document_start"
+                    }, function (injectResult3) {
+                        chrome.tabs.executeScript(chrTab.id, {
+                            file: "content.js",
+                            runAt: "document_start"
+                        }, function (injectResult4) {
+                        });
+                    });
+                });
+            });
+        }
     }
 
     function initTabListeners() {
@@ -132,19 +183,24 @@
         }
         console.log("gonna reload", tab);
         getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-            console.log("htmlDataUri", htmlDataUri);
+            // console.log("htmlDataUri", htmlDataUri);
             if (isActiveTab) {
+                // todo use windowId
                 chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
                     suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
                 });
             } else {
                 const tabId = tab.id;
-                console.log("tabId", tabId);
-                chrome.tabs.sendMessage(tabId, {
+                // console.log("tabId", tabId);
+                const msg = {
                     message: MESSAGE_TAKE_SCREENSHOT,
                     htmlDataUri: htmlDataUri,
                     tabId: tabId,
                     tabUrl: tab.url,
+                };
+                console.log("sending message", tabId, msg);
+                chrome.tabs.sendMessage(tabId, msg, function (response) {
+                    // console.log("response from CS:", response);
                 });
             }
         });
@@ -164,15 +220,24 @@
         });
     }
 
-    function onContextMenuSuspend(info, tab) {
+    function onContextMenuSuspendCurrentTab(info, tab) {
         suspendTab(tab, true);
+    }
+
+    function onContextMenuSuspendAllTabs(info, tab) {
+        findOldTabsAndSuspendThem();
     }
 
     function initContextMenu() {
         chrome.contextMenus.create({
-            title: "SUSPENDER",
+            title: "Suspend",
             contexts: ["page"],
-            onclick: onContextMenuSuspend
+            onclick: onContextMenuSuspendCurrentTab
+        });
+        chrome.contextMenus.create({
+            title: "Suspend Old Tabs",
+            contexts: ["page"],
+            onclick: onContextMenuSuspendAllTabs
         });
     }
 

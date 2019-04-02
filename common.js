@@ -85,6 +85,7 @@ TabHandle.prototype = {
         this.audible = chromeTab.audible;
         this.pinned = chromeTab.pinned;
         this.url = chromeTab.url;
+        this.title = chromeTab.title;
         this.windowId = chromeTab.windowId;
         this.favIconUrl = chromeTab.favIconUrl;
     },

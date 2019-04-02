@@ -8,11 +8,13 @@ const tabId = parseInt(url.searchParams.get("tabId"));
 const storageKey = 'screenshot.data-uri.tab.' + tabId;
 // const storageKey = 'xxx';
 // const storageKey = 'screenshot.data-uri.tab.3178';
+const d1 = new Date();
 chrome.storage.local.get([storageKey], function (items) {
     // console.log("items", items);
     const dataUri = items[storageKey];
     // console.log("dataUri", dataUri);
     if (dataUri) {
+        console.log("time consumed", (new Date() - d1));
         document.body.style.backgroundImage = 'url(' + dataUri + ')';
     } else {
         console.warn("no screenshot found for tab", tabId);
