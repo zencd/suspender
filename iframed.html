@@ -5,29 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$TITLE$</title>
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
+    <!--<link href="iframed.css" rel="stylesheet" type="text/css" media="all">-->
     <style>
     </style>
 </head>
 <body>
 
-<div class="box">
+<div class="screenshot">
+</div>
 
-    <div class="header">
-        <h1>
-            <a href="$LINK_URL$">$TITLE$</a>
-        </h1>
-        <div class="link">
-            <a href="$LINK_URL$">
-                $LINK_TEXT$
-            </a>
-        </div>
+<div class="overlay">
+    <div class="title">
+        <a href="$LINK_URL$">$TITLE$</a>
     </div>
-
-    <div class="main">
-        <iframe src="$IFRAME_URL$" frameborder="0"></iframe>
+    <div class="link">
+        <a href="$LINK_URL$">$LINK_TEXT$</a>
     </div>
 </div>
-</body>
+
+<iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
 
 <script>
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
@@ -41,13 +37,13 @@
 
     // todo maybe remove listeners unused anymore
 
-    console.log("chrome", typeof chrome);
+    // console.log("chrome", typeof chrome);
     const $frame = document.querySelector('iframe');
     window.addEventListener('message', function (messageEvent) {
         if (messageEvent.data.call === 'helloFromFrame') {
             const dataUri = messageEvent.data.dataUri;
-            // console.log("parent received", dataUri);
-            document.querySelector('.main').style.backgroundImage = 'url(' + dataUri + ')';
+            // console.log("parent received dataUri", dataUri);
+            document.querySelector('.screenshot').style.backgroundImage = 'url(' + dataUri + ')';
             $frame.parentNode.removeChild($frame);
         }
     });
