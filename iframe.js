@@ -5,6 +5,8 @@ const tabId = parseInt(url.searchParams.get("tabId"));
 // console.log("MESSAGE_LOG", typeof MESSAGE_LOG);
 // console.log("tabId", tabId);
 
+document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
+
 const storageKey = 'screenshot.data-uri.tab.' + tabId;
 // const storageKey = 'xxx';
 // const storageKey = 'screenshot.data-uri.tab.3178';
@@ -18,6 +20,9 @@ chrome.storage.local.get([storageKey], function (items) {
         document.body.style.backgroundImage = 'url(' + dataUri + ')';
         // document.querySelector('img').src = dataUri;
         console.log("time consumed 2", (new Date() - d1));
+
+        window.parent.postMessage({call: 'helloFromFrame', dataUri: dataUri}, '*');
+
     } else {
         console.warn("no screenshot found for tab", tabId);
     }

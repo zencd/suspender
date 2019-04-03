@@ -225,6 +225,10 @@
         suspendTab(tab, true);
     }
 
+    function onContextMenuSuspendCurrentTabH2C(info, tab) {
+        suspendTab(tab, false);
+    }
+
     function onContextMenuSuspendAllTabs(info, tab) {
         findOldTabsAndSuspendThem();
     }
@@ -245,6 +249,11 @@
             title: "Suspend",
             contexts: ["page"],
             onclick: onContextMenuSuspendCurrentTab
+        });
+        chrome.contextMenus.create({
+            title: "Suspend H2C",
+            contexts: ["page"],
+            onclick: onContextMenuSuspendCurrentTabH2C
         });
         chrome.contextMenus.create({
             title: "Suspend Old Tabs",

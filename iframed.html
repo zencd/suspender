@@ -30,8 +30,19 @@
 </body>
 
 <script>
+    document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
+
+    console.log("chrome", typeof chrome);
     const $frame = document.querySelector('iframe');
-    $frame.addEventListener("load", function() {
+    window.addEventListener('message', function (messageEvent) {
+        if (messageEvent.data.call === 'helloFromFrame') {
+            const dataUri = messageEvent.data.dataUri;
+            // console.log("parent received", dataUri);
+            document.querySelector('.main').style.backgroundImage = 'url(' + dataUri + ')';
+            $frame.parentNode.removeChild($frame);
+        }
+    });
+    $frame.addEventListener("load", function () {
         // pass the original url to the frame, so we can redirect user to it onlick
         const url = document.querySelector('.link a').href;
         $frame.contentWindow.postMessage({call: 'setFrameParams', url: url}, '*');
