@@ -49,10 +49,12 @@
 - honest, precise screenshots, with images rendered (TGS)
 - screenshots reflects page as user left it, not just capturing page's top (H2C, TGS)
 - instant screenshots instead of the slower TGS (which depends on page size!)
+- user should not fear of extension uninstall, update, sessions, etc
 - extension uninstall does not discard suspended tabs
 - N times faster than TGS
 - no user tracking
 - works well on retina
+- competitors propagate many views (1 per tab) while my ext does not - this should affect memory usage
 
 ## tips
 
