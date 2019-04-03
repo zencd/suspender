@@ -53,7 +53,12 @@
                 const root = document.body;
                 console.log("root", root);
                 // sendResponse({xxx: 123});
-                html2canvas(root).then(canvas => {
+                const opts = {
+                    //imageTimeout: 40*1000,
+                    //allowTaint: true,
+                    //useCORS: true,
+                };
+                html2canvas(root, opts).then(canvas => {
                     console.log("canvas", canvas);
                     const imageDataUri = canvas.toDataURL();
                     // console.log("imageDataUri", imageDataUri);

@@ -1,0 +1,65 @@
+<style>
+	.screenshot {
+		width: 100%;
+		height: 100%;
+		background: url(overlay-invest.png);
+		/*background: url(overlay-invest-black.png);*/
+        background-position: top center;
+        background-repeat: no-repeat;
+		opacity: 0.6;
+	}
+	.screenshot:hover {
+		opacity: 1.0;
+	}
+	.overlay {
+		/*opacity: 0.8;*/
+		backdrop-filter: blur(2px);
+		-webkit-backdrop-filter: blur(10px);
+		text-align: center;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 300px;
+		height: 100%;
+		background:
+				linear-gradient(150deg, rgba(90,90,100,1.0), rgba(245,255,245,.0)),
+				linear-gradient(210deg, rgba(100,90,90,1.0), rgba(245,255,245,.0));
+		padding-top: 30px;
+		/*text-shadow: 0 0 2px rgba(255,255,255,0.5);*/
+	}
+	.overlay a {
+		text-decoration: none;
+	}
+	.overlay a:hover {
+		text-decoration: underline;
+	}
+	.title {
+		font: normal 32px/37px sans-serif;
+		overflow: hidden;
+		height: 37px;
+	}
+	.title a {
+		color: #fff;
+	}
+	.link a {
+		font: normal 18px/21px sans-serif;
+		height: 21px;
+		overflow: hidden;
+	}
+	.link a {
+		color: #ccc;
+	}
+</style>
+
+<div class="screenshot">
+</div>
+
+<div class="overlay">
+<div class="title">
+	<a href="#">Orkiestra Rozrywkowa PRiTV W Katowicach | Discogs</a>
+</div>
+<div class="link">
+	<a href="#">habr.com/ru/post/348250</a>
+</div>
+</div>

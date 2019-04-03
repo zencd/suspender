@@ -32,6 +32,15 @@
 <script>
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
 
+    // console.log("chrome", chrome);
+    // console.log("chrome.runtime", chrome.runtime);
+    //const msg = {message: 'IFRAMED_STARTED'};
+    //chrome.runtime.sendMessage('mmmjhcioolknafdgaeoffcmbfkhccbao', msg, function (response) {
+    //    console.log("response", response);
+    //});
+
+    // todo maybe remove listeners unused anymore
+
     console.log("chrome", typeof chrome);
     const $frame = document.querySelector('iframe');
     window.addEventListener('message', function (messageEvent) {

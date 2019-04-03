@@ -24,6 +24,8 @@ body {
     flex: 1 1 auto;
     padding: 20px 20px 5px;
     /*XXX bottom's padding 0..3 px causes scrollbar to appear by some reason*/
+    background-repeat: no-repeat;
+    background-position: center top;
 }
 
 body[data-device-pixel-ratio="2"] .main {

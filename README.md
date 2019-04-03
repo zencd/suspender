@@ -28,10 +28,12 @@
 - iframed: substitute favicon (a data uri version probably)
 - the data uri page: use a pale favicon to distinct suspended tabs easier
 - try detect scrollbar presence and cut it off, or take screenshot without it initially
+- when user unfreezes a tab make sure the content is still there, and warn maybe
 
 ## bugs
 
-- gmail cannot be suspended - it only refreshes
+- cannot be suspended: gmail - it only refreshes
+- cannot be suspended: https://www.vinyl-digital.com/index.php?lang=0&&redirected=1
 + disable RMB click on screenshots (iframed.html)
 
 ## refs
@@ -44,8 +46,9 @@
 
 ## pro
 
-- honest, precise screenshots
-- screenshots reflects page as user left it, not just capturing page's top
+- honest, precise screenshots, with images rendered (TGS)
+- screenshots reflects page as user left it, not just capturing page's top (H2C, TGS)
+- instant screenshots instead of the slower TGS (which depends on page size!)
 - extension uninstall does not discard suspended tabs
 - N times faster than TGS
 - no user tracking
