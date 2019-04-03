@@ -23,6 +23,28 @@ chrome.storage.local.get([storageKey], function (items) {
     }
 });
 
+window.addEventListener('message', function(messageEvent) {
+    // waiting for extended info from the parent frame
+    const origin = messageEvent.origin || messageEvent.originalEvent.origin;
+    // here `origin` gonna be checked, but it is always 'null' (string!) for me
+    // const originOk = !origin || origin === 'null';
+    const originOk = true;
+    if (originOk && typeof messageEvent.data === 'object' && messageEvent.data.call==='setFrameParams') {
+        const url = messageEvent.data.url;
+        // console.log("RECEIVED!", event.data.url);
+        document.body.addEventListener('click', function (clickEvent) {
+            // console.log("clickEvent", clickEvent);
+            if (clickEvent.which === 1) {
+                window.parent.location.href = url;
+            }
+        });
+    }
+}, false);
+
+// function setUpFrame2(name) {
+//     console.log("setUpFrame2...", name);
+// }
+
 
 
 // chrome.runtime.sendMessage({ text: "what is my tab_id?" }, tabId => {

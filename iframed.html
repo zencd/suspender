@@ -30,11 +30,11 @@
 </body>
 
 <script>
-    window.addEventListener('blur', function () {
-        // detect click on the iframe, and proceed to the URL
-        if (document.activeElement === document.querySelector('iframe')) {
-            window.location.href = document.querySelector('.link a').href;
-        }
+    const $frame = document.querySelector('iframe');
+    $frame.addEventListener("load", function() {
+        // pass the original url to the frame, so we can redirect user to it onlick
+        const url = document.querySelector('.link a').href;
+        $frame.contentWindow.postMessage({call: 'setFrameParams', url: url}, '*');
     });
 </script>
 

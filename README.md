@@ -32,6 +32,7 @@
 ## bugs
 
 - gmail cannot be suspended - it only refreshes
++ disable RMB click on screenshots (iframed.html)
 
 ## refs
 
@@ -49,3 +50,28 @@
 - N times faster than TGS
 - no user tracking
 - works well on retina
+
+## tips
+
+##### refer to background page
+
+chrome.runtime.getBackgroundPage(function (bgpage)
+
+##### list all windows and tabs within them
+
+    chrome.windows.getAll({'populate': true}, function (windows) {
+        for (var wi in windows) {
+            if (windows.hasOwnProperty(wi)) {
+                var tabs = [];
+                for (var j in windows[wi].tabs) {
+                    if (windows[wi].tabs.hasOwnProperty(j)) {
+
+##### content script injection
+
+	"content_scripts": [
+    {
+		"matches": ["https://*/*","http://*/*", "<all_urls>"],
+		"js": ["lib/h2c.js","inject.js"],
+		"run_at": "document_end",
+		"all_frames" : false
+    }
