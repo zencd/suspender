@@ -35,6 +35,7 @@
 - cannot be suspended: gmail - it only refreshes
 - cannot be suspended: https://www.vinyl-digital.com/index.php?lang=0&&redirected=1
 + disable RMB click on screenshots (iframed.html)
+- retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 
 ## refs
 

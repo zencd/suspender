@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$TITLE$</title>
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
-    <!--<link href="iframed.css" rel="stylesheet" type="text/css" media="all">-->
-    <style>
-    </style>
 </head>
 <body>
 
@@ -25,32 +22,26 @@
 
 <iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
 
-<script>
+<script id="main-script">
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
 
-    // console.log("chrome", chrome);
-    // console.log("chrome.runtime", chrome.runtime);
-    //const msg = {message: 'IFRAMED_STARTED'};
-    //chrome.runtime.sendMessage('mmmjhcioolknafdgaeoffcmbfkhccbao', msg, function (response) {
-    //    console.log("response", response);
-    //});
-
-    // todo maybe remove listeners unused anymore
-
-    // console.log("chrome", typeof chrome);
     const $frame = document.querySelector('iframe');
-    window.addEventListener('message', function (messageEvent) {
-        if (messageEvent.data.call === 'helloFromFrame') {
+
+    const messageListener = window.addEventListener('message', function (messageEvent) {
+        if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             const dataUri = messageEvent.data.dataUri;
-            // console.log("parent received dataUri", dataUri);
             document.querySelector('.screenshot').style.backgroundImage = 'url(' + dataUri + ')';
-            $frame.parentNode.removeChild($frame);
+            $frame.remove();
+            document.querySelector('#main-script').remove();
+            window.removeEventListener('message', messageListener);
         }
     });
-    $frame.addEventListener("load", function () {
+
+    const loadListener = $frame.addEventListener("load", function () {
         // pass the original url to the frame, so we can redirect user to it onlick
         const url = document.querySelector('.link a').href;
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: url}, '*');
+        $frame.contentWindow.postMessage({call: 'setFrameParams', url: url, tabId: $TAB_ID$}, '*');
+        $frame.removeEventListener("load", loadListener);
     });
 </script>
 

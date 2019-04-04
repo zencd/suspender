@@ -10,7 +10,7 @@ function isUrlSuspendable(url) {
 function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const tplUrl = chrome.runtime.getURL('iframed.html');
     const cssUrl = chrome.runtime.getURL('iframed.css');
-    const iframeUrl = chrome.runtime.getURL('iframe.html?tabId=' + tabId);
+    const iframeUrl = chrome.runtime.getURL('iframe.html');
     // console.log("tplUrl", tplUrl);
     fetch(tplUrl).then((response) => { // todo fetch it once
         response.text().then((htmlTplStr) => {
@@ -21,6 +21,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
                 '$LINK_TEXT$': toReadableUrl(pageUrl),
                 '$IFRAME_URL$': iframeUrl,
                 '$CSS_URL$': cssUrl,
+                '$TAB_ID$': tabId,
             };
             // console.log("tplVars", tplVars);
             const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
