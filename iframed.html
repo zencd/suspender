@@ -7,10 +7,7 @@
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
 </head>
 <body>
-
-<div class="screenshot">
-</div>
-
+<div class="screenshot"></div>
 <div class="overlay">
     <div class="title">
         <a href="$LINK_URL$">$TITLE$</a>
@@ -19,15 +16,11 @@
         <a href="$LINK_URL$">$LINK_TEXT$</a>
     </div>
 </div>
-
 <iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
 </body>
-
 <script id="main-script">
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
-
     const $frame = document.querySelector('iframe');
-
     const messageListener = window.addEventListener('message', function (messageEvent) {
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             const dataUri = messageEvent.data.dataUri;
@@ -37,7 +30,6 @@
             window.removeEventListener('message', messageListener);
         }
     });
-
     const loadListener = $frame.addEventListener("load", function () {
         // pass the original url to the frame, so we can redirect user to it onlick
         const url = document.querySelector('.link a').href;
@@ -45,5 +37,4 @@
         $frame.removeEventListener("load", loadListener);
     });
 </script>
-
 </html>

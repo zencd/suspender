@@ -1,3 +1,5 @@
+"use strict";
+
 const MESSAGE_LOG = 'MESSAGE_LOG';
 
 if (typeof String.prototype.replaceAll === 'undefined') {
