@@ -4,7 +4,24 @@
 
 - watch for tabs and suspend them after a timeout
 - remove screenshots from storage when tab closed
-- try inject ext's JS instead of the iframe
+- try replace iframe with referring chrome-extension://abcd/park.js
+- retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
+
+## todo p2
+
+- a feature to move really old tabs to bookmarks
+
+## todo p3
+
+- minimize permissions
+- iframed.html: minimize template
+- iframed.html: inline CSS to work smoothly even without the extension
+- minimize screenshot size when pixel ratio is 2+
+- make unique extension icons
+- iframed: substitute favicon with a pale version data uri
+- the data uri page: use a pale favicon to distinct suspended tabs easier
+- try detect scrollbar presence and cut it off, or take screenshot without it initially
+- when user unfreezes a tab make sure the content is still there, and warn maybe
 
 ## todo options
 
@@ -19,24 +36,11 @@
 - implement themes
 - sync settings between different systems 
 
-## todo p3
-
-- minimize permissions
-- iframed.html: minimize template
-- iframed.html: inline CSS to work smoothly even without the extension
-- minimize screenshot size when pixel ratio is 2+
-- make extension icons
-- iframed: substitute favicon (a data uri version probably)
-- the data uri page: use a pale favicon to distinct suspended tabs easier
-- try detect scrollbar presence and cut it off, or take screenshot without it initially
-- when user unfreezes a tab make sure the content is still there, and warn maybe
-
 ## bugs
 
 - cannot be suspended: gmail - it only refreshes
 - cannot be suspended: https://www.vinyl-digital.com/index.php?lang=0&&redirected=1
 + disable RMB click on screenshots (iframed.html)
-- retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 
 ## refs
 
@@ -54,9 +58,10 @@
 - user should not fear of extension uninstall, update, sessions, etc
 - extension uninstall does not discard suspended tabs
 - N times faster than TGS
-- no user tracking
+- no user tracking with GA/etc
 - works well on retina
 - competitors propagate many views (1 per tab) while my ext does not - this should affect memory usage
+- after my ext installed user doesn't need to refresh tabs (check competitor's behaviour)
 
 ## tips
 
