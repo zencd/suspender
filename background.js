@@ -271,7 +271,7 @@
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             // console.log("BG: incoming msg", msg);
             if (msg.message === MESSAGE_SCREENSHOT_READY) {
-                console.log("screenshot is ready!!!", msg);
+                // console.log("screenshot is ready!!!", msg);
                 suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri);
             }
         });

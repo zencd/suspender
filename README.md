@@ -4,7 +4,6 @@
 
 - watch for tabs and suspend them after a timeout
 - remove screenshots from storage when tab closed
-- try replace iframe with referring chrome-extension://abcd/park.js
 - retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 
 ## todo p2
@@ -41,6 +40,7 @@
 - cannot be suspended: gmail - it only refreshes
 - cannot be suspended: https://www.vinyl-digital.com/index.php?lang=0&&redirected=1
 + disable RMB click on screenshots (iframed.html)
+- https://support.google.com/chrome/thread/2047906 "The message port closed"
 
 ## refs
 
@@ -49,6 +49,7 @@
 - https://gist.github.com/Rob--W/9654450
 - https://developer.chrome.com/extensions/tabCapture#method-captureOffscreenTab
 - http://html2canvas.hertzen.com/configuration/
+- injecting ext's JS into a data uri html directly isn't possible (symbols aren't available) so using iframe still 
 
 ## pro
 
