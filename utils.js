@@ -56,5 +56,9 @@ function toReadableUrl(s) {
     s = cutFromBeginning(s, 'http://');
     s = cutFromBeginning(s, 'https://');
     s = cutFromBeginning(s, 'www.');
+    const i = s.indexOf('/');
+    if (i >= 0) {
+        s = s.substring(0, i);
+    }
     return cutFromEnd(s, '/');
 }
