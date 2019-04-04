@@ -4,6 +4,7 @@
 
 - watch for tabs and suspend them after a timeout
 - remove screenshots from storage when tab closed
+- try inject ext's JS instead of the iframe
 
 ## todo options
 
