@@ -21,6 +21,7 @@
 - the data uri page: use a pale favicon to distinct suspended tabs easier
 - try detect scrollbar presence and cut it off, or take screenshot without it initially
 - when user unfreezes a tab make sure the content is still there, and warn maybe
+- H2C: it renders full page - need to shrink it to limit image's weight
 
 ## todo options
 

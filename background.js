@@ -223,19 +223,7 @@
         });
     }
 
-    function onContextMenuSuspendCurrentTab(info, tab) {
-        suspendTab(tab, true);
-    }
-
-    function onContextMenuSuspendCurrentTabH2C(info, tab) {
-        suspendTab(tab, false);
-    }
-
-    function onContextMenuSuspendAllTabs(info, tab) {
-        findOldTabsAndSuspendThem();
-    }
-
-    function onContextMenuDebugTabs(info, tab) {
+    function onContextMenuDebugTabs() {
         const tt = tabs.getAllTabs();
         console.log("===== DEBUG " + tt.length + " TABS =====");
         for (let i = 0; i < tt.length; i++) {
@@ -247,25 +235,41 @@
     }
 
     function initContextMenu() {
+        const contexts = [
+            // todo review them
+            'page', 'frame', 'editable', 'image', 'video', 'audio',
+        ];
         chrome.contextMenus.create({
             title: "Suspend",
-            contexts: ["page"],
-            onclick: onContextMenuSuspendCurrentTab
+            contexts: contexts,
+            onclick: (info, tab) => {
+                suspendTab(tab, true);
+            }
         });
         chrome.contextMenus.create({
             title: "Suspend H2C",
-            contexts: ["page"],
-            onclick: onContextMenuSuspendCurrentTabH2C
+            contexts: contexts,
+            onclick: (info, tab) => {
+                suspendTab(tab, false);
+            }
         });
         chrome.contextMenus.create({
             title: "Suspend Old Tabs",
-            contexts: ["page"],
-            onclick: onContextMenuSuspendAllTabs
+            contexts: contexts,
+            onclick: (info, tab) => {
+                findOldTabsAndSuspendThem();
+            }
+        });
+        chrome.contextMenus.create({
+            type: 'separator',
+            contexts: contexts,
         });
         chrome.contextMenus.create({
             title: "Debug Tabs",
-            contexts: ["page"],
-            onclick: onContextMenuDebugTabs
+            contexts: contexts,
+            onclick: (info, tab) => {
+                onContextMenuDebugTabs();
+            }
         });
     }
 
