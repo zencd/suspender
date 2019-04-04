@@ -164,11 +164,13 @@
             // Fired when a tab is updated.
             console.log("onUpdated", tabId, changeInfo, tab);
             const myTab = tabs.get(tabId);
-            myTab.updateFromChromeTab(changeInfo);
+            myTab.updateFromChromeTab(tab);
+            // console.log("onUpdated: myTab after all", myTab);
         });
         chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
             // Fired when a tab is replaced with another tab due to prerendering or instant.
             console.log("onReplaced", "addedTabId", addedTabId, "removedTabId", removedTabId);
+            tabs.removeById(removedTabId);
         });
         chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
             // Fired when a tab is closed.
@@ -234,8 +236,8 @@
     }
 
     function onContextMenuDebugTabs(info, tab) {
-        console.log("===== DEBUG =====");
         const tt = tabs.getAllTabs();
+        console.log("===== DEBUG " + tt.length + " TABS =====");
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
