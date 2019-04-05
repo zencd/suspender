@@ -87,7 +87,10 @@
                     if (dataUri) {
                         tabIdToSuspend[theKey] = false;
                         tabDataUriToSuspend[theKey] = null;
-                        tabs.get(tabId).suspended = true;
+                        const myTab = tabs.getTab(tabId);
+                        if (myTab) {
+                            myTab.suspended = true;
+                        }
                         return {redirectUrl: dataUri};
                     }
                 }
