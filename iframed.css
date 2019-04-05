@@ -9,7 +9,9 @@ html, body {
     height: 100%;
     background-position: top center;
     background-repeat: no-repeat;
-    /*opacity: 0.8;*/
+    opacity: 0.8;
+    /*filter: saturate(8);*/
+    filter: sepia(50%);
 }
 
 body[data-device-pixel-ratio="2"] .screenshot {

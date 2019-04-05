@@ -64,3 +64,9 @@ function toReadableUrl(s) {
     }
     return cutFromEnd(s, '/');
 }
+
+function limit(s, numChars) {
+    if (!s) return s;
+    if (numChars < s.length) s = s.substring(0, numChars);
+    return s;
+}

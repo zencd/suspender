@@ -66,7 +66,9 @@ TabList.prototype = {
         return Object.values(this.tabById);
     },
     removeById: function(tabId) {
+        console.log("this.tabById.length", Object.values(this.tabById).length);
         delete this.tabById[tabId];
+        console.log("this.tabById.length", Object.values(this.tabById).length);
     },
 };
 

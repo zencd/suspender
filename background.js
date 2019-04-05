@@ -229,8 +229,13 @@
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
-            console.log("-", tab.id, tab.url);
-            console.log(" ", 'suspended:', tab.suspended, 'active:', tab.active, 'pinned:', tab.pinned, "lastSeen", ls, "sec ago");
+            console.log(""+(i+1)+".", tab.id, limit(tab.url, 60));
+            console.log(" ", (tab.suspended?'S':'_'), (tab.active?'A':'_'), (tab.pinned?'P':'_'), (tab.audible?'Au':'_'), ls, "s");
+            if (!tab.url) {
+                chrome.tabs.get(tab.id, (chrTab)=> {
+                    console.log("BAD TAB", chrTab);
+                });
+            }
         }
     }
 

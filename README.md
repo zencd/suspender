@@ -2,9 +2,10 @@
 
 ## todo p1
 
-- watch for tabs and suspend them after a timeout
 - remove screenshots from storage when tab closed
 - retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
+- remove a tab - it still stays in the tab list (debug tabs)
+- tabs like vinyl-digital.com refresh each minute
 
 ## todo p2
 
