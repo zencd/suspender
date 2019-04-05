@@ -6,6 +6,7 @@
 - retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 - remove a tab - it still stays in the tab list (debug tabs)
 - tabs like vinyl-digital.com refresh each minute
+- don't suspend tabs which needs "Confirm Form Resubmission"
 
 ## todo p2
 

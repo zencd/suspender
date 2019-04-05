@@ -48,6 +48,7 @@ TabList.prototype = {
     getOrCreateTab: function (tabId) {
         let tab = this.tabById[tabId];
         if (!tab) {
+            // console.log("creating TabHandle on demand", tabId);
             tab = new TabHandle(tabId);
             this.tabById[tabId] = tab;
         }
@@ -57,11 +58,14 @@ TabList.prototype = {
         const prevTabId = this.currentTabs[windowId];
         this.currentTabs[windowId] = curTabId;
         if (prevTabId && prevTabId !== curTabId) {
-            const prevTab = this.get(prevTabId);
-            prevTab.lastSeen = new Date();
-            prevTab.active = false;
+            const prevTab = this.getTab(prevTabId);
+            if (prevTab) {
+                // absence of `prevTab` may mean it just has been closed, this is normal
+                prevTab.lastSeen = new Date();
+                prevTab.active = false;
+            }
         }
-        const curTab = this.get(curTabId);
+        const curTab = this.getOrCreateTab(curTabId);
         curTab.active = true;
     },
     getAllTabs: function () {
