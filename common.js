@@ -42,13 +42,15 @@ function TabList() {
 }
 
 TabList.prototype = {
-    get: function (tabId) {
+    getTab: function (tabId) {
+        return this.tabById[tabId];
+    },
+    getOrCreateTab: function (tabId) {
         let tab = this.tabById[tabId];
         if (!tab) {
             tab = new TabHandle(tabId);
             this.tabById[tabId] = tab;
         }
-        // console.log("get returning", tab);
         return tab;
     },
     tabActivated: function (windowId, curTabId) {

@@ -102,7 +102,7 @@
         chrome.tabs.getAllInWindow(null, function (chromeTabs) {
             for (let i = 0; i < chromeTabs.length; i++) {
                 const chrTab = chromeTabs[i];
-                const myTab = tabs.get(chrTab.id);
+                const myTab = tabs.getOrCreateTab(chrTab.id);
                 myTab.updateFromChromeTab(chrTab);
                 injectContentScriptIntoTab(chrTab);
             }
@@ -157,13 +157,13 @@
             // Fired when a tab is created. Note that the tab's URL may not be set at the time this event is fired,
             // but you can listen to onUpdated events so as to be notified when a URL is set.
             console.log("onCreated", tab);
-            const myTab = tabs.get(tab.id);
+            const myTab = tabs.getOrCreateTab(tab.id);
             myTab.updateFromChromeTab(tab);
         });
         chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             // Fired when a tab is updated.
             console.log("onUpdated", tabId, changeInfo, tab);
-            const myTab = tabs.get(tabId);
+            const myTab = tabs.getOrCreateTab(tabId);
             myTab.updateFromChromeTab(tab);
             // console.log("onUpdated: myTab after all", myTab);
         });
