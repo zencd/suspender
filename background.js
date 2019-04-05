@@ -24,15 +24,6 @@
     initMessageListener();
     inspectExistingTabs();
 
-    // const tt = tabs.getAllTabs();
-    // console.log("tt", tt.length);
-    // for (let i = 0; i < tt.length; i++) {
-    //     const tabObj = tt[i];
-    //     chrome.tabs.executeScript(tabObj.id, {file: "content.js"});
-    //     console.log("tab injected", tabObj);
-    // }
-    // setInterval(findAllTabsAndMessageThem, 10 * 1000);
-
     function findOldTabsAndSuspendThem() {
         const now = new Date();
         const tt = tabs.getAllTabs();
@@ -53,20 +44,6 @@
         }
     }
 
-    function findAllTabsAndMessageThem() {
-        const now = new Date();
-        const tt = tabs.getAllTabs();
-        for (let i = 0; i < tt.length; i++) {
-            const tabObj = tt[i];
-            if (isUrlSuspendable(tabObj.url)) {
-                const msg = {message: 'HELLO'};
-                console.log("sending HELLO to", tabObj.id, tabObj.url);
-                chrome.tabs.sendMessage(tabObj.id, msg, function (response) {
-                });
-            }
-        }
-    }
-
     function initTabWatchTimer() {
         setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_SECONDS);
         // setTimeout(findOldTabsAndSuspendThem, 9000); // temp
@@ -77,6 +54,10 @@
                 // details: frameId: 0, method: "GET", parentFrameId: -1, requestId: "177149", tabId: 3320, timeStamp: 1553804074191.074, type: "main_frame", url: "https://github.com/zencd/charted"
                 const tabId = details.tabId;
                 const theKey = '' + tabId + '.' + details.url;
+                // if (details.url.startsWith('https://www.vinyl-digital.com/')) {
+                //     console.log("onBeforeRequest", details);
+                //     console.log("theKey", theKey);
+                // }
                 if (tabIdToSuspend[theKey]) {
                     logToCurrentTab("tabIdToSuspend[theKey]", tabIdToSuspend[theKey]);
                     logToCurrentTab("tabId", tabId);
@@ -114,27 +95,10 @@
 
     function injectContentScriptIntoTab(chrTab) {
         if (isUrlSuspendable(chrTab.url)) {
-            // console.log("injecting into", chrTab);
-            chrome.tabs.executeScript(chrTab.id, {
-                file: "html2canvas.js",
-                runAt: "document_start"
-            }, function (injectResult1) {
-                chrome.tabs.executeScript(chrTab.id, {
-                    file: "utils.js",
-                    runAt: "document_start"
-                }, function (injectResult2) {
-                    chrome.tabs.executeScript(chrTab.id, {
-                        file: "common.js",
-                        runAt: "document_start"
-                    }, function (injectResult3) {
-                        chrome.tabs.executeScript(chrTab.id, {
-                            file: "content.js",
-                            runAt: "document_start"
-                        }, function (injectResult4) {
-                        });
-                    });
-                });
-            });
+            console.log("injecting into", chrTab.url);
+            const runAt = "document_start";
+            const jsFiles = ["html2canvas.js", "utils.js", "common.js", "content.js"];
+            injectScriptsIntoTab(chrTab.id, runAt, jsFiles);
         }
     }
 
@@ -221,7 +185,7 @@
             const theKey = '' + tabId + '.' + tabUrl;
             tabIdToSuspend[theKey] = true;
             tabDataUriToSuspend[theKey] = htmlDataUri;
-            console.log("reloading", tabUrl);
+            console.log("reloading", tabId, tabUrl);
             chrome.tabs.reload(tabId, {bypassCache: false});
         });
     }
@@ -232,10 +196,10 @@
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
-            console.log(""+(i+1)+".", tab.id, limit(tab.url, 60));
-            console.log(" ", (tab.suspended?'S':'_'), (tab.active?'A':'_'), (tab.pinned?'P':'_'), (tab.audible?'Au':'_'), ls, "s");
+            console.log("" + (i + 1) + ".", tab.id, limit(tab.url, 60));
+            console.log(" ", (tab.suspended ? 'S' : '_'), (tab.active ? 'A' : '_'), (tab.pinned ? 'P' : '_'), (tab.audible ? 'Au' : '_'), ls, "s");
             if (!tab.url) {
-                chrome.tabs.get(tab.id, (chrTab)=> {
+                chrome.tabs.get(tab.id, (chrTab) => {
                     console.log("BAD TAB", chrTab);
                 });
             }
@@ -290,4 +254,25 @@
             }
         });
     }
+
+    function injectScriptsIntoTab(tabId, runAt, files) {
+        if (files.length <= 0) {
+            return;
+        }
+        let cur = 0;
+        function inject_one() {
+            if (cur <= files.length - 1) {
+                chrome.tabs.executeScript(tabId, {
+                    file: files[cur],
+                    runAt: runAt
+                }, (injectResult) => {
+                    // console.log("file injected", js_files[current_js_file], injectResult);
+                    cur++;
+                    inject_one();
+                });
+            }
+        }
+        inject_one();
+    }
+
 }());

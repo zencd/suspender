@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    console.log("content.js is here");
+
     const logArray = function (args) {
         console.log.apply(console, args);
     };
