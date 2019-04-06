@@ -183,7 +183,7 @@
                 htmlDataUri: htmlDataUri,
                 unixTime: unixTime,
             };
-            chrome.tabs.update({url: redirUrl});
+            chrome.tabs.update(tabId, {url: redirUrl});
         });
     }
 

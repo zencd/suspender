@@ -6,6 +6,7 @@
 - retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 - remove a tab - it still stays in the tab list (debug tabs)
 - don't suspend tabs which needs "Confirm Form Resubmission"
+- does tabs get restored with the same tab id?
 
 ## todo p2
 
@@ -58,6 +59,7 @@
 - screenshots reflects page as user left it, not just capturing page's top (H2C, TGS)
 - instant screenshots instead of the slower TGS (which depends on page size!)
 - user should not fear of extension uninstall, update, sessions, etc
+- fast browser startup (with many tabs frozen)
 - extension uninstall does not discard suspended tabs
 - N times faster than TGS
 - no user tracking with GA/etc
