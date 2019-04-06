@@ -194,10 +194,11 @@
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
             console.log("" + (i + 1) + ".", tab.id, limit(tab.url, 60));
+            console.log(" ", tab);
             console.log(" ", (tab.suspended ? 'S' : '_'), (tab.active ? 'A' : '_'), (tab.pinned ? 'P' : '_'), (tab.audible ? 'Au' : '_'), ls, "s");
             if (!tab.url) {
                 chrome.tabs.get(tab.id, (chrTab) => {
-                    console.log("BAD TAB", chrTab);
+                    console.warn("BAD TAB", chrTab);
                 });
             }
         }

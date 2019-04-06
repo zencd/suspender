@@ -43,6 +43,7 @@
 + cannot be suspended: https://www.vinyl-digital.com/
 + disable RMB click on screenshots (iframed.html)
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
+- currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
 
 ## refs
 
@@ -91,3 +92,10 @@ chrome.runtime.getBackgroundPage(function (bgpage)
 		"run_at": "document_end",
 		"all_frames" : false
     }
+
+##### favicon
+
+    "permissions": ["chrome://favicon/"],
+    "content_security_policy": "img-src chrome://favicon;"
+    
+    chrome://favicon/http://ya.ru/

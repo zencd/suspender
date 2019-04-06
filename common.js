@@ -7,30 +7,64 @@ function isUrlSuspendable(url) {
     return url && (url.startsWith('http://') || url.startsWith('https://'));
 }
 
+function loadAndProcessFavicon(favIconUrl, onload) {
+    const $canvas = document.createElement('canvas');
+    // document.body.appendChild($iconCanvas);
+    const ctx = $canvas.getContext('2d');
+    const img = new window.Image();
+    img.onload = function () {
+        console.log("img", img.width, 'x', img.height);
+        $canvas.width = img.width;
+        $canvas.height = img.height;
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(img, 0, 0);
+        const dataUri = $canvas.toDataURL("image/png");
+        onload(dataUri);
+    };
+    img.src = favIconUrl;
+}
+
+/**
+ * converts 'https://mail.google.com/mail/u/0/#inbox'
+ * into 'chrome://favicon/https://mail.google.com/'
+ * @param url
+ * @returns {string}
+ */
+function getChromeFaviconUrl(url) {
+    const i = url.indexOf('/', 8);
+    url = (i >= 0) ? url.substring(0, i + 1) : url;
+    console.log("tmp", url);
+    return 'chrome://favicon/' + url
+}
+
 function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     const tplUrl = chrome.runtime.getURL('iframed.html');
     const cssUrl = chrome.runtime.getURL('iframed.css');
     const iframeUrl = chrome.runtime.getURL('iframe.html');
+    const faviconUrl = getChromeFaviconUrl(pageUrl);
     // console.log("tplUrl", tplUrl);
     fetch(tplUrl).then((response) => { // todo fetch it once
         response.text().then((htmlTplStr) => {
-            // console.log("htmlTplStr bytes", htmlTplStr.length);
-            let tplVars = {
-                '$TITLE$': '*' + pageTitle,
-                '$LINK_URL$': pageUrl,
-                '$LINK_TEXT$': toReadableUrl(pageUrl),
-                '$IFRAME_URL$': iframeUrl,
-                '$CSS_URL$': cssUrl,
-                '$TAB_ID$': tabId,
-            };
-            // console.log("tplVars", tplVars);
-            const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
-            // console.log("htmlStr:", htmlStr);
-            const b64 = b64EncodeUnicode(htmlStr);
-            const dataUri = 'data:text/html;base64,' + b64;
-            // console.log("dataUri", dataUri);
-            callback(dataUri);
-            // document.location.href = dataUri;
+            loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
+                // console.log("htmlTplStr bytes", htmlTplStr.length);
+                let tplVars = {
+                    '$TITLE$': pageTitle,
+                    '$LINK_URL$': pageUrl,
+                    '$LINK_TEXT$': toReadableUrl(pageUrl),
+                    '$IFRAME_URL$': iframeUrl,
+                    '$CSS_URL$': cssUrl,
+                    '$TAB_ID$': tabId,
+                    '$FAVICON_DATA_URI$': faviconDataUri,
+                };
+                // console.log("tplVars", tplVars);
+                const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
+                // console.log("htmlStr:", htmlStr);
+                const b64 = b64EncodeUnicode(htmlStr);
+                const dataUri = 'data:text/html;base64,' + b64;
+                // console.log("dataUri", dataUri);
+                callback(dataUri);
+                // document.location.href = dataUri;
+            });
         });
     });
 }
