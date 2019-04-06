@@ -3,8 +3,9 @@
 
     const console = chrome.extension.getBackgroundPage().console;
 
-    const tabIdToSuspend = {};
-    const tabDataUriToSuspend = {};
+    const parkPageUrl = chrome.runtime.getURL('/park.html'); // like chrome-extension://ID/park.html
+
+    const suspensionMap = {};
 
     const tabs = new TabList();
 
@@ -50,24 +51,14 @@
     }
 
     function initWebRequestListeners() {
+        const urlPattern = parkPageUrl + '*';
         chrome.webRequest.onBeforeRequest.addListener(function (details) {
-                // details: frameId: 0, method: "GET", parentFrameId: -1, requestId: "177149", tabId: 3320, timeStamp: 1553804074191.074, type: "main_frame", url: "https://github.com/zencd/charted"
-                const tabId = details.tabId;
-                const theKey = '' + tabId + '.' + details.url;
-                // if (details.url.startsWith('https://www.vinyl-digital.com/')) {
-                //     console.log("onBeforeRequest", details);
-                //     console.log("theKey", theKey);
-                // }
-                if (tabIdToSuspend[theKey]) {
-                    logToCurrentTab("tabIdToSuspend[theKey]", tabIdToSuspend[theKey]);
-                    logToCurrentTab("tabId", tabId);
-                    logToCurrentTab("details", details);
-                    // logToCurrentTab("details", details);
-                    // console.log("details", details);
-                    const dataUri = tabDataUriToSuspend[theKey];
+                const suspensionInfo = suspensionMap[details.url];
+                if (suspensionInfo) {
+                    const dataUri = suspensionInfo.htmlDataUri;
+                    const tabId = suspensionInfo.tabId;
                     if (dataUri) {
-                        tabIdToSuspend[theKey] = false;
-                        tabDataUriToSuspend[theKey] = null;
+                        delete suspensionMap[details.url];
                         const myTab = tabs.getTab(tabId);
                         if (myTab) {
                             myTab.suspended = true;
@@ -77,7 +68,7 @@
                 }
                 return {};
             },
-            {urls: ["http://*/*", "https://*/*"]},
+            {urls: [urlPattern]},
             ["blocking"]
         );
     }
@@ -180,13 +171,15 @@
     function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri) {
         const storageKey = 'screenshot.data-uri.tab.' + tabId;
         chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
-            logToCurrentTab("data saved");
-            // logToCurrentTab("imageDataUri", imageDataUri);
-            const theKey = '' + tabId + '.' + tabUrl;
-            tabIdToSuspend[theKey] = true;
-            tabDataUriToSuspend[theKey] = htmlDataUri;
-            console.log("reloading", tabId, tabUrl);
-            chrome.tabs.reload(tabId, {bypassCache: false});
+            const unixTime = new Date() - 0;
+            const redirUrl = parkPageUrl + '?uniq=' + unixTime;
+            console.log("redirUrl", redirUrl);
+            suspensionMap[redirUrl] = {
+                tabId: tabId,
+                htmlDataUri: htmlDataUri,
+                unixTime: unixTime,
+            };
+            chrome.tabs.update({url: redirUrl});
         });
     }
 
