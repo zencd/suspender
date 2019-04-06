@@ -5,7 +5,6 @@
 - remove screenshots from storage when tab closed
 - retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 - remove a tab - it still stays in the tab list (debug tabs)
-- tabs like vinyl-digital.com refresh each minute
 - don't suspend tabs which needs "Confirm Form Resubmission"
 
 ## todo p2
@@ -40,8 +39,7 @@
 
 ## bugs
 
-- cannot be suspended: gmail - it only refreshes
-- cannot be suspended: https://www.vinyl-digital.com/index.php?lang=0&&redirected=1
++ cannot be suspended: https://www.vinyl-digital.com/
 + disable RMB click on screenshots (iframed.html)
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
 

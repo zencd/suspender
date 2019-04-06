@@ -91,6 +91,9 @@ function TabHandle(tabId) {
 
 TabHandle.prototype = {
     updateFromChromeTab: function (chromeTab) {
+        if (chromeTab.url && chromeTab.url !== this.url) {
+            this.suspended = false;
+        }
         this.active = chromeTab.active;
         this.audible = chromeTab.audible;
         this.pinned = chromeTab.pinned;

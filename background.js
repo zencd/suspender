@@ -77,10 +77,15 @@
         chrome.tabs.getAllInWindow(null, function (chromeTabs) {
             for (let i = 0; i < chromeTabs.length; i++) {
                 const chrTab = chromeTabs[i];
+                // console.log("chrTab", chrTab);
                 const myTab = tabs.getOrCreateTab(chrTab.id);
                 myTab.updateFromChromeTab(chrTab);
+                if (chrTab.active === true) {
+                    tabs.currentTabs[chrTab.windowId] = chrTab.id;
+                }
                 injectContentScriptIntoTab(chrTab);
             }
+            // console.log("tabs.currentTabs", tabs.currentTabs);
         });
     }
 
@@ -98,10 +103,9 @@
             // Fires when the active tab in a window changes.
             // https://developer.chrome.com/extensions/tabs#event-onActivated
             // logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
+            const tab = tabs.getTab(activeInfo.tabId);
             tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
-            chrome.tabs.get(activeInfo.tabId, function (tab) {
-                console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, tab.url);
-            });
+            console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, tab.url);
         });
         chrome.tabs.onAttached.addListener(function (tabId, attachInfo) {
             // Fired when a tab is attached to a window
@@ -253,6 +257,7 @@
             return;
         }
         let cur = 0;
+
         function inject_one() {
             if (cur <= files.length - 1) {
                 chrome.tabs.executeScript(tabId, {
@@ -265,6 +270,7 @@
                 });
             }
         }
+
         inject_one();
     }
 
