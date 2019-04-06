@@ -173,17 +173,19 @@
     }
 
     function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri) {
-        const storageKey = 'screenshot.data-uri.tab.' + tabId;
-        chrome.storage.local.set({[storageKey]: imageDataUri}, function () {
-            const unixTime = new Date() - 0;
-            const redirUrl = parkPageUrl + '?uniq=' + unixTime;
-            console.log("redirUrl", redirUrl);
-            suspensionMap[redirUrl] = {
-                tabId: tabId,
-                htmlDataUri: htmlDataUri,
-                unixTime: unixTime,
-            };
-            chrome.tabs.update(tabId, {url: redirUrl});
+        scaleDownRetinaImage(imageDataUri, function (imageDataUri2) {
+            const storageKey = 'screenshot.data-uri.tab.' + tabId;
+            chrome.storage.local.set({[storageKey]: imageDataUri2}, function () {
+                const unixTime = new Date() - 0;
+                const redirUrl = parkPageUrl + '?uniq=' + unixTime;
+                // console.log("redirUrl", redirUrl);
+                suspensionMap[redirUrl] = {
+                    tabId: tabId,
+                    htmlDataUri: htmlDataUri,
+                    unixTime: unixTime,
+                };
+                chrome.tabs.update(tabId, {url: redirUrl});
+            });
         });
     }
 
