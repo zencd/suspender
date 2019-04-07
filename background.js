@@ -1,7 +1,9 @@
 (function () {
     "use strict";
 
-    const console = chrome.extension.getBackgroundPage().console;
+    const console = chrome.extension.getBackgroundPage().console; // really needed?
+
+    const CONTENT_SCRIPTS = ["html2canvas.js", "utils.js", "common.js", "content.js"];
 
     const parkPageUrl = chrome.runtime.getURL('/park.html'); // like chrome-extension://ID/park.html
 
@@ -16,6 +18,7 @@
         // suspendTimeoutSeconds: 4,
         suspendActive: false,
         suspendPinned: false,
+        suspendAudible: false,
     };
 
     initContextMenu();
@@ -32,10 +35,11 @@
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
             const timeoutOk = tabObj.lastSeen && diffSec >= settings.suspendTimeoutSeconds;
-            const activeTabOk = settings.suspendActive || (!settings.suspendActive && !tabObj.active);
             const schemaOk = isUrlSuspendable(tabObj.url);
-            const pinnedOk = settings.suspendPinned || (!settings.suspendPinned && !tabObj.pinned);
-            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk && pinnedOk;
+            const activeTabOk = settings.suspendActive || !tabObj.active;
+            const pinnedOk = settings.suspendPinned || !tabObj.pinned;
+            const audibleOk = settings.suspendAudible || !tabObj.audible;
+            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk && pinnedOk && audibleOk;
             // const doSuspend = (tabObj.url === 'https://zencd.github.io/charted/');
             // console.log("tab", tabObj.url, "suspending?", doSuspend);
             if (doSuspend) {
@@ -93,8 +97,7 @@
         if (isUrlSuspendable(chrTab.url)) {
             console.log("injecting into", chrTab.url);
             const runAt = "document_start";
-            const jsFiles = ["html2canvas.js", "utils.js", "common.js", "content.js"];
-            injectScriptsIntoTab(chrTab.id, runAt, jsFiles);
+            injectScriptsIntoTab(chrTab.id, runAt, CONTENT_SCRIPTS);
         }
     }
 

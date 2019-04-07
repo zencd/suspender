@@ -1,6 +1,7 @@
 "use strict";
 
 const MESSAGE_LOG = 'MESSAGE_LOG';
+const LOG_PREFIX = 'BTS:';
 
 if (typeof String.prototype.replaceAll === 'undefined') {
     String.prototype.replaceAll = function (search, replacement) {

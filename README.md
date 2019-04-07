@@ -7,6 +7,7 @@
 - remove a tab - it still stays in the tab list (debug tabs)
 - don't suspend tabs which needs "Confirm Form Resubmission"
 - does tabs get restored with the same tab id?
+- call chrome.tabs.discard() on suspended tabs after timeout
 
 ## todo p2
 
@@ -14,6 +15,7 @@
 
 ## todo p3
 
+- after restart, make the "data uri" tabs connects to background not all at once, maybe request screenshot on demand only
 - minimize permissions
 - iframed.html: minimize template
 - iframed.html: inline CSS to work smoothly even without the extension
@@ -44,6 +46,7 @@
 + disable RMB click on screenshots (iframed.html)
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
 - currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
+- Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
 
 ## refs
 

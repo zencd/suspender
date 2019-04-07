@@ -1,17 +1,31 @@
 (function () {
     "use strict";
 
-    console.log("content.js is here");
+    // const console = {
+    //     log: log,
+    //     info: log,
+    //     warn: log,
+    //     error: log,
+    //     debug: log,
+    // };
+
+    function log() {
+        const args = Array.prototype.slice.call(arguments);
+        args.unshift(LOG_PREFIX);
+        window.console.log.apply(null, args);
+    }
 
     const logArray = function (args) {
-        console.log.apply(console, args);
+        console.log.apply(null, args);
     };
+
+    log('content.js init');
 
     initMessageListener();
 
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-            console.log("received msg", msg);
+            console.debug("received msg", msg);
             // return;
             if (msg.message === MESSAGE_LOG) {
                 const argArray = Object.values(msg.arguments);
@@ -19,7 +33,7 @@
                 logArray(argArray);
             } else if (msg.message === MESSAGE_TAKE_SCREENSHOT) {
                 const root = document.body;
-                console.log("root", root);
+                // console.log("root", root);
                 // sendResponse({xxx: 123});
                 const opts = {
                     //imageTimeout: 40*1000,
