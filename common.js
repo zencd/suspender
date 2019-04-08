@@ -7,13 +7,11 @@ function isUrlSuspendable(url) {
     return url && (url.startsWith('http://') || url.startsWith('https://'));
 }
 
-function scaleDownRetinaImage(origDataUri, onload) {
+function scaleDownRetinaImage(scaleDown, origDataUri, onload) {
     const dpr = window.devicePixelRatio;
-    if (dpr === 1) {
+    if (dpr === 1 || !scaleDown) {
         return onload(origDataUri);
     }
-
-    // return onload(origDataUri);
 
     const $canvas = document.createElement('canvas');
     document.body.appendChild($canvas);

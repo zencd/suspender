@@ -34,6 +34,7 @@
                 const root = document.body;
                 const opts = {
                     height: window.innerHeight, // capturing only the visible area
+                    scale: 1, // scale=1 forces normal size screenshot on retina, ready for CSS pixels
                     //imageTimeout: 40*1000,
                     //allowTaint: true,
                     //useCORS: true,

@@ -10,7 +10,7 @@ function fetchAndSetImage(tabId) {
         if (dataUri) {
             console.log("time consumed 1", (new Date() - d1), "ms");
             document.body.style.backgroundImage = 'url(' + dataUri + ')';
-            console.log("time consumed 2", (new Date() - d1), "ms, " + Math.round(dataUri.length/1024) + " KB data uri");
+            console.log("time consumed 2", (new Date() - d1), "ms, " + Math.ceil(dataUri.length/1024) + " KB data uri");
             window.parent.postMessage({call: 'setScreenshot', dataUri: dataUri}, '*');
         } else {
             console.warn("no screenshot found for tab", tabId);

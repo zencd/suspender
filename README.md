@@ -3,13 +3,11 @@
 ## todo p1
 
 - remove screenshots from storage when tab closed
-- retina: switch from background image to IMG to be able to transform scale(0.5, 0.5)
 - remove a tab - it still stays in the tab list (debug tabs)
 - don't suspend tabs which needs "Confirm Form Resubmission"
 - does tabs get restored with the same tab id?
 - call chrome.tabs.discard() on suspended tabs after timeout
 - check for presence of TGS because it hooks on discard()
-- I manually rescale retina images, try pass 'scale: 1' to H2C instead 
 
 ## todo p2
 
@@ -51,6 +49,7 @@
 - currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
 - Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
 + limit screenshot height with H2C opts, otherwise it weights 2MB plus
++ I manually rescale retina images, pass 'scale: 1' to H2C instead 
 
 ## refs
 

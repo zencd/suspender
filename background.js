@@ -155,7 +155,8 @@
             if (isActiveTab) {
                 // todo use windowId
                 chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                    suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri);
+                    const scaleDown = isActiveTab;
+                    suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
                 });
             } else {
                 const tabId = tab.id;
@@ -175,8 +176,8 @@
 
     }
 
-    function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri) {
-        scaleDownRetinaImage(imageDataUri, function (imageDataUri2) {
+    function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
+        scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
             const storageKey = 'screenshot.data-uri.tab.' + tabId;
             chrome.storage.local.set({[storageKey]: imageDataUri2}, function () {
                 const unixTime = new Date() - 0;
@@ -281,7 +282,7 @@
             // console.log("BG: incoming msg", msg);
             if (msg.message === MESSAGE_SCREENSHOT_READY) {
                 // console.log("screenshot is ready!!!", msg);
-                suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri);
+                suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
             }
         });
     }
