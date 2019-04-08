@@ -25,17 +25,15 @@
 
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-            console.debug("received msg", msg);
-            // return;
+            // console.debug("received msg", msg);
             if (msg.message === MESSAGE_LOG) {
                 const argArray = Object.values(msg.arguments);
                 argArray.splice(0, 0, "BG:");
                 logArray(argArray);
             } else if (msg.message === MESSAGE_TAKE_SCREENSHOT) {
                 const root = document.body;
-                // console.log("root", root);
-                // sendResponse({xxx: 123});
                 const opts = {
+                    height: window.innerHeight, // capturing only the visible area
                     //imageTimeout: 40*1000,
                     //allowTaint: true,
                     //useCORS: true,
@@ -54,7 +52,7 @@
                     });
                 });
             } else {
-                console.log("Got message", msg.message);
+                console.debug("Got message", msg.message);
             }
         });
     }

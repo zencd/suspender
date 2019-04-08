@@ -11,7 +11,7 @@
 
     const tabs = new TabList();
 
-    const OLD_TAB_CHECK_INTERVAL_SECONDS = 60 * 1000;
+    const OLD_TAB_CHECK_INTERVAL_SECONDS = 64 * 1000;
 
     const settings = {
         suspendTimeoutSeconds: 15 * 60,
@@ -106,9 +106,9 @@
             // Fires when the active tab in a window changes.
             // https://developer.chrome.com/extensions/tabs#event-onActivated
             // logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
-            const tab = tabs.getTab(activeInfo.tabId);
+            const tab = tabs.getTab(activeInfo.tabId); // nullable
             tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
-            console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, tab.url);
+            console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, 'tab', tab);
         });
         chrome.tabs.onAttached.addListener(function (tabId, attachInfo) {
             // Fired when a tab is attached to a window
@@ -199,11 +199,25 @@
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
             console.log("" + (i + 1) + ".", tab.id, limit(tab.url, 60));
+            console.log(" ", (tab.suspended ? 'Su' : '_'), (tab.active ? 'Ac' : '_'), (tab.pinned ? 'Pi' : '_'), (tab.audible ? 'Au' : '_'), (tab.discarded ? 'Di' : '_'), ls, "s");
             console.log(" ", tab);
-            console.log(" ", (tab.suspended ? 'S' : '_'), (tab.active ? 'A' : '_'), (tab.pinned ? 'P' : '_'), (tab.audible ? 'Au' : '_'), ls, "s");
             if (!tab.url) {
                 chrome.tabs.get(tab.id, (chrTab) => {
                     console.warn("BAD TAB", chrTab);
+                });
+            }
+        }
+    }
+
+    function onContextMenuDiscardDataUriTabs() {
+        console.log("onContextMenuDiscardDataUriTabs");
+        const tt = tabs.getAllTabs();
+        for (let i = 0; i < tt.length; i++) {
+            const tab = tt[i];
+            // console.log("tab", tab.url);
+            if (tab.url && tab.url.startsWith('data:text/html')) {
+                chrome.tabs.discard(tab.id, function (resTab) {
+                    console.log("discarded tab", resTab);
                 });
             }
         }
@@ -244,6 +258,20 @@
             contexts: contexts,
             onclick: (info, tab) => {
                 onContextMenuDebugTabs();
+            }
+        });
+        chrome.contextMenus.create({
+            title: "Discard Data URI Tabs",
+            contexts: contexts,
+            onclick: (info, tab) => {
+                onContextMenuDiscardDataUriTabs();
+            }
+        });
+        chrome.contextMenus.create({
+            title: "Memory Report",
+            contexts: contexts,
+            onclick: (info, tab) => {
+                console.log(window.performance.memory);
             }
         });
     }

@@ -144,6 +144,7 @@ function TabHandle(tabId) {
     this.lastSeen = new Date(); // Date
     this.active = false;
     this.suspended = false;
+    this.discarded = false;
     this.audible = false;
     this.favIconUrl = null; // string
     this.pinned = false;
@@ -157,6 +158,7 @@ TabHandle.prototype = {
             this.suspended = false;
         }
         this.active = chromeTab.active;
+        this.discarded = chromeTab.discarded;
         this.audible = chromeTab.audible;
         this.pinned = chromeTab.pinned;
         this.url = chromeTab.url;

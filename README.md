@@ -8,6 +8,8 @@
 - don't suspend tabs which needs "Confirm Form Resubmission"
 - does tabs get restored with the same tab id?
 - call chrome.tabs.discard() on suspended tabs after timeout
+- check for presence of TGS because it hooks on discard()
+- I manually rescale retina images, try pass 'scale: 1' to H2C instead 
 
 ## todo p2
 
@@ -26,6 +28,7 @@
 - try detect scrollbar presence and cut it off, or take screenshot without it initially
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - H2C: it renders full page - need to shrink it to limit image's weight
+- there is a Chrome's feature: multi-tab selection
 
 ## todo options
 
@@ -47,6 +50,7 @@
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
 - currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
 - Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
++ limit screenshot height with H2C opts, otherwise it weights 2MB plus
 
 ## refs
 
@@ -56,6 +60,7 @@
 - https://developer.chrome.com/extensions/tabCapture#method-captureOffscreenTab
 - http://html2canvas.hertzen.com/configuration/
 - injecting ext's JS into a data uri html directly isn't possible (symbols aren't available) so using iframe still 
+- https://developers.google.com/web/updates/2015/09/tab-discarding
 
 ## pro
 
@@ -102,3 +107,9 @@ chrome.runtime.getBackgroundPage(function (bgpage)
     "content_security_policy": "img-src chrome://favicon;"
     
     chrome://favicon/http://ya.ru/
+
+##### check ext installed
+
+`chrome.management.get`
+
+https://developer.chrome.com/extensions/management
