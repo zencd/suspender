@@ -131,7 +131,7 @@ TabList.prototype = {
     getAllTabs: function () {
         return Object.values(this.tabById);
     },
-    removeById: function(tabId) {
+    removeById: function (tabId) {
         delete this.tabById[tabId];
     },
 };
@@ -165,3 +165,7 @@ TabHandle.prototype = {
         this.favIconUrl = chromeTab.favIconUrl;
     },
 };
+
+function toMB(bytes) {
+    return Math.ceil(bytes / 1024 / 1024);
+}

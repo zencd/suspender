@@ -7,7 +7,6 @@
 - don't suspend tabs which needs "Confirm Form Resubmission"
 - does tabs get restored with the same tab id?
 - call chrome.tabs.discard() on suspended tabs after timeout
-- check for presence of TGS because it hooks on discard()
 
 ## todo p2
 
@@ -15,17 +14,12 @@
 
 ## todo p3
 
-- after restart, make the "data uri" tabs connects to background not all at once, maybe request screenshot on demand only
+- check for presence of TGS because it hooks on discard()
 - minimize permissions
-- iframed.html: minimize template
+- iframed.html: minify template
 - iframed.html: inline CSS to work smoothly even without the extension
-- minimize screenshot size when pixel ratio is 2+
 - make unique extension icons
-- iframed: substitute favicon with a pale version data uri
-- the data uri page: use a pale favicon to distinct suspended tabs easier
-- try detect scrollbar presence and cut it off, or take screenshot without it initially
 - when user unfreezes a tab make sure the content is still there, and warn maybe
-- H2C: it renders full page - need to shrink it to limit image's weight
 - there is a Chrome's feature: multi-tab selection
 
 ## todo options
@@ -43,13 +37,18 @@
 
 ## bugs
 
-+ cannot be suspended: https://www.vinyl-digital.com/
-+ disable RMB click on screenshots (iframed.html)
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
 - currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
 - Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
++ DENIED: try detect scrollbar presence and cut it off, or take screenshot without it initially
++ cannot be suspended: https://www.vinyl-digital.com/
++ disable RMB click on screenshots (iframed.html)
 + limit screenshot height with H2C opts, otherwise it weights 2MB plus
 + I manually rescale retina images, pass 'scale: 1' to H2C instead 
++ H2C: it renders full page - need to shrink it to limit image's weight
++ iframed: substitute favicon with a pale version data uri
++ the data uri page: use a pale favicon to distinct suspended tabs easier
++ minimize screenshot size when pixel ratio is 2+
 
 ## refs
 
