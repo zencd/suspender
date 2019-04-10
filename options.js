@@ -1,9 +1,8 @@
-const $suspendPinned = document.querySelector('#suspend-pinned');
 const options = new Options();
-options.onsave = function () {
+options.onPersisted = function () {
     console.log("options saved", options);
+    qs('.notify').className += ' elementFadeOut';
 };
-console.log("options initially", options);
 
 const ogm = new OptionsGuiMapping();
 

@@ -7,14 +7,13 @@ function Options() {
     this.defineOption('suspendActive', false);
     this.defineOption('suspendUnsavedForm', false);
     this.defineOption('suspendOffline', false);
-    this.onsave = null; // function
+    this.onPersisted = null; // function
     return this;
 }
 
 Options.STORAGE_PREFIX = 'options.';
 
 Options.prototype = {
-    STORAGE_PREFIX: 'options.',
     defineOption: function (name, defVal) {
         this.meta[name] = {
             name: name,
@@ -52,8 +51,8 @@ Options.prototype = {
         const map = {};
         map[this.makeStorageKey(name)] = value;
         chrome.storage.sync.set(map, function () {
-            if (thisOptions.onsave) {
-                thisOptions.onsave();
+            if (thisOptions.onPersisted) {
+                thisOptions.onPersisted();
             }
         });
     },

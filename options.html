@@ -19,6 +19,29 @@
         dd {
             margin: 0;
         }
+
+        .notify {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            text-align: center;
+            padding: 5px 10px;
+            background: #eee;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .elementFadeOut {
+            display: block;
+            opacity: 0;
+            animation: fadeKeyframes 5s linear;
+        }
+
+        @keyframes fadeKeyframes {
+            0% {opacity: 1}
+            50% {opacity: 1}
+            100% {opacity: 0}
+        }
     </style>
 </head>
 <body>
@@ -73,14 +96,14 @@
             <input type="checkbox" id="suspend-offline" data-storage-name="suspendOffline">
         </dd>
 
-<!--
-        <dt>
-            <label for="power-source">Suspend tabs when connected to power source</label>
-        </dt>
-        <dd>
-            <input type="checkbox" id="power-source">
-        </dd>
--->
+        <!--
+                <dt>
+                    <label for="power-source">Suspend tabs when connected to power source</label>
+                </dt>
+                <dd>
+                    <input type="checkbox" id="power-source">
+                </dd>
+        -->
 
         <dt>
             <label for="unsuspend-on-view">Automatically unsuspend tab when it is viewed</label>
@@ -96,6 +119,10 @@
             <textarea id="white-list"></textarea>
         </dd>
     </dl>
+</div>
+
+<div class="notify">
+    Options Saved
 </div>
 
 <script src="utils.js"></script>
