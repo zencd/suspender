@@ -1,7 +1,10 @@
 const options = new Options();
 options.onPersisted = function () {
     // console.log("options saved", options);
-    qs('.notify').className += ' elementFadeOut';
+    qs('.notify').style.display = 'block';
+    setTimeout(function () {
+        qs('.notify').style.display = 'none';
+    }, 2000);
 };
 
 const ogm = new OptionsToGuiMapping(options);
