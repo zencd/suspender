@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BTS Options</title>
     <style>
+        html, body {
+            margin: 0;
+            background-color: #f0f0f0;
+        }
         .wrapper {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 30px auto 0 auto;
+            border-radius: 30px;
+            background-color: white;
+            padding: 20px 50px;
         }
 
         dt {
@@ -50,10 +57,10 @@
     <h1>BTS Options</h1>
     <dl>
         <dt>
-            <label for="suspend-timeout">Pause after</label>
+            <label for="suspend-timeout">Suspend after</label>
         </dt>
         <dd>
-            <select id="suspend-timeout">
+            <select id="suspend-timeout" data-storage-name="suspendTimeout">
                 <option value="0">Never</option>
                 <option value="15">15 sec</option>
                 <option value="60">1 min</option>
