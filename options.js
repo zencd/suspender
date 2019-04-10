@@ -1,13 +1,22 @@
 const options = new Options();
+
+let notifierFadeOutTimer;
 options.onPersisted = function () {
-    // console.log("options saved", options);
+    clearTimeout(notifierFadeOutTimer);
     qs('.notify').style.display = 'block';
-    setTimeout(function () {
+    notifierFadeOutTimer = setTimeout(function () {
         qs('.notify').style.display = 'none';
-    }, 2000);
+    }, 2500);
 };
 
 const ogm = new OptionsToGuiMapping(options);
+
+disableLabelsForDisabledElements();
+
+document.addEventListener('DOMContentLoaded', function () {
+    ogm.init();
+    setControlsAsByStorage();
+});
 
 function OptionsToGuiMapping(options) {
     this.controlByName = {};
@@ -30,7 +39,7 @@ function OptionsToGuiMapping(options) {
             }
         }
     };
-    this.initSelects = function() {
+    this.initSelects = function () {
         const $controls = qsa('select');
         for (let i = 0; i < $controls.length; i++) {
             const $control = $controls[i];
@@ -71,7 +80,15 @@ function setControlsAsByStorage() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    ogm.init();
-    setControlsAsByStorage();
-});
+function disableLabelsForDisabledElements() {
+    const $elems = qsa('[disabled]');
+    for (let i = 0; i < $elems.length; i++) {
+        const id = $elems[i].id;
+        if (id) {
+            const $label = qs('label[for="' + id + '"]');
+            if ($label) {
+                $label.className += ' disabled';
+            }
+        }
+    }
+}
