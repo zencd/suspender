@@ -137,7 +137,8 @@ TabList.prototype = {
 };
 
 function TabHandle(tabId) {
-    this.id = tabId;
+    this.id = tabId; // Chrome's tab id, integer
+    this.windowId = null; // Chrome's window id, integer
     this.url = null;
     this.lastSeen = new Date(); // Date
     this.active = false;
@@ -146,7 +147,6 @@ function TabHandle(tabId) {
     this.audible = false;
     this.favIconUrl = null; // string
     this.pinned = false;
-    this.windowId = null;
     return this;
 }
 

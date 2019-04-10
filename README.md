@@ -21,6 +21,7 @@
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - there is a Chrome's feature: multi-tab selection
+- try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
 
 ## todo options
 

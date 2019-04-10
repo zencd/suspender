@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Options title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTS Options</title>
+    <style>
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        dt {
+            font: 18px sans-serif;
+            margin-top: 20px;
+            color: #222;
+        }
+
+        dd {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
-Options content here!!
+<div class="wrapper">
+    <h1>BTS Options</h1>
+    <dl>
+        <dt>
+            <label for="suspend-timeout">Pause after</label>
+        </dt>
+        <dd>
+            <select id="suspend-timeout">
+                <option value="0">Never</option>
+                <option value="15">15 sec</option>
+                <option value="60">1 min</option>
+                <option value="300">5 min</option>
+                <option value="900">15 min</option>
+                <option value="1800">30 min</option>
+                <option value="3600">1 hrs</option>
+                <option value="7200">2 hrs</option>
+                <option value="43200">12 hrs</option>
+                <option value="86400">24 hrs</option>
+                <option value="604800">1 week</option>
+            </select>
+        </dd>
+
+        <dt>
+            <label for="suspend-pinned">Suspend pinned tabs</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="suspend-pinned">
+        </dd>
+
+        <dt>
+            <label for="suspend-unsaved-form">Suspend tabs that contain unsaved form inputs</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="suspend-unsaved-form">
+        </dd>
+
+        <dt>
+            <label for="suspend-active">Suspend active tabs</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="suspend-active">
+        </dd>
+
+        <dt>
+            <label for="suspend-offline">Suspend tabs when offline</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="suspend-offline">
+        </dd>
+
+        <dt>
+            <label for="power-source">Suspend tabs when connected to power source</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="power-source">
+        </dd>
+
+        <dt>
+            <label for="unsuspend-on-view">Automatically unsuspend tab when it is viewed</label>
+        </dt>
+        <dd>
+            <input type="checkbox" id="unsuspend-on-view">
+        </dd>
+
+        <dt>
+            <label for="white-list">White list</label>
+        </dt>
+        <dd>
+            <textarea id="white-list"></textarea>
+        </dd>
+    </dl>
+</div>
+
+<script src="options.js"></script>
 
 </body>
 </html>
