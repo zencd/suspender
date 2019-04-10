@@ -49,42 +49,44 @@
             <label for="suspend-pinned">Suspend pinned tabs</label>
         </dt>
         <dd>
-            <input type="checkbox" id="suspend-pinned">
+            <input type="checkbox" id="suspend-pinned" data-storage-name="suspendPinned">
         </dd>
 
         <dt>
             <label for="suspend-unsaved-form">Suspend tabs that contain unsaved form inputs</label>
         </dt>
         <dd>
-            <input type="checkbox" id="suspend-unsaved-form">
+            <input type="checkbox" id="suspend-unsaved-form" data-storage-name="suspendUnsavedForm">
         </dd>
 
         <dt>
             <label for="suspend-active">Suspend active tabs</label>
         </dt>
         <dd>
-            <input type="checkbox" id="suspend-active">
+            <input type="checkbox" id="suspend-active" data-storage-name="suspendActive">
         </dd>
 
         <dt>
             <label for="suspend-offline">Suspend tabs when offline</label>
         </dt>
         <dd>
-            <input type="checkbox" id="suspend-offline">
+            <input type="checkbox" id="suspend-offline" data-storage-name="suspendOffline">
         </dd>
 
+<!--
         <dt>
             <label for="power-source">Suspend tabs when connected to power source</label>
         </dt>
         <dd>
             <input type="checkbox" id="power-source">
         </dd>
+-->
 
         <dt>
             <label for="unsuspend-on-view">Automatically unsuspend tab when it is viewed</label>
         </dt>
         <dd>
-            <input type="checkbox" id="unsuspend-on-view">
+            <input type="checkbox" id="unsuspend-on-view" data-storage-name="unsuspendOnView">
         </dd>
 
         <dt>
@@ -96,6 +98,8 @@
     </dl>
 </div>
 
+<script src="utils.js"></script>
+<script src="options-lib.js"></script>
 <script src="options.js"></script>
 
 </body>

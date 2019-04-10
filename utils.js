@@ -71,3 +71,11 @@ function limit(s, numChars) {
     if (numChars < s.length) s = s.substring(0, numChars);
     return s;
 }
+
+function qs(selector) {
+    return document.querySelector(selector);
+}
+
+function qsa(selector) {
+    return document.querySelectorAll(selector);
+}
