@@ -49,7 +49,9 @@ function OptionsToGuiMapping(options) {
                     control: $control,
                 };
                 $control.addEventListener('change', function () {
-                    options.saveOne($control.dataset.storageName, $control.value);
+                    const propName = $control.dataset.storageName;
+                    let value = options.parsePropertyFromString(propName, $control.value);
+                    options.saveOne(propName, value);
                 });
             }
         }

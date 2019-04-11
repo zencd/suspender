@@ -4,6 +4,7 @@ class StorageOptions {
         this.__meta = {};
         this.__mapForGetRequest = {};
         this.__storageKeyToPropertyName = {};
+        this.__storage = chrome.storage.sync;
         this.onPersisted = null; // function
     }
 
@@ -47,7 +48,7 @@ class StorageOptions {
 
     load(onload) {
         const thisOptions = this;
-        chrome.storage.sync.get(thisOptions.__mapForGetRequest, function (items) {
+        thisOptions.__storage.get(thisOptions.__mapForGetRequest, function (items) {
             thisOptions.parseStorage(items);
             if (typeof onload !== 'undefined') {
                 onload();
@@ -55,25 +56,21 @@ class StorageOptions {
         });
     }
 
-    tryFixValueToCorrectType(propName, value) {
+    parsePropertyFromString(propName, stringValue) {
         const meta = this.__meta[propName];
-        if (value != null && meta != null && meta['type'] === 'number' && typeof value !== 'number') {
-            const value2 = Number(value);
-            if (value == value2) { // XXX not exact comparison is by design here
-                return value2;
-            }
+        if (stringValue != null && meta != null && meta['type'] === 'number') {
+            return Number(stringValue);
         }
-        return value;
+        return stringValue;
     }
 
     saveOne(propName, value) {
         const thisOptions = this;
-        value = thisOptions.tryFixValueToCorrectType(propName, value);
         this[propName] = value;
         const map = {};
         const storageKey = this.__storagePrefix + propName;
         map[storageKey] = value;
-        chrome.storage.sync.set(map, function () {
+        thisOptions.__storage.set(map, function () {
             if (thisOptions.onPersisted) {
                 thisOptions.onPersisted();
             }
