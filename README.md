@@ -16,8 +16,8 @@
 
 - check for presence of TGS because it hooks on discard()
 - minimize permissions
-- iframed.html: minify template
-- iframed.html: inline CSS to work smoothly even without the extension
+- park.html: minify template
+- park.html: inline CSS to work smoothly even without the extension
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - there is a Chrome's feature: multi-tab selection
@@ -43,11 +43,11 @@
 - Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
 + DENIED: try detect scrollbar presence and cut it off, or take screenshot without it initially
 + cannot be suspended: https://www.vinyl-digital.com/
-+ disable RMB click on screenshots (iframed.html)
++ disable RMB click on screenshots (park.html)
 + limit screenshot height with H2C opts, otherwise it weights 2MB plus
 + I manually rescale retina images, pass 'scale: 1' to H2C instead 
 + H2C: it renders full page - need to shrink it to limit image's weight
-+ iframed: substitute favicon with a pale version data uri
++ park: substitute favicon with a pale version data uri
 + the data uri page: use a pale favicon to distinct suspended tabs easier
 + minimize screenshot size when pixel ratio is 2+
 

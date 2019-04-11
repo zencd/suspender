@@ -64,8 +64,8 @@ function getChromeFaviconUrl(url) {
 }
 
 function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
-    const tplUrl = chrome.runtime.getURL('iframed.html');
-    const cssUrl = chrome.runtime.getURL('iframed.css');
+    const tplUrl = chrome.runtime.getURL('park.html');
+    const cssUrl = chrome.runtime.getURL('park.css');
     const iframeUrl = chrome.runtime.getURL('iframe.html');
     const faviconUrl = getChromeFaviconUrl(pageUrl);
     // console.log("tplUrl", tplUrl);
