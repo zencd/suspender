@@ -22,7 +22,7 @@ class StorageOptions {
         this.__meta[propName] = {
             name: propName,
             defVal: defVal,
-            type: typeof defVal,
+            type: (defVal === null || defVal === undefined) ? null : typeof defVal,
         };
         const storageKey = this.__storagePrefix + propName;
         this.__mapForGetRequest[storageKey] = defVal;
