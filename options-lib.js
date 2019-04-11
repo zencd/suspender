@@ -22,6 +22,7 @@ class StorageOptions {
         this.__meta[propName] = {
             name: propName,
             defVal: defVal,
+            type: typeof defVal,
         };
         const storageKey = this.__storagePrefix + propName;
         this.__mapForGetRequest[storageKey] = defVal;
@@ -54,8 +55,20 @@ class StorageOptions {
         });
     }
 
+    tryFixValueToCorrectType(propName, value) {
+        const meta = this.__meta[propName];
+        if (value != null && meta != null && meta['type'] === 'number' && typeof value !== 'number') {
+            const value2 = Number(value);
+            if (value == value2) { // XXX not exact comparison is by design here
+                return value2;
+            }
+        }
+        return value;
+    }
+
     saveOne(propName, value) {
         const thisOptions = this;
+        value = thisOptions.tryFixValueToCorrectType(propName, value);
         this[propName] = value;
         const map = {};
         const storageKey = this.__storagePrefix + propName;

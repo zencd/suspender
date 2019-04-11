@@ -24,7 +24,9 @@
     inspectExistingTabs();
 
     function loadOptions() {
-        options.load();
+        options.load(function () {
+            console.log("options loaded from storage", options);
+        });
     }
 
     function findOldTabsAndSuspendThem() {
