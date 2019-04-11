@@ -1,10 +1,10 @@
 class StorageOptions {
-    constructor(storagePrefix) {
+    constructor(storagePrefix, storage) {
         this.__storagePrefix = storagePrefix;
         this.__meta = {};
         this.__mapForGetRequest = {};
         this.__storageKeyToPropertyName = {};
-        this.__storage = chrome.storage.sync;
+        this.__storage = storage;
         this.onPersisted = null; // function
     }
 
@@ -94,7 +94,7 @@ class StorageOptions {
 
 class Options extends StorageOptions {
     constructor() {
-        super('options.');
+        super('options.', chrome.storage.sync);
         this.suspendTimeout = 900; // seconds
         this.suspendPinned = false;
         this.unsuspendOnView = false;
