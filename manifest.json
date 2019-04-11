@@ -39,6 +39,7 @@
       "html2canvas.js",
       "utils.js",
       "common.js",
+      "options-lib.js",
       "background.js"
     ],
     "persistent": true

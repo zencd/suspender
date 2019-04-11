@@ -11,8 +11,13 @@ html, body {
     padding: 20px 50px;
 }
 
+h1 {
+	margin-bottom: 40px;
+    color: #444;
+}
+
 dt {
-    font: 18px sans-serif;
+    font: 16px sans-serif;
     margin-top: 20px;
     color: #222;
 }

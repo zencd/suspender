@@ -13,14 +13,9 @@
 
     const OLD_TAB_CHECK_INTERVAL_SECONDS = 64 * 1000;
 
-    const settings = {
-        suspendTimeoutSeconds: 15 * 60,
-        // suspendTimeoutSeconds: 4,
-        suspendActive: false,
-        suspendPinned: false,
-        suspendAudible: false,
-    };
+    const options = new Options();
 
+    loadOptions();
     initContextMenu();
     initWebRequestListeners();
     initTabListeners();
@@ -28,17 +23,21 @@
     initMessageListener();
     inspectExistingTabs();
 
+    function loadOptions() {
+        options.load();
+    }
+
     function findOldTabsAndSuspendThem() {
         const now = new Date();
         const tt = tabs.getAllTabs();
         for (let i = 0; i < tt.length; i++) {
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
-            const timeoutOk = tabObj.lastSeen && diffSec >= settings.suspendTimeoutSeconds;
+            const timeoutOk = tabObj.lastSeen && diffSec >= options.suspendTimeout;
             const schemaOk = isUrlSuspendable(tabObj.url);
-            const activeTabOk = settings.suspendActive || !tabObj.active;
-            const pinnedOk = settings.suspendPinned || !tabObj.pinned;
-            const audibleOk = settings.suspendAudible || !tabObj.audible;
+            const activeTabOk = options.suspendActive || !tabObj.active;
+            const pinnedOk = options.suspendPinned || !tabObj.pinned;
+            const audibleOk = options.suspendAudible || !tabObj.audible;
             const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk && pinnedOk && audibleOk;
             // const doSuspend = (tabObj.url === 'https://zencd.github.io/charted/');
             // console.log("tab", tabObj.url, "suspending?", doSuspend);

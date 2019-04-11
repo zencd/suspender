@@ -34,7 +34,7 @@ function OptionsToGuiMapping(options) {
                     control: cbx,
                 };
                 cbx.addEventListener('click', function () {
-                    options.save(cbx.dataset.storageName, cbx.checked);
+                    options.saveOne(cbx.dataset.storageName, cbx.checked);
                 });
             }
         }
@@ -49,7 +49,7 @@ function OptionsToGuiMapping(options) {
                     control: $control,
                 };
                 $control.addEventListener('change', function () {
-                    options.save($control.dataset.storageName, $control.value);
+                    options.saveOne($control.dataset.storageName, $control.value);
                 });
             }
         }
@@ -74,8 +74,7 @@ function OptionsToGuiMapping(options) {
 }
 
 function setControlsAsByStorage() {
-    chrome.storage.sync.get(options.mapForGetRequest, function (items) {
-        options.parseStorage(items);
+    options.load(function () {
         ogm.gotOptions();
     });
 }

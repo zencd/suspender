@@ -1,19 +1,31 @@
 function Options() {
+    this.suspendTimeout = 900; // seconds
+    this.suspendPinned = false;
+    this.unsuspendOnView = false;
+    this.suspendActive = false;
+    this.suspendAudible = false;
+    this.suspendOffline = false;
     this.meta = {};
     this.mapForGetRequest = {};
-    this.defineOption('suspendTimeout', 900);
-    this.defineOption('suspendPinned', false);
-    this.defineOption('unsuspendOnView', false);
-    this.defineOption('suspendActive', false);
-    this.defineOption('suspendUnsavedForm', false);
-    this.defineOption('suspendOffline', false);
     this.onPersisted = null; // function
+    this.defineOptionsFromProperties(); // XXX call it AFTER all properties defined
     return this;
 }
 
 Options.STORAGE_PREFIX = 'options.';
 
+Options.INTERNAL_PROPERTIES = new Set(['meta', 'mapForGetRequest', 'onPersisted']);
+
 Options.prototype = {
+    defineOptionsFromProperties: function () {
+        for (const propName in this) {
+            if (this.hasOwnProperty(propName)) {
+                if (!Options.INTERNAL_PROPERTIES.has(propName)) {
+                    this.defineOption(propName, this[propName]);
+                }
+            }
+        }
+    },
     defineOption: function (name, defVal) {
         this.meta[name] = {
             name: name,
@@ -45,7 +57,16 @@ Options.prototype = {
         }
         return null;
     },
-    save: function (name, value) {
+    load: function (onload) {
+        const thisOptions = this;
+        chrome.storage.sync.get(thisOptions.mapForGetRequest, function (items) {
+            thisOptions.parseStorage(items);
+            if (typeof onload !== 'undefined') {
+                onload();
+            }
+        });
+    },
+    saveOne: function (name, value) {
         const thisOptions = this;
         this[name] = value;
         const map = {};
