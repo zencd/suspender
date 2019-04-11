@@ -81,6 +81,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
                     '$CSS_URL$': cssUrl,
                     '$TAB_ID$': tabId,
                     '$FAVICON_DATA_URI$': faviconDataUri,
+                    '$DATE$': formatDateTime(),
                 };
                 // console.log("tplVars", tplVars);
                 const htmlStr = expandStringTemplate(htmlTplStr, tplVars);

@@ -16,6 +16,7 @@
     const options = new Options();
 
     loadOptions();
+    initOptionsListener();
     initContextMenu();
     initWebRequestListeners();
     initTabListeners();
@@ -26,6 +27,12 @@
     function loadOptions() {
         options.load(function () {
             console.log("options loaded from storage", options);
+        });
+    }
+
+    function initOptionsListener() {
+        chrome.storage.onChanged.addListener(function(changes, areaName) {
+            options.processChanges(changes, areaName);
         });
     }
 

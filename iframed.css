@@ -82,3 +82,8 @@ body[data-device-pixel-ratio="2"] .screenshot {
     overflow: hidden;
     margin: 0 auto;
 }
+
+.date {
+    font: normal 12px/24px sans-serif;
+    color: #888;
+}

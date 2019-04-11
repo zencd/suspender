@@ -79,3 +79,21 @@ function qs(selector) {
 function qsa(selector) {
     return document.querySelectorAll(selector);
 }
+
+function formatDateTime(date) {
+    if (typeof date === 'undefined') {
+        date = new Date();
+    }
+    let month = '' + (date.getMonth() + 1);
+    let day = '' + date.getDate();
+    let year = date.getFullYear();
+    let hrs = '' + date.getHours();
+    let min = '' + date.getMinutes();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    if (hrs.length < 2) hrs = '0' + hrs;
+    if (min.length < 2) min = '0' + min;
+
+    return year + '-' + month + '-' + day + ' ' + hrs + ':' + min;
+}

@@ -79,6 +79,20 @@ class StorageOptions {
             }
         });
     }
+
+    processChanges(changes, areaName) {
+        // todo consider areaName
+        for (const storageKey in changes) {
+            if (changes.hasOwnProperty(storageKey)) {
+                const newValue = changes[storageKey].newValue;
+                const propName = this.__storageKeyToPropertyName[storageKey];
+                if (propName) {
+                    this[propName] = newValue;
+                    console.log("options changed", propName, newValue);
+                }
+            }
+        }
+    }
 }
 
 class Options extends StorageOptions {
