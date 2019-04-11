@@ -11,8 +11,8 @@ class StorageOptions {
     defineOptionsFromProperties() {
         const INTERNAL_PROPERTIES = new Set(['onPersisted']);
         for (const propName in this) {
-            if (this.hasOwnProperty(propName)) {
-                if (!INTERNAL_PROPERTIES.has(propName) && !propName.startsWith('__')) {
+            if (!propName.startsWith('__') && this.hasOwnProperty(propName)) {
+                if (!INTERNAL_PROPERTIES.has(propName)) {
                     this.defineOption(propName, this[propName]);
                 }
             }
@@ -95,7 +95,7 @@ class StorageOptions {
 class Options extends StorageOptions {
     constructor() {
         super('options.', chrome.storage.sync);
-        this.suspendTimeout = 900; // seconds
+        this.suspendTimeout = 3600; // seconds
         this.suspendPinned = false;
         this.unsuspendOnView = false;
         this.suspendActive = false;
