@@ -1,43 +1,35 @@
-function Options() {
-    this.suspendTimeout = 900; // seconds
-    this.suspendPinned = false;
-    this.unsuspendOnView = false;
-    this.suspendActive = false;
-    this.suspendAudible = false;
-    this.suspendOffline = false;
-    this.__meta = {};
-    this.__mapForGetRequest = {};
-    this.__storageKeyToPropertyName = {};
-    this.onPersisted = null; // function
-    this.defineOptionsFromProperties(); // XXX call it AFTER all properties defined
-    return this;
-}
+class StorageOptions {
+    constructor(storagePrefix) {
+        this.__storagePrefix = storagePrefix;
+        this.__meta = {};
+        this.__mapForGetRequest = {};
+        this.__storageKeyToPropertyName = {};
+        this.onPersisted = null; // function
+    }
 
-Options.STORAGE_PREFIX = 'options.';
-
-Options.INTERNAL_PROPERTIES = new Set(['onPersisted']);
-
-Options.prototype = {
-    defineOptionsFromProperties: function () {
+    defineOptionsFromProperties() {
+        const INTERNAL_PROPERTIES = new Set(['onPersisted']);
         for (const propName in this) {
             if (this.hasOwnProperty(propName)) {
-                if (!Options.INTERNAL_PROPERTIES.has(propName) && !propName.startsWith('__')) {
+                if (!INTERNAL_PROPERTIES.has(propName) && !propName.startsWith('__')) {
                     this.defineOption(propName, this[propName]);
                 }
             }
         }
-    },
-    defineOption: function (propName, defVal) {
+    }
+
+    defineOption(propName, defVal) {
         this.__meta[propName] = {
             name: propName,
             defVal: defVal,
         };
-        const storageKey = this.makeStorageKey(propName);
+        const storageKey = this.__storagePrefix + propName;
         this.__mapForGetRequest[storageKey] = defVal;
         this.__storageKeyToPropertyName[storageKey] = propName;
         this[propName] = defVal;
-    },
-    parseStorage: function (items) {
+    }
+
+    parseStorage(items) {
         for (const storageKey in items) {
             if (items.hasOwnProperty(storageKey)) {
                 const propName = this.__storageKeyToPropertyName[storageKey];
@@ -50,11 +42,9 @@ Options.prototype = {
             }
         }
         // console.log("options parsed", this);
-    },
-    makeStorageKey: function (optionName) {
-        return Options.STORAGE_PREFIX + optionName;
-    },
-    load: function (onload) {
+    }
+
+    load(onload) {
         const thisOptions = this;
         chrome.storage.sync.get(thisOptions.__mapForGetRequest, function (items) {
             thisOptions.parseStorage(items);
@@ -62,16 +52,31 @@ Options.prototype = {
                 onload();
             }
         });
-    },
-    saveOne: function (propName, value) {
+    }
+
+    saveOne(propName, value) {
         const thisOptions = this;
         this[propName] = value;
         const map = {};
-        map[this.makeStorageKey(propName)] = value;
+        const storageKey = this.__storagePrefix + propName;
+        map[storageKey] = value;
         chrome.storage.sync.set(map, function () {
             if (thisOptions.onPersisted) {
                 thisOptions.onPersisted();
             }
         });
-    },
-};
+    }
+}
+
+class Options extends StorageOptions {
+    constructor() {
+        super('options.');
+        this.suspendTimeout = 900; // seconds
+        this.suspendPinned = false;
+        this.unsuspendOnView = false;
+        this.suspendActive = false;
+        this.suspendAudible = false;
+        this.suspendOffline = false;
+        this.defineOptionsFromProperties(); // XXX call it AFTER all properties defined
+    }
+}
