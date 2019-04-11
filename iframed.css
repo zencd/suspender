@@ -53,6 +53,7 @@ body[data-device-pixel-ratio="2"] .screenshot {
             hsla(0, 0%, 91%, 0.23) 100%
     );
     padding-top: 25px;
+    cursor: pointer;
 }
 
 .overlay a {
@@ -75,15 +76,22 @@ body[data-device-pixel-ratio="2"] .screenshot {
     color: #fff;
 }
 
-.link {
-    font: normal 18px/21px sans-serif;
+.link-and-date {
     max-width: 900px;
     height: 21px;
     overflow: hidden;
     margin: 0 auto;
+    font: normal 18px sans-serif;
+    color: #999;
+}
+
+.link {
+    /*font: normal 18px/21px sans-serif;*/
 }
 
 .date {
-    font: normal 12px/24px sans-serif;
+    /*font: normal 12px/24px sans-serif;*/
+    /*font-size: 15px;*/
     color: #888;
+    padding-left: 10px;
 }

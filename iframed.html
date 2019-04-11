@@ -13,11 +13,10 @@
     <div class="title">
         <a href="$LINK_URL$">$TITLE$</a>
     </div>
-    <div class="link">
-        <a href="$LINK_URL$">$LINK_TEXT$</a>
-    </div>
-    <div class="date">
-        $DATE$
+    <div class="link-and-date">
+        <span class="link">
+            $LINK_TEXT$
+        </span>
     </div>
 </div>
 <iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
@@ -25,19 +24,24 @@
 <script id="main-script">
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
     const $frame = document.querySelector('iframe');
+    const $anchor = document.querySelector('.title a');
+    const $overlay = document.querySelector('.overlay');
     const messageListener = window.addEventListener('message', function (messageEvent) {
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             const dataUri = messageEvent.data.dataUri;
-            document.querySelector('.screenshot').style.backgroundImage = 'url(' + dataUri + ')';
+            const $screenshot = document.querySelector('.screenshot');
+            $screenshot.style.backgroundImage = 'url(' + dataUri + ')';
             $frame.remove();
             document.querySelector('#main-script').remove();
             window.removeEventListener('message', messageListener);
+            $overlay.addEventListener('click', function () {
+                window.location.href = $anchor.href;
+            });
         }
     });
     const loadListener = $frame.addEventListener("load", function () {
         // pass the original url to the frame, so we can redirect user to it onlick
-        const url = document.querySelector('.link a').href;
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: url, tabId: $TAB_ID$}, '*');
+        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: $TAB_ID$}, '*');
         $frame.removeEventListener("load", loadListener);
     });
 </script>

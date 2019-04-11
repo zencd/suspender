@@ -112,3 +112,26 @@ chrome.runtime.getBackgroundPage(function (bgpage)
 `chrome.management.get`
 
 https://developer.chrome.com/extensions/management
+
+##### detecting form editing
+
+    window.addEventListener('keydown', formInputListener);
+    
+    function formInputListener(e) {
+    if (!isReceivingFormInput && !tempWhitelist) {
+      if (event.keyCode >= 48 && event.keyCode <= 90 && event.target.tagName) {
+        if (
+          event.target.tagName.toUpperCase() === 'INPUT' ||
+          event.target.tagName.toUpperCase() === 'TEXTAREA' ||
+          event.target.tagName.toUpperCase() === 'FORM' ||
+          event.target.isContentEditable === true
+        ) {
+          isReceivingFormInput = true;
+          if (!isBackgroundConnectable()) {
+            return false;
+          }
+          chrome.runtime.sendMessage(buildReportTabStatePayload());
+        }
+      }
+    }
+    }
