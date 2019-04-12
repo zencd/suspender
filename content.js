@@ -11,7 +11,7 @@
 
     function log() {
         const args = Array.prototype.slice.call(arguments);
-        args.unshift(Utils.LOG_PREFIX);
+        args.unshift(CommonUtils.LOG_PREFIX);
         window.console.log.apply(null, args);
     }
 
@@ -34,7 +34,7 @@
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             // console.debug("received msg", msg);
-            if (msg.message === Utils.MESSAGE_LOG) {
+            if (msg.message === CommonUtils.MESSAGE_LOG) {
                 const argArray = Object.values(msg.arguments);
                 argArray.splice(0, 0, "BG:");
                 logArray(argArray);

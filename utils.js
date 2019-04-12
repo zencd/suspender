@@ -1,20 +1,9 @@
 "use strict";
 
+/**
+ * Abstract utils.
+ */
 class Utils {
-
-    static MESSAGE_LOG = 'MESSAGE_LOG';
-    static LOG_PREFIX = 'BTS:';
-
-    static logToCurrentTab() {
-        const logArgs = arguments;
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-            const msg = {message: Utils.MESSAGE_LOG, arguments: logArgs};
-            if (tabs.length > 0) {
-                chrome.tabs.sendMessage(tabs[0].id, msg, function (response) {
-                });
-            }
-        });
-    }
 
     static b64EncodeUnicode(str) {
         // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings

@@ -61,13 +61,10 @@ class TabHandle {
         if (chromeTab.url && chromeTab.url !== this.url) {
             this.suspended = false;
         }
-        this.active = chromeTab.active;
-        this.discarded = chromeTab.discarded;
-        this.audible = chromeTab.audible;
-        this.pinned = chromeTab.pinned;
-        this.url = chromeTab.url;
-        this.title = chromeTab.title;
-        this.windowId = chromeTab.windowId;
-        this.favIconUrl = chromeTab.favIconUrl;
+        const propNames = ['active', 'discarded', 'audible', 'pinned', 'url', 'title', 'windowId', 'favIconUrl'];
+        for (let i = 0; i < propNames.length; i++) {
+            const propName = propNames[i];
+            this[propName] = chromeTab[propName];
+        }
     }
 }

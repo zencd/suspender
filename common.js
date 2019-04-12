@@ -1,9 +1,26 @@
 "use strict";
 
+/**
+ * Extension specific utils.
+ */
 class CommonUtils {
 
     static MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
     static MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
+    static MESSAGE_LOG = 'MESSAGE_LOG';
+
+    static LOG_PREFIX = 'BTS:';
+
+    static logToCurrentTab() {
+        const logArgs = arguments;
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+            const msg = {message: CommonUtils.MESSAGE_LOG, arguments: logArgs};
+            if (tabs.length > 0) {
+                chrome.tabs.sendMessage(tabs[0].id, msg, function (response) {
+                });
+            }
+        });
+    }
 
     static isUrlSuspendable(url) {
         return url && (url.startsWith('http://') || url.startsWith('https://'));
