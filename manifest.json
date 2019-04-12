@@ -32,7 +32,7 @@
   "web_accessible_resources": [
     "park.html",
     "park.css",
-    "iframe.html"
+    "park-frame.html"
   ],
   "background": {
     "scripts": [
