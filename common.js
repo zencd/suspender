@@ -83,9 +83,9 @@ class CommonUtils {
     }
 
     static getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
-        const tplUrl = chrome.runtime.getURL('park.html');
-        const cssUrl = chrome.runtime.getURL('park.css');
-        const iframeUrl = chrome.runtime.getURL('park-frame.html');
+        const tplUrl = chrome.runtime.getURL('web/park.html');
+        const cssUrl = chrome.runtime.getURL('web/park.css');
+        const iframeUrl = chrome.runtime.getURL('web/park-frame.html');
         const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
         // console.log("tplUrl", tplUrl);
         fetch(tplUrl).then((response) => { // todo fetch it once
