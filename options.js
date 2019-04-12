@@ -10,6 +10,10 @@
 
     disableLabelsForDisabledElements();
 
+    const manifest = chrome.runtime.getManifest();
+    // console.log("manifest", manifest);
+    qs('.version').innerText = '' + manifest.version;
+
     document.addEventListener('DOMContentLoaded', function () {
         ogm.init();
         setControlsAsByStorage();

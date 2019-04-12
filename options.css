@@ -16,6 +16,11 @@ h1 {
     color: #444;
 }
 
+.version {
+    font-weight: normal;
+    font-size: 14px;
+}
+
 dt {
     font: 16px sans-serif;
     margin-top: 20px;
