@@ -30,6 +30,7 @@
     "notifications"
   ],
   "web_accessible_resources": [
+    "web/*",
     "park.html",
     "park.css",
     "park-frame.html"
