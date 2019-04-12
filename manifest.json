@@ -39,6 +39,7 @@
       "html2canvas.js",
       "utils.js",
       "common.js",
+      "TabList.js",
       "options-lib.js",
       "background.js"
     ],

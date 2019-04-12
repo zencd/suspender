@@ -43,7 +43,7 @@
             const tabObj = tt[i];
             const diffSec = (now - tabObj.lastSeen) / 1000;
             const timeoutOk = tabObj.lastSeen && diffSec >= options.suspendTimeout;
-            const schemaOk = isUrlSuspendable(tabObj.url);
+            const schemaOk = CommonUtils.isUrlSuspendable(tabObj.url);
             const activeTabOk = options.suspendActive || !tabObj.active;
             const pinnedOk = options.suspendPinned || !tabObj.pinned;
             const audibleOk = options.suspendAudible || !tabObj.audible;
@@ -102,10 +102,10 @@
     }
 
     function injectContentScriptIntoTab(chrTab) {
-        if (isUrlSuspendable(chrTab.url)) {
+        if (CommonUtils.isUrlSuspendable(chrTab.url)) {
             console.log("injecting into", chrTab.url);
             const runAt = "document_idle"; // was document_start
-            injectScriptsIntoTab(chrTab.id, runAt, CONTENT_SCRIPTS);
+            Utils.injectScriptsIntoTab(chrTab.id, runAt, CONTENT_SCRIPTS);
         }
     }
 
@@ -154,11 +154,11 @@
 
     function suspendTab(tab, isActiveTab) {
         console.log("suspendTab", tab);
-        if (!isUrlSuspendable(tab.url)) {
+        if (!CommonUtils.isUrlSuspendable(tab.url)) {
             return;
         }
         console.log("gonna reload", tab);
-        getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
+        CommonUtils.getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
             // console.log("htmlDataUri", htmlDataUri);
             if (isActiveTab) {
                 // todo use windowId
@@ -170,7 +170,7 @@
                 const tabId = tab.id;
                 // console.log("tabId", tabId);
                 const msg = {
-                    message: MESSAGE_TAKE_SCREENSHOT,
+                    message: CommonUtils.MESSAGE_TAKE_SCREENSHOT,
                     htmlDataUri: htmlDataUri,
                     tabId: tabId,
                     tabUrl: tab.url,
@@ -185,7 +185,7 @@
     }
 
     function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
-        scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
+        CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
             const storageKey = 'screenshot.data-uri.tab.' + tabId;
             chrome.storage.local.set({[storageKey]: imageDataUri2}, function () {
                 const unixTime = new Date() - 0;
@@ -207,7 +207,7 @@
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
-            console.log("" + (i + 1) + ".", tab.id, limit(tab.url, 60));
+            console.log("" + (i + 1) + ".", tab.id, Utils.limit(tab.url, 60));
             console.log(" ", (tab.suspended ? 'Su' : '_'), (tab.active ? 'Ac' : '_'), (tab.pinned ? 'Pi' : '_'), (tab.audible ? 'Au' : '_'), (tab.discarded ? 'Di' : '_'), ls, "s");
             console.log(" ", tab);
             if (!tab.url) {
@@ -288,7 +288,7 @@
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             // console.log("BG: incoming msg", msg);
-            if (msg.message === MESSAGE_SCREENSHOT_READY) {
+            if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
                 // console.log("screenshot is ready!!!", msg);
                 suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
             }

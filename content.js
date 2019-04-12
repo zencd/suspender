@@ -11,7 +11,7 @@
 
     function log() {
         const args = Array.prototype.slice.call(arguments);
-        args.unshift(LOG_PREFIX);
+        args.unshift(Utils.LOG_PREFIX);
         window.console.log.apply(null, args);
     }
 
@@ -34,11 +34,11 @@
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             // console.debug("received msg", msg);
-            if (msg.message === MESSAGE_LOG) {
+            if (msg.message === Utils.MESSAGE_LOG) {
                 const argArray = Object.values(msg.arguments);
                 argArray.splice(0, 0, "BG:");
                 logArray(argArray);
-            } else if (msg.message === MESSAGE_TAKE_SCREENSHOT) {
+            } else if (msg.message === CommonUtils.MESSAGE_TAKE_SCREENSHOT) {
                 const root = document.body;
                 const opts = {
                     height: window.innerHeight, // capturing only the visible area
@@ -54,7 +54,7 @@
                     // console.log("imageDataUri", imageDataUri);
                     // sendResponse({imageDataUri: imageDataUri});
                     chrome.runtime.sendMessage(null, {
-                        message: MESSAGE_SCREENSHOT_READY,
+                        message: CommonUtils.MESSAGE_SCREENSHOT_READY,
                         imageDataUri: imageDataUri,
                         htmlDataUri: msg.htmlDataUri,
                         tabId: msg.tabId,
