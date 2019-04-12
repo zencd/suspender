@@ -1,20 +1,21 @@
+/**
+ * XXX Please name properties prepended with two underscores.
+ * Normal names are reserved for option names (in subclasses).
+ */
 class StorageOptions {
-    constructor(storagePrefix, storage) {
+    constructor(storagePrefix, storage, onPersisted) {
         this.__storagePrefix = storagePrefix;
         this.__meta = {};
         this.__mapForGetRequest = {};
         this.__storageKeyToPropertyName = {};
         this.__storage = storage;
-        this.onPersisted = null; // function
+        this.__onPersisted = onPersisted; // function
     }
 
     defineOptionsFromProperties() {
-        const INTERNAL_PROPERTIES = new Set(['onPersisted']);
         for (const propName in this) {
             if (!propName.startsWith('__') && this.hasOwnProperty(propName)) {
-                if (!INTERNAL_PROPERTIES.has(propName)) {
-                    this.defineOption(propName, this[propName]);
-                }
+                this.defineOption(propName, this[propName]);
             }
         }
     }
@@ -71,8 +72,8 @@ class StorageOptions {
         const storageKey = this.__storagePrefix + propName;
         map[storageKey] = value;
         thisOptions.__storage.set(map, function () {
-            if (thisOptions.onPersisted) {
-                thisOptions.onPersisted();
+            if (thisOptions.__onPersisted) {
+                thisOptions.__onPersisted();
             }
         });
     }
@@ -93,8 +94,8 @@ class StorageOptions {
 }
 
 class Options extends StorageOptions {
-    constructor() {
-        super('options.', chrome.storage.sync);
+    constructor(onPersisted) {
+        super('options.', chrome.storage.sync, onPersisted);
         this.suspendTimeout = 3600; // seconds
         this.suspendPinned = false;
         this.unsuspendOnView = false;

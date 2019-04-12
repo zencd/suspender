@@ -7,10 +7,10 @@ function isUrlSuspendable(url) {
     return url && (url.startsWith('http://') || url.startsWith('https://'));
 }
 
-function scaleDownRetinaImage(scaleDown, origDataUri, onload) {
+function scaleDownRetinaImage(scaleDown, origDataUri, onLoad) {
     const dpr = window.devicePixelRatio;
     if (dpr === 1 || !scaleDown) {
-        return onload(origDataUri);
+        return onLoad(origDataUri);
     }
 
     const $canvas = document.createElement('canvas');
@@ -20,20 +20,20 @@ function scaleDownRetinaImage(scaleDown, origDataUri, onload) {
     img.onload = function () {
         const w2 = img.width / dpr;
         const h2 = img.height / dpr;
-        console.log("img", img.width, 'x', img.height);
+        // console.log("img", img.width, 'x', img.height);
         $canvas.width = w2;
         $canvas.height = h2;
         // ctx.globalAlpha = 0.5;
         ctx.drawImage(img, 0, 0, w2, h2);
         const dataUri = $canvas.toDataURL("image/png");
-        console.log("final dataUri", dataUri.length);
-        console.log("final dataUri", dataUri);
-        onload(dataUri);
+        // console.log("final dataUri", dataUri.length);
+        // console.log("final dataUri", dataUri);
+        onLoad(dataUri);
     };
     img.src = origDataUri;
 }
 
-function loadAndProcessFavicon(favIconUrl, onload) {
+function loadAndProcessFavicon(favIconUrl, onLoad) {
     const $canvas = document.createElement('canvas');
     // document.body.appendChild($iconCanvas);
     const ctx = $canvas.getContext('2d');
@@ -45,7 +45,7 @@ function loadAndProcessFavicon(favIconUrl, onload) {
         ctx.globalAlpha = 0.5;
         ctx.drawImage(img, 0, 0);
         const dataUri = $canvas.toDataURL("image/png");
-        onload(dataUri);
+        onLoad(dataUri);
     };
     img.src = favIconUrl;
 }
@@ -81,7 +81,7 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
                     '$CSS_URL$': cssUrl,
                     '$TAB_ID$': tabId,
                     '$FAVICON_DATA_URI$': faviconDataUri,
-                    '$DATE$': formatDateTime(),
+                    '$DATE$': formatHumanReadableDateTime(),
                 };
                 // console.log("tplVars", tplVars);
                 const htmlStr = expandStringTemplate(htmlTplStr, tplVars);
@@ -96,17 +96,17 @@ function getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
     });
 }
 
-function TabList() {
-    this.tabById = {}; // tab id => TabHandle object
-    this.currentTabs = {}; // window id => tab id
-    return this;
-}
+class TabList {
+    constructor() {
+        this.tabById = {}; // tab id => TabHandle object
+        this.currentTabs = {}; // window id => tab id
+    }
 
-TabList.prototype = {
-    getTab: function (tabId) {
+    getTab(tabId) {
         return this.tabById[tabId];
-    },
-    getOrCreateTab: function (tabId) {
+    }
+
+    getOrCreateTab(tabId) {
         let tab = this.tabById[tabId];
         if (!tab) {
             // console.log("creating TabHandle on demand", tabId);
@@ -114,8 +114,9 @@ TabList.prototype = {
             this.tabById[tabId] = tab;
         }
         return tab;
-    },
-    tabActivated: function (windowId, curTabId) {
+    }
+
+    tabActivated(windowId, curTabId) {
         const prevTabId = this.currentTabs[windowId];
         this.currentTabs[windowId] = curTabId;
         if (prevTabId && prevTabId !== curTabId) {
@@ -128,31 +129,33 @@ TabList.prototype = {
         }
         const curTab = this.getOrCreateTab(curTabId);
         curTab.active = true;
-    },
-    getAllTabs: function () {
-        return Object.values(this.tabById);
-    },
-    removeById: function (tabId) {
-        delete this.tabById[tabId];
-    },
-};
+    }
 
-function TabHandle(tabId) {
-    this.id = tabId; // Chrome's tab id, integer
-    this.windowId = null; // Chrome's window id, integer
-    this.url = null;
-    this.lastSeen = new Date(); // Date
-    this.active = false;
-    this.suspended = false;
-    this.discarded = false;
-    this.audible = false;
-    this.favIconUrl = null; // string
-    this.pinned = false;
-    return this;
+    getAllTabs() {
+        return Object.values(this.tabById);
+    }
+
+    removeById(tabId) {
+        delete this.tabById[tabId];
+    }
+
 }
 
-TabHandle.prototype = {
-    updateFromChromeTab: function (chromeTab) {
+class TabHandle {
+    constructor(tabId) {
+        this.id = tabId; // Chrome's tab id, integer
+        this.windowId = null; // Chrome's window id, integer
+        this.url = null;
+        this.lastSeen = new Date(); // Date
+        this.active = false;
+        this.suspended = false;
+        this.discarded = false;
+        this.audible = false;
+        this.favIconUrl = null; // string
+        this.pinned = false;
+    }
+
+    updateFromChromeTab(chromeTab) {
         if (chromeTab.url && chromeTab.url !== this.url) {
             this.suspended = false;
         }
@@ -164,8 +167,8 @@ TabHandle.prototype = {
         this.title = chromeTab.title;
         this.windowId = chromeTab.windowId;
         this.favIconUrl = chromeTab.favIconUrl;
-    },
-};
+    }
+}
 
 function toMB(bytes) {
     return Math.ceil(bytes / 1024 / 1024);

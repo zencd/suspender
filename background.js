@@ -31,7 +31,7 @@
     }
 
     function initOptionsListener() {
-        chrome.storage.onChanged.addListener(function(changes, areaName) {
+        chrome.storage.onChanged.addListener(function (changes, areaName) {
             options.processChanges(changes, areaName);
         });
     }
@@ -104,7 +104,7 @@
     function injectContentScriptIntoTab(chrTab) {
         if (isUrlSuspendable(chrTab.url)) {
             console.log("injecting into", chrTab.url);
-            const runAt = "document_start";
+            const runAt = "document_idle"; // was document_start
             injectScriptsIntoTab(chrTab.id, runAt, CONTENT_SCRIPTS);
         }
     }
@@ -293,28 +293,6 @@
                 suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
             }
         });
-    }
-
-    function injectScriptsIntoTab(tabId, runAt, files) {
-        if (files.length <= 0) {
-            return;
-        }
-        let cur = 0;
-
-        function inject_one() {
-            if (cur <= files.length - 1) {
-                chrome.tabs.executeScript(tabId, {
-                    file: files[cur],
-                    runAt: runAt
-                }, (injectResult) => {
-                    // console.log("file injected", js_files[current_js_file], injectResult);
-                    cur++;
-                    inject_one();
-                });
-            }
-        }
-
-        inject_one();
     }
 
 }());

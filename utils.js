@@ -80,7 +80,7 @@ function qsa(selector) {
     return document.querySelectorAll(selector);
 }
 
-function formatDateTime(date) {
+function formatHumanReadableDateTime(date) {
     if (typeof date === 'undefined') {
         date = new Date();
     }
@@ -96,4 +96,26 @@ function formatDateTime(date) {
     if (min.length < 2) min = '0' + min;
 
     return year + '-' + month + '-' + day + ' ' + hrs + ':' + min;
+}
+
+function injectScriptsIntoTab(tabId, runAt, files) {
+    if (files.length <= 0) {
+        return;
+    }
+    let cur = 0;
+
+    function inject_one() {
+        if (cur <= files.length - 1) {
+            chrome.tabs.executeScript(tabId, {
+                file: files[cur],
+                runAt: runAt
+            }, (injectResult) => {
+                // console.log("file injected", js_files[current_js_file], injectResult);
+                cur++;
+                inject_one();
+            });
+        }
+    }
+
+    inject_one();
 }
