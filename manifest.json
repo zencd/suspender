@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "AAA Suspender",
-  "version": "0.0.3",
+  "name": "Better Suspender",
+  "version": "1.0.0",
   "description": "Better tab suspender: reduces memory usage extensively",
   "author": "gmail@gmail.com",
   //"homepage_url": "http://extensionizr.com",

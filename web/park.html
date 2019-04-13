@@ -7,10 +7,10 @@
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
     <link rel="icon" href="$FAVICON_DATA_URI$">
 </head>
-<body>
-<div class="screenshot-parent">
-    <div class="screenshot"></div>
-</div>
+<body style="background-color: $BG_COLOR$">
+<!--<div class="screenshot-parent">-->
+<div class="screenshot"></div>
+<!--</div>-->
 <div class="overlay">
     <div class="title">
         <a href="$LINK_URL$">$TITLE$</a>
@@ -32,7 +32,9 @@
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             const dataUri = messageEvent.data.dataUri;
             const $screenshot = document.querySelector('.screenshot');
+            fadeInScreenshot($screenshot);
             $screenshot.style.backgroundImage = 'url(' + dataUri + ')';
+            // document.querySelector('.screenshot-parent').style.backgroundImage = undefined;
             $frame.remove();
             document.querySelector('#main-script').remove();
             window.removeEventListener('message', messageListener);
@@ -46,5 +48,18 @@
         $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: $TAB_ID$}, '*');
         $frame.removeEventListener("load", loadListener);
     });
+
+    function fadeInScreenshot($screenshot) {
+        let cnt = 0;
+        const animIters = 25;
+        requestAnimationFrame(function oneFrame() {
+            // const opacity = cnt / animIters;
+            const opacity = Math.pow(cnt / animIters, 2); // looks like a non linear formula feels better
+            $screenshot.style.opacity = opacity;
+            if (cnt++ < animIters) {
+                requestAnimationFrame(oneFrame);
+            }
+        });
+    }
 </script>
 </html>

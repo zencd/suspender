@@ -12,6 +12,8 @@
 
     const manifest = chrome.runtime.getManifest();
     // console.log("manifest", manifest);
+    document.title = manifest.name;
+    qs('h1').childNodes[0].nodeValue = manifest.name + ' '; // set text node
     qs('.version').innerText = '' + manifest.version;
 
     document.addEventListener('DOMContentLoaded', function () {

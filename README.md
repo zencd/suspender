@@ -10,10 +10,11 @@
 
 ## todo p2
 
-- a feature to move really old tabs to bookmarks
+- whitelist
 
 ## todo p3
 
+- a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
 - minimize permissions
 - park.html: minify template
@@ -22,19 +23,7 @@
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - there is a Chrome's feature: multi-tab selection
 - try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
-
-## todo options
-
-- never suspend pinned tabs
-- never suspend tabs that contain unsaved form inputs
-- never suspend tabs that are playing audio
-- never suspend active tabs
-- never suspend tabs when offline
-- never suspend tabs when connected to power source
-- whitelist
-- automatically unsuspend tab when it is viewed
-- implement themes
-- sync settings between different systems 
+- try different gradients for bright/dark sites
 
 ## bugs
 

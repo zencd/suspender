@@ -61,6 +61,9 @@
                         tabUrl: msg.tabUrl,
                     });
                 });
+            } else if (msg.message === CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR) {
+                const color = getComputedStyle(document.body).backgroundColor;
+                sendResponse({backgroundColor: color});
             } else {
                 console.debug("Got message", msg.message);
             }

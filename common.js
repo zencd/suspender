@@ -7,6 +7,7 @@ class CommonUtils {
 
     static MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
     static MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
+    static MESSAGE_GET_DOCUMENT_BG_COLOR = 'MESSAGE_GET_DOCUMENT_BG_COLOR';
     static MESSAGE_LOG = 'MESSAGE_LOG';
 
     static LOG_PREFIX = 'BTS:';
@@ -80,39 +81,6 @@ class CommonUtils {
         url = (i >= 0) ? url.substring(0, i + 1) : url;
         console.log("tmp", url);
         return 'chrome://favicon/' + url
-    }
-
-    static getSuspendedPageContent(tabId, pageUrl, pageTitle, callback) {
-        const tplUrl = chrome.runtime.getURL('web/park.html');
-        const cssUrl = chrome.runtime.getURL('web/park.css');
-        const iframeUrl = chrome.runtime.getURL('web/park-frame.html');
-        const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
-        // console.log("tplUrl", tplUrl);
-        fetch(tplUrl).then((response) => { // todo fetch it once
-            response.text().then((htmlTplStr) => {
-                CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
-                    // console.log("htmlTplStr bytes", htmlTplStr.length);
-                    let tplVars = {
-                        '$TITLE$': pageTitle,
-                        '$LINK_URL$': pageUrl,
-                        '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
-                        '$IFRAME_URL$': iframeUrl,
-                        '$CSS_URL$': cssUrl,
-                        '$TAB_ID$': tabId,
-                        '$FAVICON_DATA_URI$': faviconDataUri,
-                        '$DATE$': Utils.formatHumanReadableDateTime(),
-                    };
-                    // console.log("tplVars", tplVars);
-                    const htmlStr = Utils.expandStringTemplate(htmlTplStr, tplVars);
-                    // console.log("htmlStr:", htmlStr);
-                    const b64 = Utils.b64EncodeUnicode(htmlStr);
-                    const dataUri = 'data:text/html;base64,' + b64;
-                    // console.log("dataUri", dataUri);
-                    callback(dataUri);
-                    // document.location.href = dataUri;
-                });
-            });
-        });
     }
 
 }

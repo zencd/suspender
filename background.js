@@ -15,6 +15,13 @@
 
     const options = new Options();
 
+    const gParkHtmlUrl = chrome.runtime.getURL('web/park.html');
+    const gParkCssUrl = chrome.runtime.getURL('web/park.css');
+    const gParkFrameUrl = chrome.runtime.getURL('web/park-frame.html');
+
+    let gParkHtmlText = null;
+
+    prefetchResources();
     loadOptions();
     initOptionsListener();
     initContextMenu();
@@ -23,6 +30,18 @@
     initTabWatchTimer();
     initMessageListener();
     inspectExistingTabs();
+
+    function prefetchResources() {
+        function prefetchParkPageHtml() {
+            fetch(gParkHtmlUrl).then((response) => {
+                response.text().then((text) => {
+                    gParkHtmlText = text;
+                });
+            });
+        }
+
+        prefetchParkPageHtml();
+    }
 
     function loadOptions() {
         options.load(function () {
@@ -158,30 +177,55 @@
             return;
         }
         console.log("gonna reload", tab);
-        CommonUtils.getSuspendedPageContent(tab.id, tab.url, tab.title, function (htmlDataUri) {
-            // console.log("htmlDataUri", htmlDataUri);
-            if (isActiveTab) {
-                // todo use windowId
-                chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
-                    const scaleDown = isActiveTab;
-                    suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
-                });
-            } else {
-                const tabId = tab.id;
-                // console.log("tabId", tabId);
-                const msg = {
-                    message: CommonUtils.MESSAGE_TAKE_SCREENSHOT,
-                    htmlDataUri: htmlDataUri,
-                    tabId: tabId,
-                    tabUrl: tab.url,
-                };
-                console.log("sending message", tabId, msg);
-                chrome.tabs.sendMessage(tabId, msg, function (response) {
-                    // console.log("response from CS:", response);
-                });
-            }
+        chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR}, function (bgResp) {
+            getSuspendedPageContent(tab.id, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
+                if (isActiveTab) {
+                    // todo use windowId
+                    chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                        const scaleDown = isActiveTab;
+                        suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
+                    });
+                } else {
+                    const msg = {
+                        message: CommonUtils.MESSAGE_TAKE_SCREENSHOT,
+                        htmlDataUri: htmlDataUri,
+                        tabId: tab.id,
+                        tabUrl: tab.url,
+                    };
+                    console.log("sending message", tab.id, msg);
+                    chrome.tabs.sendMessage(tab.id, msg, function (response) {
+                        // console.log("response from CS:", response);
+                    });
+                }
+            });
         });
 
+    }
+
+    function getSuspendedPageContent(tabId, pageUrl, pageTitle, bgColor, callback) {
+        const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
+        CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
+            // console.log("htmlTplStr bytes", htmlTplStr.length);
+            let tplVars = {
+                '$BG_COLOR$': bgColor,
+                '$TITLE$': pageTitle,
+                '$LINK_URL$': pageUrl,
+                '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
+                '$IFRAME_URL$': gParkFrameUrl,
+                '$CSS_URL$': gParkCssUrl,
+                '$TAB_ID$': tabId,
+                '$FAVICON_DATA_URI$': faviconDataUri,
+                '$DATE$': Utils.formatHumanReadableDateTime(),
+            };
+            // console.log("tplVars", tplVars);
+            const htmlStr = Utils.expandStringTemplate(gParkHtmlText, tplVars);
+            // console.log("htmlStr:", htmlStr);
+            const b64 = Utils.b64EncodeUnicode(htmlStr);
+            const dataUri = 'data:text/html;base64,' + b64;
+            // console.log("dataUri", dataUri);
+            callback(dataUri);
+            // document.location.href = dataUri;
+        });
     }
 
     function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
