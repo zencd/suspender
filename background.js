@@ -18,6 +18,7 @@
     const gParkHtmlUrl = chrome.runtime.getURL('web/park.html');
     const gParkCssUrl = chrome.runtime.getURL('web/park.css');
     const gParkFrameUrl = chrome.runtime.getURL('web/park-frame.html');
+    const gParkJsUrl = chrome.runtime.getURL('web/park.js');
 
     let gParkHtmlText = null;
 
@@ -216,6 +217,7 @@
                 '$TAB_ID$': tabId,
                 '$FAVICON_DATA_URI$': faviconDataUri,
                 '$DATE$': Utils.formatHumanReadableDateTime(),
+                '$PARK_JS_URL$': gParkJsUrl,
             };
             // console.log("tplVars", tplVars);
             const htmlStr = Utils.expandStringTemplate(gParkHtmlText, tplVars);

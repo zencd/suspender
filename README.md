@@ -24,6 +24,7 @@
 - there is a Chrome's feature: multi-tab selection
 - try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
 - try different gradients for bright/dark sites
+- park: bg color: darken it because of gradients applied
 
 ## bugs
 
@@ -124,3 +125,9 @@ https://developer.chrome.com/extensions/management
       }
     }
     }
+
+##### pack ext
+
+    chrome.exe --pack-extension=c:\myext --pack-extension-key=c:\myext.pem --no-message-box
+
+http://www.adambarth.com/experimental/crx/docs/crx.html

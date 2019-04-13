@@ -52,9 +52,12 @@
     function fadeInScreenshot($screenshot) {
         let cnt = 0;
         const animIters = 25;
+        const maxOpacity = 0.87;
         requestAnimationFrame(function oneFrame() {
             // const opacity = cnt / animIters;
-            const opacity = Math.pow(cnt / animIters, 2); // looks like a non linear formula feels better
+            const x = cnt / animIters * maxOpacity;
+            const opacity = Math.pow(x, 2); // looks like a non linear formula feels better
+            // console.log("x", x, "opacity", opacity);
             $screenshot.style.opacity = opacity;
             if (cnt++ < animIters) {
                 requestAnimationFrame(oneFrame);
@@ -62,4 +65,5 @@
         });
     }
 </script>
+<script src="$PARK_JS_URL$"></script>
 </html>

@@ -6,7 +6,6 @@ html, body {
 
 .screenshot-parent {
     height: 100%;
-    /*background-image: url('chrome-extension://gmohlipeloidpljdminphonbcmcikmja/web/scr-50.png');*/
     background-size: 100% 100%;
 }
 
@@ -15,13 +14,8 @@ html, body {
     height: 100%;
     background-position: top center;
     background-repeat: no-repeat;
-    opacity: 0.8;
-    /*filter: saturate(8);*/
+    opacity: 0.1;
     filter: sepia(40%);
-}
-
-body[data-device-pixel-ratio="2"] .screenshot {
-    /*background-size: 100% 100%;*/
 }
 
 .overlay {
@@ -31,15 +25,7 @@ body[data-device-pixel-ratio="2"] .screenshot {
     left: 0;
     width: 100%;
     height: 100%;
-    /*height: 600px;*/
-
-    /*background: linear-gradient(180deg,
-    rgba(98, 90, 90, 1) 0px,
-    rgba(98, 90, 90, 1) 80px,
-    rgba(245, 255, 245, 0.3) 600px
-    );*/
-
-    background: linear-gradient(
+    xbackground: linear-gradient(
             to bottom,
             hsl(0, 0%, 11%) 0%,
             hsla(0, 0%, 27.1%, 0.878) 11.6%,
@@ -64,11 +50,12 @@ body[data-device-pixel-ratio="2"] .screenshot {
 
 .overlay a {
     text-decoration: none;
-    color: #fff;
+    color: #eee;
 }
 
 .overlay a:hover {
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    /*text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);*/
+    text-decoration: underline;
 }
 
 .title {
@@ -92,12 +79,9 @@ body[data-device-pixel-ratio="2"] .screenshot {
 }
 
 .link {
-    /*font: normal 18px/21px sans-serif;*/
 }
 
 .date {
-    /*font: normal 12px/24px sans-serif;*/
-    /*font-size: 15px;*/
     color: #888;
     padding-left: 10px;
 }

@@ -109,6 +109,15 @@ class Utils {
         return document.querySelectorAll(selector);
     }
 
+    static shadeColor(rgb, percent) {
+        const res = new Array(3);
+        for (let i = 0; i < 3; i++) {
+            let c = Math.round(rgb[i] * (100 + percent) / 100);
+             res[i] = (c < 255) ? c : 255;
+        }
+        return res;
+    }
+
 }
 
 if (typeof String.prototype.replaceAll === 'undefined') {
