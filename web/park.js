@@ -59,7 +59,7 @@ for (let i = 0; i <= numSteps; i++) {
 }
 
 const gradientText = "linear-gradient(to bottom, " + stops.join(", ") + ")";
-console.log(gradientText);
+// console.log(gradientText);
 document.querySelector('.overlay').style.background = gradientText;
 
 /*
