@@ -62,7 +62,10 @@
                     });
                 });
             } else if (msg.message === CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR) {
-                const color = getComputedStyle(document.body).backgroundColor;
+                let color = getComputedStyle(document.body).backgroundColor;
+                if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
+                    color = 'rgb(255,255,255)';
+                }
                 sendResponse({backgroundColor: color});
             } else {
                 console.debug("Got message", msg.message);

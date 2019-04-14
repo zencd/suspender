@@ -25,6 +25,7 @@
 - try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
 - try different gradients for bright/dark sites
 - park: bg color: darken it because of gradients applied
+- park: gradient: calc gradient's start color from the bg color: the pure black gradient looks too dark for white backgrounds
 
 ## bugs
 

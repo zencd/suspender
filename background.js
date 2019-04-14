@@ -204,11 +204,16 @@
     }
 
     function getSuspendedPageContent(tabId, pageUrl, pageTitle, bgColor, callback) {
+        const c = Utils.parseRgb(bgColor);
+        const c2 = Utils.alterBrightness(c, -0.7);
+        const bgColor2 = 'rgb(' + c2.join(',') + ')';
+
         const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
         CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
             // console.log("htmlTplStr bytes", htmlTplStr.length);
             let tplVars = {
                 '$BG_COLOR$': bgColor,
+                '$BG_COLOR_2$': bgColor2,
                 '$TITLE$': pageTitle,
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),

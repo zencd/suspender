@@ -113,7 +113,31 @@ class Utils {
         const res = new Array(3);
         for (let i = 0; i < 3; i++) {
             let c = Math.round(rgb[i] * (100 + percent) / 100);
-             res[i] = (c < 255) ? c : 255;
+            res[i] = (c < 255) ? c : 255;
+        }
+        return res;
+    }
+
+    static parseRgb(input) {
+        const m = input.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+        if (m) {
+            return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3])];
+        } else {
+            console.log("parseRgb: unrecognized input:", input);
+            return [255, 255, 255];
+        }
+    }
+
+    static alterBrightness(rgb, change) {
+        const res = new Array(3);
+        for (let i = 0; i < 3; i++) {
+            let c = Math.round(rgb[i] + rgb[i] * change);
+            if (c < 0) {
+                c = 0;
+            } else if (c > 255) {
+                c = 255;
+            }
+            res[i] = c;
         }
         return res;
     }

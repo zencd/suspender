@@ -7,7 +7,7 @@
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
     <link rel="icon" href="$FAVICON_DATA_URI$">
 </head>
-<body style="background-color: $BG_COLOR$">
+<body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_COLOR_2$">
 <!--<div class="screenshot-parent">-->
 <div class="screenshot"></div>
 <!--</div>-->
@@ -52,7 +52,7 @@
     function fadeInScreenshot($screenshot) {
         let cnt = 0;
         const animIters = 25;
-        const maxOpacity = 0.87;
+        const maxOpacity = 1;
         requestAnimationFrame(function oneFrame() {
             // const opacity = cnt / animIters;
             const x = cnt / animIters * maxOpacity;
