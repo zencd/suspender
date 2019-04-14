@@ -11,14 +11,6 @@ function parseRgb(input) {
 
 // https://gist.github.com/gre/1650294
 const EasingFunctions = {
-    // no easing, no acceleration
-    linear: function (t) {
-        return t
-    },
-    // accelerating from zero velocity
-    easeInQuad: function (t) {
-        return t * t
-    },
     // decelerating to zero velocity
     easeOutQuad: function (t) {
         return t * (2 - t)
@@ -68,8 +60,8 @@ const EasingFunctions = {
 const knownBgColor = parseRgb(document.body.dataset.bgColorDarken);
 console.log("knownBgColor", knownBgColor);
 
-const paddingTop = 70;
-const height = 600;
+const paddingTop = 50;
+const height = 400;
 const numSteps = 10;
 // const startColor = [0, 0, 0, .98];
 // const endColor = [0, 0, 0, 0.0];
@@ -87,7 +79,7 @@ const stops = [];
 
 for (let i = 0; i <= numSteps; i++) {
     const x = i / numSteps;
-    const y = EasingFunctions.easeOutQuad(x);
+    const y = EasingFunctions.easeInOutQuad(x);
     // console.log("x", x, "y", y);
     const r = Math.round(startColor[0] + ranges[0] * y);
     const g = Math.round(startColor[1] + ranges[1] * y);
