@@ -37,5 +37,38 @@ function generateAndSetGradient() {
     document.querySelector('.overlay').style.background = gradientText;
 }
 
+function fadeInScreenshot($screenshot) {
+    const maxOpacity = 0.8;
+    const numFrames = 25;
+    let frame = 0;
+    requestAnimationFrame(function doFrame() {
+        const x = frame / numFrames;
+        const opacity = Math.pow(x, 2) * maxOpacity; // looks like a non linear formula feels better
+        $screenshot.style.opacity = opacity;
+        if (frame++ < numFrames) {
+            requestAnimationFrame(doFrame);
+        }
+    });
+}
+
+const messageListener = window.addEventListener('message', function (messageEvent) {
+    if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
+        const dataUri = messageEvent.data.dataUri;
+        const $screenshot = document.querySelector('.screenshot');
+        fadeInScreenshot($screenshot);
+        $screenshot.style.backgroundImage = 'url(' + dataUri + ')';
+        // document.querySelector('.screenshot-parent').style.backgroundImage = undefined;
+        $frame.remove();
+        document.querySelector('#main-script').remove();
+        document.querySelector('#park-js-script').remove();
+        window.removeEventListener('message', messageListener);
+    }
+});
+
+const loadListener = $frame.addEventListener("load", function () {
+    // pass the original url to the frame, so we can redirect user to it onlick
+    $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: gTabId}, '*');
+    $frame.removeEventListener("load", loadListener);
+});
+
 generateAndSetGradient();
-document.querySelector('#park-js-script').remove(); // remove this script element

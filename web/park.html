@@ -27,6 +27,7 @@
 <iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
 </body>
 <script id="main-script">
+    const gTabId = $TAB_ID$;
     document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
     const $frame = document.querySelector('iframe');
     const $anchor = document.querySelector('.title a');
@@ -34,37 +35,6 @@
     $overlay.addEventListener('click', function () {
         window.location.href = $anchor.href;
     });
-    const messageListener = window.addEventListener('message', function (messageEvent) {
-        if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
-            const dataUri = messageEvent.data.dataUri;
-            const $screenshot = document.querySelector('.screenshot');
-            fadeInScreenshot($screenshot);
-            $screenshot.style.backgroundImage = 'url(' + dataUri + ')';
-            // document.querySelector('.screenshot-parent').style.backgroundImage = undefined;
-            $frame.remove();
-            document.querySelector('#main-script').remove();
-            window.removeEventListener('message', messageListener);
-        }
-    });
-    const loadListener = $frame.addEventListener("load", function () {
-        // pass the original url to the frame, so we can redirect user to it onlick
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: $TAB_ID$}, '*');
-        $frame.removeEventListener("load", loadListener);
-    });
-
-    function fadeInScreenshot($screenshot) {
-        const maxOpacity = 0.8;
-        const numFrames = 25;
-        let frame = 0;
-        requestAnimationFrame(function doFrame() {
-            const x = frame / numFrames;
-            const opacity = Math.pow(x, 2) * maxOpacity; // looks like a non linear formula feels better
-            $screenshot.style.opacity = opacity;
-            if (frame++ < numFrames) {
-                requestAnimationFrame(doFrame);
-            }
-        });
-    }
 </script>
 <script src="$PARK_JS_URL$" id="park-js-script"></script>
 </html>
