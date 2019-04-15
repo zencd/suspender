@@ -20,7 +20,8 @@
     const gParkFrameUrl = chrome.runtime.getURL('web/park-frame.html');
     const gParkJsUrl = chrome.runtime.getURL('web/park.js');
 
-    let gParkHtmlText = null;
+    let gParkHtmlText = '';
+    let gParkCssText = '';
 
     prefetchResources();
     loadOptions();
@@ -40,8 +41,16 @@
                 });
             });
         }
+        function prefetchParkPageCss() {
+            fetch(gParkCssUrl).then((response) => {
+                response.text().then((text) => {
+                    gParkCssText = text;
+                });
+            });
+        }
 
         prefetchParkPageHtml();
+        prefetchParkPageCss();
     }
 
     function loadOptions() {
@@ -222,7 +231,8 @@
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
                 '$IFRAME_URL$': gParkFrameUrl,
-                '$CSS_URL$': gParkCssUrl,
+                '$CSS_URL$': '',
+                '$CSS_TEXT$': gParkCssText,
                 '$TAB_ID$': tabId,
                 '$FAVICON_DATA_URI$': faviconDataUri,
                 '$DATE$': Utils.formatHumanReadableDateTime(),

@@ -6,6 +6,9 @@
     <title>$TITLE$</title>
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
     <link rel="icon" href="$FAVICON_DATA_URI$">
+    <style>
+        $CSS_TEXT$
+    </style>
 </head>
 <body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_DARKEN$">
 <!--<div class="screenshot-parent">-->
@@ -28,6 +31,9 @@
     const $frame = document.querySelector('iframe');
     const $anchor = document.querySelector('.title a');
     const $overlay = document.querySelector('.overlay');
+    $overlay.addEventListener('click', function () {
+        window.location.href = $anchor.href;
+    });
     const messageListener = window.addEventListener('message', function (messageEvent) {
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             const dataUri = messageEvent.data.dataUri;
@@ -38,9 +44,6 @@
             $frame.remove();
             document.querySelector('#main-script').remove();
             window.removeEventListener('message', messageListener);
-            $overlay.addEventListener('click', function () {
-                window.location.href = $anchor.href;
-            });
         }
     });
     const loadListener = $frame.addEventListener("load", function () {
@@ -63,5 +66,5 @@
         });
     }
 </script>
-<script src="$PARK_JS_URL$"></script>
+<script src="$PARK_JS_URL$" id="park-js-script"></script>
 </html>

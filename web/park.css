@@ -25,28 +25,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,1) 0px, rgba(0,0,0,0) 400px);
-    /*
-    background: linear-gradient(
-            to bottom,
-            hsl(0, 0%, 11%) 0%,
-            hsla(0, 0%, 27.1%, 0.878) 11.6%,
-            hsla(0, 0%, 38.94%, 0.77) 21.3%,
-            hsla(0, 0%, 50.59%, 0.675) 29.5%,
-            hsla(0, 0%, 58.14%, 0.591) 36.4%,
-            hsla(0, 0%, 64.66%, 0.52) 42.1%,
-            hsla(0, 0%, 70.24%, 0.458) 47.2%,
-            hsla(0, 0%, 74.95%, 0.407) 51.6%,
-            hsla(0, 0%, 78.87%, 0.363) 55.8%,
-            hsla(0, 0%, 82.08%, 0.328) 60%,
-            hsla(0, 0%, 84.67%, 0.3) 64.5%,
-            hsla(0, 0%, 86.72%, 0.277) 69.5%,
-            hsla(0, 0%, 88.29%, 0.26) 75.3%,
-            hsla(0, 0%, 89.48%, 0.247) 82.1%,
-            hsla(0, 0%, 90.35%, 0.237) 90.3%,
-            hsla(0, 0%, 91%, 0.23) 100%
-    );
-    */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0, rgba(0,0,0,0) 100%); /* fallback gradient */
     padding-top: 25px;
     cursor: pointer;
 }
