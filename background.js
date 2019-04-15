@@ -100,7 +100,10 @@
                 }
                 return {};
             },
-            {urls: [urlPattern]},
+            {
+                urls: [urlPattern],
+                types: ["main_frame"],
+            },
             ["blocking"]
         );
     }
@@ -182,7 +185,8 @@
             getSuspendedPageContent(tab.id, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
                 if (isActiveTab) {
                     // todo use windowId
-                    chrome.tabs.captureVisibleTab(null, {}, function (imageDataUri) {
+                    const opts = {format: "png"}; // also "jpeg"
+                    chrome.tabs.captureVisibleTab(null, opts, function (imageDataUri) {
                         const scaleDown = isActiveTab;
                         suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
                     });
@@ -205,8 +209,8 @@
 
     function getSuspendedPageContent(tabId, pageUrl, pageTitle, bgColor, callback) {
         const c = Utils.parseRgb(bgColor);
-        const c2 = Utils.alterBrightness(c, -0.7);
-        const bgColor2 = 'rgb(' + c2.join(',') + ')';
+        const c2 = Utils.alterBrightness(c, -0.75);
+        const bgColor2 = c2.join(',');
 
         const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
         CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {

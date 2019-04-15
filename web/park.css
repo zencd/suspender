@@ -14,7 +14,7 @@ html, body {
     height: 100%;
     background-position: top center;
     background-repeat: no-repeat;
-    opacity: 0.1;
+    /*opacity: 0.1;*/
     filter: sepia(40%);
 }
 
