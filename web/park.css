@@ -51,19 +51,11 @@ html, body {
     color: #fff;
 }
 
-.link-and-date {
+.link {
     max-width: 900px;
     height: 21px;
     overflow: hidden;
     margin: 0 auto;
     font: normal 18px sans-serif;
     color: #bbb;
-}
-
-.link {
-}
-
-.date {
-    color: #888;
-    padding-left: 10px;
 }

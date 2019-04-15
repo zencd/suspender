@@ -231,7 +231,7 @@
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
                 '$IFRAME_URL$': gParkFrameUrl,
-                '$CSS_URL$': '',
+                //'$CSS_URL$': '',
                 '$CSS_TEXT$': gParkCssText,
                 '$TAB_ID$': tabId,
                 '$FAVICON_DATA_URI$': faviconDataUri,
