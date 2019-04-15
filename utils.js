@@ -41,6 +41,9 @@ class Utils {
     }
 
     static toReadableUrl(s) {
+        if (!s) {
+            return s;
+        }
         s = Utils.cutFromBeginning(s, 'http://');
         s = Utils.cutFromBeginning(s, 'https://');
         s = Utils.cutFromBeginning(s, 'www.');

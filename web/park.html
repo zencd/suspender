@@ -7,7 +7,7 @@
     <link href="$CSS_URL$" rel="stylesheet" type="text/css" media="all">
     <link rel="icon" href="$FAVICON_DATA_URI$">
 </head>
-<body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_COLOR_2$">
+<body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_DARKEN$">
 <!--<div class="screenshot-parent">-->
 <div class="screenshot"></div>
 <!--</div>-->
@@ -50,17 +50,15 @@
     });
 
     function fadeInScreenshot($screenshot) {
-        let cnt = 0;
-        const animIters = 25;
-        const maxOpacity = 0.9;
-        requestAnimationFrame(function oneFrame() {
-            // const opacity = cnt / animIters;
-            const x = cnt / animIters * maxOpacity;
-            const opacity = Math.pow(x, 2); // looks like a non linear formula feels better
-            // console.log("x", x, "opacity", opacity);
+        const maxOpacity = 0.8;
+        const numFrames = 25;
+        let frame = 0;
+        requestAnimationFrame(function doFrame() {
+            const x = frame / numFrames;
+            const opacity = Math.pow(x, 2) * maxOpacity; // looks like a non linear formula feels better
             $screenshot.style.opacity = opacity;
-            if (cnt++ < animIters) {
-                requestAnimationFrame(oneFrame);
+            if (frame++ < numFrames) {
+                requestAnimationFrame(doFrame);
             }
         });
     }
