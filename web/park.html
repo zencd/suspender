@@ -22,12 +22,10 @@ $CSS_TEXT$
 <iframe src="$IFRAME_URL$" style="display: none;"></iframe>
 </body>
 <script id="main-script">
-    const gTabId = $TAB_ID$; // used in the linked script
-    const $anchor = document.querySelector('.title a');
-    const $overlay = document.querySelector('.overlay');
-    $overlay.addEventListener('click', function () {
-        window.location.href = $anchor.href;
-    });
+const gTabId = $TAB_ID$; // used in the linked script
+const $anchor = document.querySelector('.title a');
+const $overlay = document.querySelector('.overlay');
+$overlay.addEventListener('click', function () {window.location.href = $anchor.href;});
 </script>
 <script src="$PARK_JS_URL$" id="park-js-script"></script>
 </html>
