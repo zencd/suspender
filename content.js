@@ -55,6 +55,7 @@
                     // sendResponse({imageDataUri: imageDataUri});
                     chrome.runtime.sendMessage(null, {
                         message: CommonUtils.MESSAGE_SCREENSHOT_READY,
+                        screenshotId: msg.screenshotId,
                         imageDataUri: imageDataUri,
                         htmlDataUri: msg.htmlDataUri,
                         tabId: msg.tabId,

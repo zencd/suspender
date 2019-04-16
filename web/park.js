@@ -62,7 +62,7 @@
     $frame.src = F;
     $frame.addEventListener("load", function loadListener() {
         // pass the original url to the frame, so we can redirect user to it onlick
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: S}, '*');
+        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, screenshotId: S}, '*');
         $frame.removeEventListener("load", loadListener);
     });
     document.body.appendChild($frame);

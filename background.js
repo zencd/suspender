@@ -5,7 +5,7 @@
 
     const CONTENT_SCRIPTS = ["html2canvas.js", "utils.js", "common.js", "content.js"];
 
-    const parkPageUrl = chrome.runtime.getURL('/park.html'); // like chrome-extension://ID/park.html
+    const gTempParkPageUrl = chrome.runtime.getURL('/park.html'); // like chrome-extension://ID/park.html
 
     const suspensionMap = {};
 
@@ -20,8 +20,8 @@
     const gParkFrameUrl = chrome.runtime.getURL('web/park-frame.html');
     const gParkJsUrl = chrome.runtime.getURL('web/park.js');
 
-    let gParkHtmlText = '';
-    let gParkCssText = '';
+    let gParkHtmlText = ''; // content fetched from `gParkHtmlUrl`
+    let gParkCssText = ''; // content fetched from `gParkCssUrl`
 
     prefetchResources();
     loadOptions();
@@ -92,7 +92,7 @@
     }
 
     function initWebRequestListeners() {
-        const urlPattern = parkPageUrl + '*';
+        const urlPattern = gTempParkPageUrl + '*';
         chrome.webRequest.onBeforeRequest.addListener(function (details) {
                 const suspensionInfo = suspensionMap[details.url];
                 if (suspensionInfo) {
@@ -191,17 +191,19 @@
         }
         console.log("gonna reload", tab);
         chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR}, function (bgResp) {
-            getSuspendedPageContent(tab.id, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
+            const screenshotId = Utils.uidString();
+            getSuspendedPageContent(screenshotId, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
                 if (isActiveTab) {
                     // todo use windowId
                     const opts = {format: "png"}; // also "jpeg"
                     chrome.tabs.captureVisibleTab(null, opts, function (imageDataUri) {
                         const scaleDown = isActiveTab;
-                        suspendTabPhase2(tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
+                        suspendTabPhase2(screenshotId, tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
                     });
                 } else {
                     const msg = {
                         message: CommonUtils.MESSAGE_TAKE_SCREENSHOT,
+                        screenshotId: screenshotId,
                         htmlDataUri: htmlDataUri,
                         tabId: tab.id,
                         tabUrl: tab.url,
@@ -216,7 +218,7 @@
 
     }
 
-    function getSuspendedPageContent(tabId, pageUrl, pageTitle, bgColor, callback) {
+    function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, callback) {
         const bgRgb = Utils.parseRgb(bgColor);
         const bgDarkenRgb = Utils.alterBrightness(bgRgb, -0.75);
         const bgDarkenStr = bgDarkenRgb.join(',');
@@ -233,7 +235,7 @@
                 '$IFRAME_URL$': gParkFrameUrl,
                 //'$CSS_URL$': '',
                 '$CSS_TEXT$': gParkCssText,
-                '$TAB_ID$': tabId,
+                '$SCREENSHOT_ID$': screenshotId,
                 '$FAVICON_DATA_URI$': faviconDataUri,
                 '$DATE$': Utils.formatHumanReadableDateTime(),
                 '$PARK_JS_URL$': gParkJsUrl,
@@ -249,12 +251,12 @@
         });
     }
 
-    function suspendTabPhase2(tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
+    function suspendTabPhase2(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
         CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
-            const storageKey = 'screenshot.data-uri.tab.' + tabId;
+            const storageKey = 'screenshot.id=' + screenshotId;
             chrome.storage.local.set({[storageKey]: imageDataUri2}, function () {
                 const unixTime = new Date() - 0;
-                const redirUrl = parkPageUrl + '?uniq=' + unixTime;
+                const redirUrl = gTempParkPageUrl + '?uniq=' + unixTime;
                 // console.log("redirUrl", redirUrl);
                 suspensionMap[redirUrl] = {
                     tabId: tabId,
@@ -355,7 +357,7 @@
             // console.log("BG: incoming msg", msg);
             if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
                 // console.log("screenshot is ready!!!", msg);
-                suspendTabPhase2(msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
+                suspendTabPhase2(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
             }
         });
     }

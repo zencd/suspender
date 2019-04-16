@@ -136,6 +136,20 @@ class Utils {
         return res;
     }
 
+    static uidString(n) {
+        // https://stackoverflow.com/a/19964557/207352
+        if (typeof n === 'undefined') {
+            n = 16;
+        }
+        const s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return Array(n).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+    }
+
+    static getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 }
 
 if (typeof String.prototype.replaceAll === 'undefined') {
