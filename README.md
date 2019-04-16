@@ -7,6 +7,7 @@
 - don't suspend tabs which needs "Confirm Form Resubmission"
 - does tabs get restored with the same tab id?
 - call chrome.tabs.discard() on suspended tabs after timeout
+- encode variables passed to template `park.html`
 
 ## todo p2
 

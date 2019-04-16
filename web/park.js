@@ -1,5 +1,4 @@
 (function () {
-
     'use strict';
 
     function easeInOutQuad(t) {
@@ -7,7 +6,7 @@
     }
 
     function generateAndSetGradient() {
-        const gradientStartColor = document.body.dataset.bgColorDarken.split(',').map((s) => parseInt(s));
+        const gradientStartColor = B.split(',').map((s) => parseInt(s));
         // console.log("gradientStartColor", gradientStartColor);
 
         const gradientTopPadding = 50;
@@ -55,28 +54,30 @@
         });
     }
 
-    const $frame = document.querySelector('iframe');
+    const $screenshot = document.querySelector('.screenshot');
+    const $anchor = document.querySelector('.title a');
+
+    const $frame = document.createElement('iframe');
+    $frame.style.display = 'none';
+    $frame.src = F;
+    $frame.addEventListener("load", function loadListener() {
+        // pass the original url to the frame, so we can redirect user to it onlick
+        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: S}, '*');
+        $frame.removeEventListener("load", loadListener);
+    });
+    document.body.appendChild($frame);
 
     window.addEventListener('message', function messageListener(messageEvent) {
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
-            const dataUri = messageEvent.data.dataUri;
-            const $screenshot = document.querySelector('.screenshot');
             fadeInScreenshot($screenshot);
-            $screenshot.style.backgroundImage = 'url(' + dataUri + ')';
-            // cleaning:
+            $screenshot.style.backgroundImage = 'url(' + messageEvent.data.dataUri + ')';
+            // cleaning DOM
             $frame.remove();
-            document.querySelector('#main-script').remove();
-            document.querySelector('#park-js-script').remove();
+            document.querySelector('script').remove();
+            document.querySelector('script').remove();
             window.removeEventListener('message', messageListener);
         }
     });
 
-    $frame.addEventListener("load", function loadListener() {
-        // pass the original url to the frame, so we can redirect user to it onlick
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, tabId: gTabId}, '*');
-        $frame.removeEventListener("load", loadListener);
-    });
-
     generateAndSetGradient();
-
 })();

@@ -1,7 +1,5 @@
 "use strict";
 
-document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
-
 function fetchAndSetImage(tabId) {
     const storageKey = 'screenshot.data-uri.tab.' + tabId;
     const d1 = new Date();

@@ -1,31 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$TITLE$</title>
-    <link rel="icon" href="$FAVICON_DATA_URI$">
-    <style>
-$CSS_TEXT$
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>$TITLE$</title>
+<link rel="icon" href="$FAVICON_DATA_URI$">
+<style>$CSS_TEXT$</style>
 </head>
-<body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_DARKEN$">
+<body style="background-color:$BG_COLOR$">
 <div class="screenshot"></div>
-<div class="overlay">
-    <div class="title">
-        <a href="$LINK_URL$">$TITLE$</a>
-    </div>
-    <div class="link">
-        $LINK_TEXT$
-    </div>
+<div class="overlay" onclick="location.href=querySelector('.title a').href">
+<div class="title"><a href="$LINK_URL$">$TITLE$</a></div>
+<div class="link">$LINK_TEXT$</div>
 </div>
-<iframe src="$IFRAME_URL$" style="display: none;"></iframe>
 </body>
-<script id="main-script">
-const gTabId = $TAB_ID$; // used in the linked script
-const $anchor = document.querySelector('.title a');
-const $overlay = document.querySelector('.overlay');
-$overlay.addEventListener('click', function () {window.location.href = $anchor.href;});
-</script>
-<script src="$PARK_JS_URL$" id="park-js-script"></script>
+<script>let S="$TAB_ID$",F="$IFRAME_URL$",B="$BG_DARKEN$";</script>
+<script src="$PARK_JS_URL$"></script>
 </html>
