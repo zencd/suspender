@@ -10,9 +10,7 @@ $CSS_TEXT$
     </style>
 </head>
 <body style="background-color: $BG_COLOR$" data-bg-color-darken="$BG_DARKEN$">
-<!--<div class="screenshot-parent">-->
 <div class="screenshot"></div>
-<!--</div>-->
 <div class="overlay">
     <div class="title">
         <a href="$LINK_URL$">$TITLE$</a>
@@ -24,9 +22,7 @@ $CSS_TEXT$
 <iframe src="$IFRAME_URL$" frameborder="0" style="display: none;"></iframe>
 </body>
 <script id="main-script">
-    const gTabId = $TAB_ID$;
-    document.body.dataset.devicePixelRatio = '' + window.devicePixelRatio;
-    const $frame = document.querySelector('iframe');
+    const gTabId = $TAB_ID$; // used in the linked script
     const $anchor = document.querySelector('.title a');
     const $overlay = document.querySelector('.overlay');
     $overlay.addEventListener('click', function () {

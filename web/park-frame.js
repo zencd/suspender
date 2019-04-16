@@ -8,9 +8,7 @@ function fetchAndSetImage(tabId) {
     chrome.storage.local.get([storageKey], function (items) {
         const dataUri = items[storageKey];
         if (dataUri) {
-            console.log("time consumed 1", (new Date() - d1), "ms");
-            document.body.style.backgroundImage = 'url(' + dataUri + ')';
-            console.log("time consumed 2", (new Date() - d1), "ms, " + Math.ceil(dataUri.length/1024) + " KB data uri");
+            console.log("screenshot fetched for", (new Date() - d1), "ms, " + Math.ceil(dataUri.length/1024) + " KB data uri");
             window.parent.postMessage({call: 'setScreenshot', dataUri: dataUri}, '*');
         } else {
             console.warn("no screenshot found for tab", tabId);
