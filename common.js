@@ -12,6 +12,8 @@ class CommonUtils {
 
     static LOG_PREFIX = 'BTS:';
 
+    static SUSPENDED_FAVICON_OPACITY = 0.35;
+
     static logToCurrentTab() {
         const logArgs = arguments;
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -55,14 +57,12 @@ class CommonUtils {
 
     static loadAndProcessFavicon(favIconUrl, onLoad) {
         const $canvas = document.createElement('canvas');
-        // document.body.appendChild($iconCanvas);
         const ctx = $canvas.getContext('2d');
         const img = new window.Image();
         img.onload = function () {
-            console.log("img", img.width, 'x', img.height);
             $canvas.width = img.width;
             $canvas.height = img.height;
-            ctx.globalAlpha = 0.5;
+            ctx.globalAlpha = CommonUtils.SUSPENDED_FAVICON_OPACITY;
             ctx.drawImage(img, 0, 0);
             const dataUri = $canvas.toDataURL("image/png");
             onLoad(dataUri);

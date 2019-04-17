@@ -87,26 +87,30 @@
         }
     }
 
-    function suspendAll() {
+    function suspendWindow(windowId) {
         console.log("suspendAll");
     }
 
-    function unsuspendAll() {
-        // console.log("unsuspendAll");
-        chrome.windows.getAll({'populate': true}, function (windows) {
-            const tabz = collectTabsFromWindows(windows);
-            for (let i = 0; i < tabz.length; i++) {
-                const tab = tabz[i];
-                const urlHash = Utils.fastIntHash(tab.url);
-                // console.log("urlHash", urlHash);
-                const storageKey = 'suspended.urlHash=' + urlHash;
-                chrome.storage.local.get(storageKey, function (items) {
-                    const obj = items[storageKey];
-                    if (obj) {
-                        // console.log("obj", obj, "=>", obj.url);
-                        chrome.tabs.update(tab.id, {url: obj.url});
-                    }
-                });
+    function unsuspendWindow(windowId) {
+        chrome.windows.get(windowId, {'populate': true}, function (window) {
+            for (let i in window.tabs) {
+                if (window.tabs.hasOwnProperty(i)) {
+                    const chrTab = window.tabs[i];
+                    unsuspendTab(chrTab);
+                }
+            }
+        });
+    }
+
+    function unsuspendTab(tab) {
+        const urlHash = Utils.fastIntHash(tab.url);
+        // console.log("urlHash", urlHash);
+        const storageKey = 'suspended.urlHash=' + urlHash;
+        chrome.storage.local.get(storageKey, function (items) {
+            const obj = items[storageKey];
+            if (obj) {
+                // console.log("obj", obj, "=>", obj.url);
+                chrome.tabs.update(tab.id, {url: obj.url});
             }
         });
     }
@@ -124,6 +128,10 @@
             }
         }
         return tabz;
+    }
+
+    function addThisSiteToWhitelist() {
+
     }
 
     function initTabWatchTimer() {
@@ -372,17 +380,21 @@
             }
         });
         chrome.contextMenus.create({
-            title: "Suspend H2C",
+            type: 'separator',
+            contexts: contexts,
+        });
+        chrome.contextMenus.create({
+            title: "Suspend this window",
             contexts: contexts,
             onclick: (info, tab) => {
-                suspendTab(tab, false);
+                suspendWindow(tab.windowId);
             }
         });
         chrome.contextMenus.create({
-            title: "Suspend Old Tabs",
+            title: "Unsuspend this window",
             contexts: contexts,
             onclick: (info, tab) => {
-                findOldTabsAndSuspendThem();
+                unsuspendWindow(tab.windowId);
             }
         });
         chrome.contextMenus.create({
@@ -390,17 +402,11 @@
             contexts: contexts,
         });
         chrome.contextMenus.create({
-            title: "Suspend All",
+            title: "Never suspend this site",
             contexts: contexts,
             onclick: (info, tab) => {
-                suspendAll();
-            }
-        });
-        chrome.contextMenus.create({
-            title: "Unsuspend All",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                unsuspendAll();
+                console.log("info", info, "tab", tab);
+                addThisSiteToWhitelist();
             }
         });
         chrome.contextMenus.create({
@@ -422,10 +428,17 @@
             }
         });
         chrome.contextMenus.create({
-            title: "Memory Report",
+            title: "Suspend via H2C",
             contexts: contexts,
             onclick: (info, tab) => {
-                console.log(window.performance.memory);
+                suspendTab(tab, false);
+            }
+        });
+        chrome.contextMenus.create({
+            title: "Suspend Old Tabs",
+            contexts: contexts,
+            onclick: (info, tab) => {
+                findOldTabsAndSuspendThem();
             }
         });
     }
