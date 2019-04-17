@@ -41,6 +41,7 @@
                 });
             });
         }
+
         function prefetchParkPageCss() {
             fetch(gParkCssUrl).then((response) => {
                 response.text().then((text) => {
@@ -84,6 +85,45 @@
                 suspendTab(tabObj, false);
             }
         }
+    }
+
+    function suspendAll() {
+        console.log("suspendAll");
+    }
+
+    function unsuspendAll() {
+        // console.log("unsuspendAll");
+        chrome.windows.getAll({'populate': true}, function (windows) {
+            const tabz = collectTabsFromWindows(windows);
+            for (let i = 0; i < tabz.length; i++) {
+                const tab = tabz[i];
+                const urlHash = Utils.fastIntHash(tab.url);
+                // console.log("urlHash", urlHash);
+                const storageKey = 'suspended.urlHash=' + urlHash;
+                chrome.storage.local.get(storageKey, function (items) {
+                    const obj = items[storageKey];
+                    if (obj) {
+                        // console.log("obj", obj, "=>", obj.url);
+                        chrome.tabs.update(tab.id, {url: obj.url});
+                    }
+                });
+            }
+        });
+    }
+
+    function collectTabsFromWindows(windows) {
+        const tabz = [];
+        for (let wi in windows) {
+            if (windows.hasOwnProperty(wi)) {
+                for (let i in windows[wi].tabs) {
+                    if (windows[wi].tabs.hasOwnProperty(i)) {
+                        const chrTab = windows[wi].tabs[i];
+                        tabz.push(chrTab);
+                    }
+                }
+            }
+        }
+        return tabz;
     }
 
     function initTabWatchTimer() {
@@ -321,8 +361,8 @@
 
     function initContextMenu() {
         const contexts = [
-            // todo review them
-            'page', 'frame', 'editable', 'image', 'video', 'audio',
+            // 'page', 'frame', 'editable', 'image', 'video', 'audio', 'selection'
+            'all'
         ];
         chrome.contextMenus.create({
             title: "Suspend",
@@ -343,6 +383,24 @@
             contexts: contexts,
             onclick: (info, tab) => {
                 findOldTabsAndSuspendThem();
+            }
+        });
+        chrome.contextMenus.create({
+            type: 'separator',
+            contexts: contexts,
+        });
+        chrome.contextMenus.create({
+            title: "Suspend All",
+            contexts: contexts,
+            onclick: (info, tab) => {
+                suspendAll();
+            }
+        });
+        chrome.contextMenus.create({
+            title: "Unsuspend All",
+            contexts: contexts,
+            onclick: (info, tab) => {
+                unsuspendAll();
             }
         });
         chrome.contextMenus.create({
