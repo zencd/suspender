@@ -146,6 +146,12 @@ class Utils {
     }
 
     static getRandomInt(min, max) {
+        if (typeof min === 'undefined') {
+            min = 0;
+        }
+        if (typeof max === 'undefined') {
+            max = 1000*1000*1000;
+        }
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;

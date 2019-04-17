@@ -255,31 +255,34 @@
         CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
             const nowMillis = new Date() - 0; // GMT epoch millis
             const urlHash = Utils.fastIntHash(htmlDataUri);
+            const storage = chrome.storage.local;
             const storageItems = {
                 ['screenshot.id=' + screenshotId]: {
-                    content: imageDataUri2,
                     created: nowMillis,
                     urlHash: urlHash,
+                    content: imageDataUri2,
                 }
             };
-            chrome.storage.local.set(storageItems, function () {
-                const unixTime = new Date() - 0;
-                const redirUrl = gTempParkPageUrl + '?uniq=' + unixTime;
+            storage.set(storageItems, function () {
+                const redirUrl = gTempParkPageUrl + '?uniq=' + Utils.getRandomInt();
                 suspensionMap[redirUrl] = {
                     tabId: tabId,
                     htmlDataUri: htmlDataUri,
-                    unixTime: unixTime,
+                    date: nowMillis,
                 };
+
                 chrome.tabs.update(tabId, {url: redirUrl});
 
                 const storageItems2 = {
-                    ['tab.urlHash=' + urlHash]: {
+                    ['suspended.urlHash=' + urlHash]: {
                         screenshotId: screenshotId,
                         created: nowMillis,
                         urlHash: urlHash,
+                        url: tabUrl,
+                        tabId: tabId,
                     }
                 };
-                chrome.storage.local.set(storageItems2, function () {
+                storage.set(storageItems2, function () {
                 });
             });
         });
