@@ -37,14 +37,14 @@
         function prefetchParkPageHtml() {
             fetch(gParkHtmlUrl).then((response) => {
                 response.text().then((text) => {
-                    gParkHtmlText = text;
+                    gParkHtmlText = Utils.stripCrLf(text).trim();
                 });
             });
         }
         function prefetchParkPageCss() {
             fetch(gParkCssUrl).then((response) => {
                 response.text().then((text) => {
-                    gParkCssText = text;
+                    gParkCssText = Utils.stripCrLf(text).trim();
                 });
             });
         }

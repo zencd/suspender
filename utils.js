@@ -142,13 +142,18 @@ class Utils {
             n = 16;
         }
         const s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return Array(n).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+        return Array(n).join().split(',').map(() => { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
     }
 
     static getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    static stripCrLf(s) {
+        if (!s) return s;
+        return s.replace(/[\n\r]/g, '');
     }
 }
 
