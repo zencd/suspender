@@ -51,11 +51,10 @@
         "common.js",
         "content.js"
       ],
-      "run_at": "document_idle", // document_start
+      "run_at": "document_idle", // also "document_start"
       "matches": [
         //"<all_urls>",
         //"*://*/*",
-        //"https://zencd.github.io/*"
         "http://*/*",
         "https://*/*"
       ]

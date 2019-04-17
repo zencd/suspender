@@ -20,7 +20,7 @@ class Utils {
         let res = tplContent;
         for (let key in vars) {
             if (vars.hasOwnProperty(key)) {
-                res = res.replaceAll(key, vars[key]);
+                res = Utils.replaceAll(res, key, vars[key]);
             }
         }
         return res;
@@ -155,13 +155,21 @@ class Utils {
         if (!s) return s;
         return s.replace(/[\n\r]/g, '');
     }
-}
 
-if (typeof String.prototype.replaceAll === 'undefined') {
-    // todo don't alter String prototype
-    String.prototype.replaceAll = function (search, replacement) {
-        return this.split(search).join(replacement);
+    static fastIntHash(s) {
+        // Java's hashCode() basically
+        let hash = 0;
+        for (let i = 0; i < s.length; i++) {
+            hash = ((hash << 5) - hash) + s.charCodeAt(i);
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return hash;
+    }
+
+    static replaceAll(input, search, replacement) {
+        return input.split(search).join(replacement);
     };
+
 }
 
 window.qs = Utils.qs;

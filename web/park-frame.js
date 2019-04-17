@@ -4,7 +4,8 @@ function fetchAndSetImage(screenshotId) {
     const storageKey = 'screenshot.id=' + screenshotId;
     const d1 = new Date();
     chrome.storage.local.get([storageKey], function (items) {
-        const dataUri = items[storageKey];
+        const obj = items[storageKey];
+        const dataUri = obj.content;
         if (dataUri) {
             console.log("screenshot fetched for", (new Date() - d1), "ms, " + Math.ceil(dataUri.length/1024) + " KB data uri");
             window.parent.postMessage({call: 'setScreenshot', dataUri: dataUri}, '*');

@@ -253,17 +253,34 @@
 
     function suspendTabPhase2(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
         CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
-            const storageKey = 'screenshot.id=' + screenshotId;
-            chrome.storage.local.set({[storageKey]: imageDataUri2}, function () {
+            const nowMillis = new Date() - 0; // GMT epoch millis
+            const urlHash = Utils.fastIntHash(htmlDataUri);
+            const storageItems = {
+                ['screenshot.id=' + screenshotId]: {
+                    content: imageDataUri2,
+                    created: nowMillis,
+                    urlHash: urlHash,
+                }
+            };
+            chrome.storage.local.set(storageItems, function () {
                 const unixTime = new Date() - 0;
                 const redirUrl = gTempParkPageUrl + '?uniq=' + unixTime;
-                // console.log("redirUrl", redirUrl);
                 suspensionMap[redirUrl] = {
                     tabId: tabId,
                     htmlDataUri: htmlDataUri,
                     unixTime: unixTime,
                 };
                 chrome.tabs.update(tabId, {url: redirUrl});
+
+                const storageItems2 = {
+                    ['tab.urlHash=' + urlHash]: {
+                        screenshotId: screenshotId,
+                        created: nowMillis,
+                        urlHash: urlHash,
+                    }
+                };
+                chrome.storage.local.set(storageItems2, function () {
+                });
             });
         });
     }

@@ -4,7 +4,7 @@
 
 - remove screenshots from storage when tab closed
 - remove a tab - it still stays in the tab list (debug tabs)
-- don't suspend tabs which needs "Confirm Form Resubmission"
+- don't suspend tabs which needs "Confirm Form Resubmission" (POST)
 - does tabs get restored with the same tab id?
 - call chrome.tabs.discard() on suspended tabs after timeout
 - encode variables passed to template `park.html`
@@ -18,15 +18,10 @@
 - a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
 - minimize permissions
-- park.html: minify template
-- park.html: inline CSS to work smoothly even without the extension
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - there is a Chrome's feature: multi-tab selection
 - try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
-- try different gradients for bright/dark sites
-- park: bg color: darken it because of gradients applied
-- park: gradient: calc gradient's start color from the bg color: the pure black gradient looks too dark for white backgrounds
 
 ## bugs
 
@@ -42,6 +37,14 @@
 + park: substitute favicon with a pale version data uri
 + the data uri page: use a pale favicon to distinct suspended tabs easier
 + minimize screenshot size when pixel ratio is 2+
+
+## done
+
++ park.html: minify template
++ park.html: inline CSS to work smoothly even without the extension
++ try different gradients for bright/dark sites
++ park: bg color: darken it because of gradients applied
++ park: gradient: calc gradient's start color from the bg color: the pure black gradient looks too dark for white backgrounds
 
 ## pro
 

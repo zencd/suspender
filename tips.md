@@ -1,5 +1,13 @@
 # tips
 
+## storage
+
+    chrome.storage.local.get((result)=>{console.log(Object.keys(result))})
+    
+    chrome.storage.local.remove(keys, ()=>{console.log('removed')})
+    
+    chrome.storage.local.clear();
+
 ##### refs
 
 - Chrome prohibits redirects to data URI scheme: "Not allowed to navigate top frame to data URL"
