@@ -1,24 +1,29 @@
+var bgExt = {};
+
 (function () {
     "use strict";
 
     const console = chrome.extension.getBackgroundPage().console; // really needed?
 
-    const CONTENT_SCRIPTS = ["html2canvas.js", "utils.js", "common.js", "content.js"];
-
-    const gTempParkPageUrl = chrome.runtime.getURL('/park.html'); // like chrome-extension://ID/park.html
+    const cs0 = chrome.runtime.getManifest().content_scripts[0];
+    const CONTENT_SCRIPTS = cs0.js;
+    const CONTENT_SCRIPTS_RUN_AT = cs0.run_at;
 
     const suspensionMap = {};
 
     const tabs = new TabList();
 
-    const OLD_TAB_CHECK_INTERVAL_SECONDS = 64 * 1000;
+    const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
     const options = new Options();
 
-    const gParkHtmlUrl = chrome.runtime.getURL('web/park.html');
-    const gParkCssUrl = chrome.runtime.getURL('web/park.css');
-    const gParkFrameUrl = chrome.runtime.getURL('web/park-frame.html');
-    const gParkJsUrl = chrome.runtime.getURL('web/park.js');
+    const urls = {
+        parkHtml: chrome.runtime.getURL('web/park.html'),
+        parkCss: chrome.runtime.getURL('web/park.css'),
+        parkFrame: chrome.runtime.getURL('web/park-frame.html'),
+        parkJs: chrome.runtime.getURL('web/park.js'),
+        tempParkPage: chrome.runtime.getURL('/park.html')
+    };
 
     let gParkHtmlText = ''; // content fetched from `gParkHtmlUrl`
     let gParkCssText = ''; // content fetched from `gParkCssUrl`
@@ -47,7 +52,7 @@
 
     function prefetchResources() {
         function prefetchParkPageHtml() {
-            fetch(gParkHtmlUrl).then((response) => {
+            fetch(urls.parkHtml).then((response) => {
                 response.text().then((text) => {
                     gParkHtmlText = Utils.stripCrLf(text).trim();
                 });
@@ -55,7 +60,7 @@
         }
 
         function prefetchParkPageCss() {
-            fetch(gParkCssUrl).then((response) => {
+            fetch(urls.parkCss).then((response) => {
                 response.text().then((text) => {
                     gParkCssText = Utils.stripCrLf(text).trim();
                 });
@@ -151,12 +156,12 @@
     }
 
     function initTabWatchTimer() {
-        setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_SECONDS);
+        setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_MILLIS);
         // setTimeout(findOldTabsAndSuspendThem, 9000); // temp
     }
 
     function initWebRequestListeners() {
-        const urlPattern = gTempParkPageUrl + '*';
+        const urlPattern = urls.tempParkPage + '*';
         chrome.webRequest.onBeforeRequest.addListener(function (details) {
                 const suspensionInfo = suspensionMap[details.url];
                 if (suspensionInfo) {
@@ -200,8 +205,7 @@
     function injectContentScriptIntoTab(chrTab) {
         if (CommonUtils.isUrlSuspendable(chrTab.url)) {
             console.log("injecting into", chrTab.url);
-            const runAt = "document_idle"; // was document_start
-            Utils.injectScriptsIntoTab(chrTab.id, runAt, CONTENT_SCRIPTS);
+            Utils.injectScriptsIntoTab(chrTab.id, CONTENT_SCRIPTS_RUN_AT, CONTENT_SCRIPTS);
         }
     }
 
@@ -296,13 +300,13 @@
                 '$TITLE$': pageTitle,
                 '$LINK_URL$': pageUrl,
                 '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
-                '$IFRAME_URL$': gParkFrameUrl,
+                '$IFRAME_URL$': urls.parkFrame,
                 //'$CSS_URL$': '',
                 '$CSS_TEXT$': gParkCssText,
                 '$SCREENSHOT_ID$': screenshotId,
                 '$FAVICON_DATA_URI$': faviconDataUri,
                 '$DATE$': Utils.formatHumanReadableDateTime(),
-                '$PARK_JS_URL$': gParkJsUrl,
+                '$PARK_JS_URL$': urls.parkJs,
             };
             // console.log("tplVars", tplVars);
             const htmlStr = Utils.expandStringTemplate(gParkHtmlText, tplVars);
@@ -328,7 +332,7 @@
                 }
             };
             storage.set(storageItems, function () {
-                const redirUrl = gTempParkPageUrl + '?uniq=' + Utils.getRandomInt();
+                const redirUrl = urls.tempParkPage + '?uniq=' + Utils.getRandomInt();
                 suspensionMap[redirUrl] = {
                     tabId: tabId,
                     htmlDataUri: htmlDataUri,
@@ -384,9 +388,14 @@
     }
 
     function initContextMenu() {
+        chrome.runtime.onInstalled.addListener(function () {
+            initContextMenu2();
+        });
+    }
+
+    function initContextMenu2() {
         const contexts = [
             "page", "frame", "selection", "link", "editable", "image", "video", "audio"
-            // 'all'
         ];
 
         const browserActionContexts = ['browser_action'];

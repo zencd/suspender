@@ -15,6 +15,8 @@
 
 ## todo p3
 
+- the 19px browser_action icon gets auto resized on Windows
+- suspend current tab: it's unclear the process has started, with a shortcut especially
 - a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
 - minimize permissions

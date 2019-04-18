@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Better Suspender",
   "version": "1.0.11",
-  "description": "Reduce memory usage extensively suspending long time unused tabs automatically.",
+  "description": "Reduce Chrome's memory usage extensively suspending certain unused tabs automatically.",
   "author": "gmail@gmail.com",
   //"homepage_url": "http://extensionizr.com",
   "icons": {
@@ -13,7 +13,7 @@
   "default_locale": "en",
   "options_page": "options.html",
   "browser_action": {
-    "default_icon": "icons/download3.png",
+    "default_icon": "icons/zz20-03.png",
     "default_title": "Better Suspender",
     "default_popup": "browser_action.html"
   },

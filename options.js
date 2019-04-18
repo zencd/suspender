@@ -21,6 +21,8 @@
         setControlsAsByStorage();
     });
 
+    CommonUtils.makeSpecialLinkClickable(qs('#open-keyboard-shortcuts'), true);
+
     function optionsPersisted() {
         clearTimeout(notifierFadeOutTimer);
         qs('.notify').style.display = 'block';

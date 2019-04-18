@@ -86,3 +86,11 @@ https://gist.github.com/gre/1650294
     chrome.exe --pack-extension=c:\myext --pack-extension-key=c:\myext.pem --no-message-box
 
 http://www.adambarth.com/experimental/crx/docs/crx.html
+
+## get manifest parsed
+
+    chrome.runtime.getManifest()
+
+## misc
+
+https://developer.chrome.com/extensions/user_interface

@@ -12,7 +12,7 @@ class CommonUtils {
 
     static LOG_PREFIX = 'BTS:';
 
-    static SUSPENDED_FAVICON_OPACITY = 0.35;
+    static SUSPENDED_FAVICON_OPACITY = 0.4;
 
     static logToCurrentTab() {
         const logArgs = arguments;
@@ -83,4 +83,26 @@ class CommonUtils {
         return 'chrome://favicon/' + url
     }
 
+    /**
+     * Makes a link like below clickable:
+     *   <a href="chrome://extensions/shortcuts">
+     * Because Chrome prohibits following special urls by default.
+     * @param $elem
+     * @param openInNewTab
+     */
+    static makeSpecialLinkClickable($elem, openInNewTab) {
+        if (openInNewTab === undefined) {
+            openInNewTab = false;
+        }
+        $elem.onclick = (ev) => {
+            ev.preventDefault();
+            const url = ev.target.href;
+            if (openInNewTab) {
+                chrome.tabs.create({url: url});
+            } else {
+                chrome.tabs.update({url: url});
+            }
+        };
+
+    }
 }
