@@ -192,6 +192,9 @@ class Utils {
         return input.split(search).join(replacement);
     };
 
+    static isDataUri(url) {
+        return url && url.startsWith('data:text/html;');
+    }
 }
 
 window.qs = Utils.qs;

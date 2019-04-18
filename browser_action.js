@@ -16,3 +16,7 @@ document.querySelector('#show-options').onclick = () => {
     chrome.tabs.create({url: bgExt.urls.optionsHtml});
     window.close();
 };
+
+// window.onblur = () => {
+//     window.close();
+// };

@@ -109,7 +109,6 @@ var bgExt = {};
 
     function suspendWindow(windowId) {
         // todo start iterating my tab objects, not chrome's
-        console.log("suspendAll");
     }
 
     function unsuspendWindow(windowId) {
@@ -117,32 +116,29 @@ var bgExt = {};
         chrome.windows.get(windowId, {'populate': true}, function (window) {
             for (let i in window.tabs) {
                 if (window.tabs.hasOwnProperty(i)) {
-                    // todo check the url is suitable first
                     const chrTab = window.tabs[i];
-                    unsuspendTab(chrTab);
+                    if (Utils.isDataUri(chrTab.url)) {
+                        unsuspendTab(chrTab);
+                    }
                 }
             }
         });
     }
 
     function suspendCurrentWindow() {
-        console.log("suspendCurrentWindow...");
         Utils.getCurrentWindowIdFromBackgroundScript(function (windowId) {
             suspendWindow(windowId)
         });
     }
 
     function unsuspendCurrentWindow() {
-        console.log("unsuspendCurrentWindow...");
         Utils.getCurrentWindowIdFromBackgroundScript(function (windowId) {
             unsuspendWindow(windowId)
         });
     }
 
     function suspendCurrentTab() {
-        console.log("unsuspendCurrentTab 1");
         Utils.getCurrentTabFromBackgroundScript((chtTab)=>{
-            console.log("unsuspendCurrentTab 2", chtTab);
             suspendTab(chtTab);
         });
     }
