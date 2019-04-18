@@ -88,10 +88,12 @@
     }
 
     function suspendWindow(windowId) {
+        // todo start iterating my tab objects, not chrome's
         console.log("suspendAll");
     }
 
     function unsuspendWindow(windowId) {
+        // todo start iterating my tab objects, not chrome's
         chrome.windows.get(windowId, {'populate': true}, function (window) {
             for (let i in window.tabs) {
                 if (window.tabs.hasOwnProperty(i)) {
@@ -102,15 +104,17 @@
         });
     }
 
-    function unsuspendTab(tab) {
-        const urlHash = Utils.fastIntHash(tab.url);
-        // console.log("urlHash", urlHash);
+    function unsuspendTab(chrTab) {
+        const urlHash = Utils.fastIntHash(chrTab.url);
         const storageKey = 'suspended.urlHash=' + urlHash;
         chrome.storage.local.get(storageKey, function (items) {
             const obj = items[storageKey];
             if (obj) {
-                // console.log("obj", obj, "=>", obj.url);
-                chrome.tabs.update(tab.id, {url: obj.url});
+                chrome.tabs.update(chrTab.id, {url: obj.url});
+                const myTab = tabs.getTab(chrTab.id);
+                if (myTab) {
+                    myTab.lastSeen = new Date();
+                }
             }
         });
     }
@@ -369,9 +373,33 @@
 
     function initContextMenu() {
         const contexts = [
-            // 'page', 'frame', 'editable', 'image', 'video', 'audio', 'selection'
-            'all'
+            "page", "frame", "selection", "link", "editable", "image", "video", "audio"
+            // 'all'
         ];
+
+        const browserActionContexts = ['browser_action'];
+
+        chrome.contextMenus.create({
+            title: "Suspend",
+            contexts: browserActionContexts,
+            onclick: (info, tab) => { suspendTab(tab, true); }
+        });
+        chrome.contextMenus.create({
+            title: "Suspend this window",
+            contexts: browserActionContexts,
+            onclick: (info, tab) => { suspendWindow(tab.windowId); }
+        });
+        chrome.contextMenus.create({
+            title: "Unsuspend this window",
+            contexts: browserActionContexts,
+            onclick: (info, tab) => { unsuspendWindow(tab.windowId); }
+        });
+        chrome.contextMenus.create({
+            title: "Never suspend this site",
+            contexts: browserActionContexts,
+            onclick: (info, tab) => {}
+        });
+
         chrome.contextMenus.create({
             title: "Suspend",
             contexts: contexts,
@@ -405,7 +433,6 @@
             title: "Never suspend this site",
             contexts: contexts,
             onclick: (info, tab) => {
-                console.log("info", info, "tab", tab);
                 addThisSiteToWhitelist();
             }
         });

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Better Suspender",
-  "version": "1.0.0",
-  "description": "Better tab suspender: reduces memory usage extensively",
+  "version": "1.0.11",
+  "description": "Reduce memory usage extensively suspending long time unused tabs automatically.",
   "author": "gmail@gmail.com",
   //"homepage_url": "http://extensionizr.com",
   "icons": {
@@ -13,8 +13,8 @@
   "default_locale": "en",
   "options_page": "options.html",
   "browser_action": {
-    "default_icon": "icons/icon19.png",
-    "default_title": "browser action demo",
+    "default_icon": "icons/download3.png",
+    "default_title": "Better Suspender",
     "default_popup": "browser_action.html"
   },
   "permissions": [
@@ -34,7 +34,7 @@
   ],
   "background": {
     "scripts": [
-      "html2canvas.js",
+      //"html2canvas.js",
       "utils.js",
       "common.js",
       "TabList.js",
