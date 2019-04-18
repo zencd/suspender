@@ -15,6 +15,7 @@
 
 ## todo p3
 
+- browser action: show options: try to switch to existing tab first
 - the 19px browser_action icon gets auto resized on Windows
 - suspend current tab: it's unclear the process has started, with a shortcut especially
 - a feature to move really old tabs to bookmarks

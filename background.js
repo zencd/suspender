@@ -22,8 +22,11 @@ var bgExt = {};
         parkCss: chrome.runtime.getURL('web/park.css'),
         parkFrame: chrome.runtime.getURL('web/park-frame.html'),
         parkJs: chrome.runtime.getURL('web/park.js'),
-        tempParkPage: chrome.runtime.getURL('/park.html')
+        tempParkPage: chrome.runtime.getURL('/park.html'),
+        optionsHtml: chrome.runtime.getURL('/options.html'),
     };
+
+    bgExt.urls = urls;
 
     let gParkHtmlText = ''; // content fetched from `gParkHtmlUrl`
     let gParkCssText = ''; // content fetched from `gParkCssUrl`
@@ -114,12 +117,39 @@ var bgExt = {};
         chrome.windows.get(windowId, {'populate': true}, function (window) {
             for (let i in window.tabs) {
                 if (window.tabs.hasOwnProperty(i)) {
+                    // todo check the url is suitable first
                     const chrTab = window.tabs[i];
                     unsuspendTab(chrTab);
                 }
             }
         });
     }
+
+    function suspendCurrentWindow() {
+        console.log("suspendCurrentWindow...");
+        Utils.getCurrentWindowIdFromBackgroundScript(function (windowId) {
+            suspendWindow(windowId)
+        });
+    }
+
+    function unsuspendCurrentWindow() {
+        console.log("unsuspendCurrentWindow...");
+        Utils.getCurrentWindowIdFromBackgroundScript(function (windowId) {
+            unsuspendWindow(windowId)
+        });
+    }
+
+    function suspendCurrentTab() {
+        console.log("unsuspendCurrentTab 1");
+        Utils.getCurrentTabFromBackgroundScript((chtTab)=>{
+            console.log("unsuspendCurrentTab 2", chtTab);
+            suspendTab(chtTab);
+        });
+    }
+
+    bgExt.suspendCurrentTab = suspendCurrentTab;
+    bgExt.unsuspendCurrentWindow = unsuspendCurrentWindow;
+    bgExt.suspendCurrentWindow = suspendCurrentWindow;
 
     function unsuspendTab(chrTab) {
         const urlHash = Utils.fastIntHash(chrTab.url);
