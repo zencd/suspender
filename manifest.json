@@ -59,5 +59,13 @@
         "https://*/*"
       ]
     }
-  ]
+  ],
+  "commands": {
+    "1-suspend-tab": {
+      "description": "suspend current tab",
+      "suggested_key": {
+        "default": "Alt+S"
+      }
+    }
+  }
 }

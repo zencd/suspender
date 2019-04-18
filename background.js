@@ -32,6 +32,18 @@
     initTabWatchTimer();
     initMessageListener();
     inspectExistingTabs();
+    initCommandListener();
+
+    function initCommandListener() {
+        chrome.commands.onCommand.addListener((command) => {
+            console.log("command", command, typeof command);
+            if (command === '1-suspend-tab') {
+                Utils.getCurrentTabFromBackgroundScript((chrTab) => {
+                    suspendTab(chrTab, true);
+                });
+            }
+        });
+    }
 
     function prefetchResources() {
         function prefetchParkPageHtml() {
@@ -382,22 +394,29 @@
         chrome.contextMenus.create({
             title: "Suspend",
             contexts: browserActionContexts,
-            onclick: (info, tab) => { suspendTab(tab, true); }
+            onclick: (info, tab) => {
+                suspendTab(tab, true);
+            }
         });
         chrome.contextMenus.create({
             title: "Suspend this window",
             contexts: browserActionContexts,
-            onclick: (info, tab) => { suspendWindow(tab.windowId); }
+            onclick: (info, tab) => {
+                suspendWindow(tab.windowId);
+            }
         });
         chrome.contextMenus.create({
             title: "Unsuspend this window",
             contexts: browserActionContexts,
-            onclick: (info, tab) => { unsuspendWindow(tab.windowId); }
+            onclick: (info, tab) => {
+                unsuspendWindow(tab.windowId);
+            }
         });
         chrome.contextMenus.create({
             title: "Never suspend this site",
             contexts: browserActionContexts,
-            onclick: (info, tab) => {}
+            onclick: (info, tab) => {
+            }
         });
 
         chrome.contextMenus.create({

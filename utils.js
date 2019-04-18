@@ -5,6 +5,14 @@
  */
 class Utils {
 
+    static getCurrentTabFromBackgroundScript(onTab) {
+        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+            if (tabs.length > 0) {
+                onTab(tabs[0]);
+            }
+        });
+    }
+
     static b64EncodeUnicode(str) {
         // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
         // first we use encodeURIComponent to get percent-encoded UTF-8,
