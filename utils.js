@@ -295,27 +295,5 @@ class Utils {
     }
 }
 
-class ChromeUtils {
-    static chromeTabsDiscard(tabId, callback) {
-        return chrome.tabs.discard(tabId, callback);
-    }
-
-    static chromeExtensionOnMessageAddListener(listener) {
-        return chrome.extension.onMessage.addListener(listener);
-    }
-
-    static chromeStorageOnChangedAddListener(listener) {
-        return chrome.storage.onChanged.addListener(listener);
-    }
-
-    static chromeTabsGet(tabId, callback) {
-        return chrome.tabs.get(tabId, callback);
-    }
-
-    static getURL(path) {
-        return chrome.runtime.getURL(path);
-    }
-}
-
 window.qs = Utils.qs;
 window.qsa = Utils.qsa;

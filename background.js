@@ -22,12 +22,12 @@ var backgroundScriptBts = {
     const options = new Options();
 
     const urls = {
-        parkHtml: ChromeUtils.getURL('web/park.html'),
-        parkCss: ChromeUtils.getURL('web/park.css'),
-        parkFrame: ChromeUtils.getURL('web/park-frame.html'),
-        parkJs: ChromeUtils.getURL('web/park.js'),
-        tempParkPage: ChromeUtils.getURL('/park.html'),
-        optionsHtml: ChromeUtils.getURL('/options.html'),
+        parkHtml: chrome.runtime.getURL('web/park.html'),
+        parkCss: chrome.runtime.getURL('web/park.css'),
+        parkFrame: chrome.runtime.getURL('web/park-frame.html'),
+        parkJs: chrome.runtime.getURL('web/park.js'),
+        tempParkPage: chrome.runtime.getURL('/park.html'),
+        optionsHtml: chrome.runtime.getURL('/options.html'),
     };
 
     ns.urls = urls;
@@ -46,7 +46,7 @@ var backgroundScriptBts = {
         options.load(function () {
             console.log("options loaded from storage", options);
         });
-        ChromeUtils.chromeStorageOnChangedAddListener(function (changes, areaName) {
+        chrome.storage.onChanged.addListener(function (changes, areaName) {
             options.processChanges(changes, areaName);
         });
     }
@@ -90,7 +90,7 @@ var backgroundScriptBts = {
             console.log(" ", (tab.suspended ? 'Su' : '_'), (tab.active ? 'Ac' : '_'), (tab.pinned ? 'Pi' : '_'), (tab.audible ? 'Au' : '_'), (tab.discarded ? 'Di' : '_'), ls, "s");
             console.log(" ", tab);
             if (!tab.url) {
-                ChromeUtils.chromeTabsGet(tab.id, (chrTab) => {
+                chrome.tabs.get(tab.id, (chrTab) => {
                     console.warn("BAD TAB", chrTab);
                 });
             }
@@ -103,7 +103,7 @@ var backgroundScriptBts = {
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             if (tab.url && Utils.isDataUri(tab.url)) {
-                ChromeUtils.chromeTabsDiscard(tab.id, function (resTab) {
+                chrome.tabs.discard(tab.id, function (resTab) {
                     console.log("discarded tab", resTab);
                 });
             }
@@ -111,10 +111,8 @@ var backgroundScriptBts = {
     }
 
     function initMessageListener() {
-        ChromeUtils.chromeExtensionOnMessageAddListener(function (msg, sender, sendResponse) {
-            // console.log("BG: incoming msg", msg);
+        chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
-                // console.log("screenshot is ready!!!", msg);
                 ns.suspendTabPhase2(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
             }
         });

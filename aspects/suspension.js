@@ -65,7 +65,7 @@
 
         const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
         CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
-            // console.log("htmlTplStr bytes", htmlTplStr.length);
+            // todo do replace more effectively, probably via joining a set of strings
             let tplVars = {
                 '$BG_COLOR$': bgColor,
                 '$BG_DARKEN$': bgDarkenStr,
@@ -80,14 +80,10 @@
                 // '$DATE$': Utils.formatHumanReadableDateTime(),
                 '$PARK_JS_URL$': ns.urls.parkJs,
             };
-            // console.log("tplVars", tplVars);
             const htmlStr = Utils.expandStringTemplate(ns.getParkHtmlText(), tplVars);
-            // console.log("htmlStr:", htmlStr);
             const b64 = Utils.b64EncodeUnicode(htmlStr);
-            const dataUri = 'data:text/html;base64,' + b64;
-            // console.log("dataUri", dataUri);
-            callback(dataUri);
-            // document.location.href = dataUri;
+            const htmlDataUri = 'data:text/html;base64,' + b64;
+            callback(htmlDataUri);
         });
     }
 
@@ -131,9 +127,10 @@
     function unsuspendWindow(windowId) {
         // todo start iterating my tab objects, not chrome's
         chrome.windows.get(windowId, {'populate': true}, function (window) {
-            for (let i in window.tabs) {
-                if (window.tabs.hasOwnProperty(i)) {
-                    const chrTab = window.tabs[i];
+            const tabs = window.tabs;
+            for (let i in tabs) {
+                if (tabs.hasOwnProperty(i)) {
+                    const chrTab = tabs[i];
                     if (Utils.isDataUri(chrTab.url)) {
                         unsuspendTab(chrTab);
                     }
