@@ -73,6 +73,15 @@ class __BtsSharedNamespace {
     findOldTabsAndSuspendThem() {
         throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
     }
+    addToSuspensionMap() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+    getParkHtmlText() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+    getParkCssText() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
 }
 
 /**

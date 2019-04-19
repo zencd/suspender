@@ -1,4 +1,6 @@
 (()=>{
+    "use strict";
+
     const ns = Utils.getNS()
         .export(getTabs)
         .export(inspectExistingTabs)

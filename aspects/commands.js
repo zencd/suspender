@@ -1,4 +1,5 @@
 (()=>{
+    "use strict";
 
     const ns = Utils.getNS().export(initCommandListener);
 
