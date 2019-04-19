@@ -108,13 +108,6 @@
                 ns.suspendTab(tab, false);
             }
         });
-        makeContextMenu({
-            title: "Suspend Old Tabs",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.findOldTabsAndSuspendThem();
-            }
-        });
     }
     
     function makeContextMenu(params) {

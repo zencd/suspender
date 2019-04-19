@@ -2,6 +2,7 @@
     "use strict";
 
     const ns = Utils.getNS()
+        .export(initTabWatchTimer)
         .export(suspendTab)
         .export(suspendTabPhase2)
         .export(suspendWindow)
@@ -9,6 +10,35 @@
         .export(suspendCurrentTab)
         .export(suspendCurrentWindow)
         .export(unsuspendCurrentWindow);
+
+    const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
+
+    function initTabWatchTimer() {
+        setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_MILLIS);
+        // setTimeout(findOldTabsAndSuspendThem, 9000); // temp
+    }
+
+    function findOldTabsAndSuspendThem() {
+        const options = ns.getOptions();
+        const now = new Date();
+        const tt = ns.getTabs().getAllTabs();
+        for (let i = 0; i < tt.length; i++) {
+            const tab = tt[i];
+            const diffSec = (now - tab.lastSeen) / 1000;
+            const timeoutOk = tab.lastSeen && diffSec >= options.suspendTimeout;
+            const schemaOk = CommonUtils.isUrlSuspendable(tab.url);
+            const activeTabOk = options.suspendActive || !tab.active;
+            const pinnedOk = options.suspendPinned || !tab.pinned;
+            const audibleOk = options.suspendAudible || !tab.audible;
+            const doSuspend = timeoutOk && activeTabOk && !tab.suspended && schemaOk && pinnedOk && audibleOk;
+            // const doSuspend = (tab.url === 'https://zencd.github.io/charted/');
+            // console.log("tab", tab.url, "suspending?", doSuspend);
+            if (doSuspend) {
+                console.log("suspending tab", tab);
+                ns.suspendTab(tab, false);
+            }
+        }
+    }
 
     function suspendTab(tab, isActiveTab) {
         console.log("suspendTab", tab);

@@ -11,15 +11,9 @@ var backgroundScriptBts = {
 
     const ns = Utils.getNS()
         .export(onContextMenuDiscardDataUriTabs)
-        .export(findOldTabsAndSuspendThem)
-        .export(addThisSiteToWhitelist)
         .export(onContextMenuDebugTabs);
 
     const console = chrome.extension.getBackgroundPage().console; // really needed?
-
-    const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
-
-    const options = new Options();
 
     const urls = {
         parkHtml: chrome.runtime.getURL('web/park.html'),
@@ -33,52 +27,14 @@ var backgroundScriptBts = {
     ns.urls = urls;
 
     ns.prefetchResources();
-    initOptions();
+    ns.initOptions();
     ns.initMenus();
     ns.initWebRequestListeners();
     ns.initTabListeners();
-    initTabWatchTimer();
+    ns.initTabWatchTimer();
     initMessageListener();
     ns.inspectExistingTabs();
     ns.initCommandListener();
-
-    function initOptions() {
-        options.load(function () {
-            console.log("options loaded from storage", options);
-        });
-        chrome.storage.onChanged.addListener(function (changes, areaName) {
-            options.processChanges(changes, areaName);
-        });
-    }
-
-    function findOldTabsAndSuspendThem() {
-        const now = new Date();
-        const tt = ns.getTabs().getAllTabs();
-        for (let i = 0; i < tt.length; i++) {
-            const tabObj = tt[i];
-            const diffSec = (now - tabObj.lastSeen) / 1000;
-            const timeoutOk = tabObj.lastSeen && diffSec >= options.suspendTimeout;
-            const schemaOk = CommonUtils.isUrlSuspendable(tabObj.url);
-            const activeTabOk = options.suspendActive || !tabObj.active;
-            const pinnedOk = options.suspendPinned || !tabObj.pinned;
-            const audibleOk = options.suspendAudible || !tabObj.audible;
-            const doSuspend = timeoutOk && activeTabOk && !tabObj.suspended && schemaOk && pinnedOk && audibleOk;
-            // const doSuspend = (tabObj.url === 'https://zencd.github.io/charted/');
-            // console.log("tab", tabObj.url, "suspending?", doSuspend);
-            if (doSuspend) {
-                console.log("suspending tab", tabObj);
-                ns.suspendTab(tabObj, false);
-            }
-        }
-    }
-
-    function addThisSiteToWhitelist() {
-    }
-
-    function initTabWatchTimer() {
-        setInterval(findOldTabsAndSuspendThem, OLD_TAB_CHECK_INTERVAL_MILLIS);
-        // setTimeout(findOldTabsAndSuspendThem, 9000); // temp
-    }
 
     function onContextMenuDebugTabs() {
         const tt = ns.getTabs().getAllTabs();

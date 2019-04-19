@@ -1,14 +1,11 @@
 class __BtsSharedNamespace {
-    static METHOD_NOT_EXPORTED = "method must be replaced by actual implementation";
-
     constructor() {
-        function notExported() {
-            throw __BtsSharedNamespace.METHOD_NOT_EXPORTED;
-        }
+        function notExported() {}
         this.prefetchResources = notExported;
         this.initMenus = notExported;
         this.initWebRequestListeners = notExported;
         this.initTabListeners = notExported;
+        this.initTabWatchTimer = notExported;
         this.inspectExistingTabs = notExported;
         this.initCommandListener = notExported;
         this.getTabs = notExported;
@@ -26,13 +23,26 @@ class __BtsSharedNamespace {
         this.suspendCurrentWindow = notExported;
         this.unsuspendCurrentWindow = notExported;
         this.suspendCurrentTab = notExported;
+        this.initOptions = notExported;
+        this.getOptions = notExported;
+
+        for (let prop in this) {
+            if (this.hasOwnProperty(prop)) {
+                const method = this[prop];
+                if (method === notExported) {
+                    this[prop] = function () {
+                        throw 'method `' + prop + '` has not been exported by an aspect';
+                    }
+                }
+            }
+        }
     }
 
     export(method) {
         if (this[method.name]) {
             const s = this[method.name].toString();
             // console.log("s", s);
-            if (s.indexOf('METHOD_NOT_EXPORTED') < 0) {
+            if (s.indexOf('has not been exported') < 0) {
                 console.warn("method with this name is already exported:", method.name);
             }
         }

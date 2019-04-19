@@ -45,6 +45,7 @@
       "aspects/commands.js",
       "aspects/resources.js",
       "aspects/suspension.js",
+      "aspects/opts.js",
       "background.js"
     ],
     "persistent": true
