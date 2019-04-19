@@ -21,14 +21,6 @@
 
     log('content.js init');
 
-    // const jsHeapSizeLimit = toMB(window.performance.memory.jsHeapSizeLimit);
-    // const totalJSHeapSize = toMB(window.performance.memory.totalJSHeapSize);
-    // const usedJSHeapSize = toMB(window.performance.memory.usedJSHeapSize);
-    // log("window.performance.memory", window.performance.memory);
-    // log("jsHeapSizeLimit", jsHeapSizeLimit);
-    // log("totalJSHeapSize", totalJSHeapSize);
-    // log("usedJSHeapSize", usedJSHeapSize);
-
     initMessageListener();
 
     function initMessageListener() {

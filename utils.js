@@ -1,9 +1,96 @@
 "use strict";
 
+class __BtsSharedNamespace {
+    static NOT_REPLACED_ERROR = "method must be replaced by actual implementation";
+    
+    export(method) {
+        if (this[method.name]) {
+            const s = this[method.name].toString();
+            if (s.indexOf('NOT_REPLACED_ERROR') < 0) {
+                console.warn("method with this name is already exported:", method.name);
+            }
+        }
+        this[method.name] = method;
+        return this;
+    }
+
+    prefetchResources() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    initMenus() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    initWebRequestListeners() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    initTabListeners() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    inspectExistingTabs() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    initCommandListener() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    getTabs() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    suspendTab() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    suspendWindow() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    suspendTabPhase2() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    unsuspendWindow() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    addThisSiteToWhitelist() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    onContextMenuDebugTabs() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    onContextMenuDiscardDataUriTabs() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+
+    findOldTabsAndSuspendThem() {
+        throw __BtsSharedNamespace.NOT_REPLACED_ERROR;
+    }
+}
+
 /**
  * Abstract utils.
  */
 class Utils {
+
+    static getNS() {
+        let ns;
+        const key = '__ns_4593395738';
+        if (typeof window[key] === 'undefined') {
+            ns = new __BtsSharedNamespace();
+            window[key] = ns;
+        } else {
+            ns = window[key];
+        }
+        return ns;
+    }
 
     static getCurrentTabFromBackgroundScript(onTab) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
@@ -158,7 +245,9 @@ class Utils {
             n = 16;
         }
         const s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return Array(n).join().split(',').map(() => { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+        return Array(n).join().split(',').map(() => {
+            return s.charAt(Math.floor(Math.random() * s.length));
+        }).join('');
     }
 
     static getRandomInt(min, max) {
@@ -166,7 +255,7 @@ class Utils {
             min = 0;
         }
         if (typeof max === 'undefined') {
-            max = 1000*1000*1000;
+            max = 1000 * 1000 * 1000;
         }
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -194,6 +283,28 @@ class Utils {
 
     static isDataUri(url) {
         return url && url.startsWith('data:text/html;');
+    }
+}
+
+class ChromeUtils {
+    static chromeTabsDiscard(tabId, callback) {
+        return chrome.tabs.discard(tabId, callback);
+    }
+
+    static chromeExtensionOnMessageAddListener(listener) {
+        return chrome.extension.onMessage.addListener(listener);
+    }
+
+    static chromeStorageOnChangedAddListener(listener) {
+        return chrome.storage.onChanged.addListener(listener);
+    }
+
+    static chromeTabsGet(tabId, callback) {
+        return chrome.tabs.get(tabId, callback);
+    }
+
+    static getURL(path) {
+        return chrome.runtime.getURL(path);
     }
 }
 

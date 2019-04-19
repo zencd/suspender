@@ -29,6 +29,7 @@
 - use requestIdleCallback() for bg tasks
 - learn about: queueMicrotask() https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 - maybe there is a better place for 500KB objects than local storage
+- maybe check `suspensionMap` periodically for old entries to avoid memory leaks
 
 ## bugs
 

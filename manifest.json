@@ -34,11 +34,16 @@
   ],
   "background": {
     "scripts": [
-      //"html2canvas.js",
       "utils.js",
       "common.js",
       "TabList.js",
       "options-lib.js",
+      "aspects/tabs.js",
+      "aspects/webrequest.js",
+      "aspects/context_menu.js",
+      "aspects/commands.js",
+      "aspects/resources.js",
+      "aspects/suspension.js",
       "background.js"
     ],
     "persistent": true
