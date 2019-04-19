@@ -7,6 +7,17 @@
 
     const suspensionMap = {};
 
+    function initWebRequestListeners() {
+        const urlPattern = ns.urls.tempParkPage + '*';
+        chrome.webRequest.onBeforeRequest.addListener(onBeforeRequest,
+            {
+                urls: [urlPattern],
+                types: ["main_frame"],
+            },
+            ["blocking"]
+        );
+    }
+
     function addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis) {
         suspensionMap[redirUrl] = {
             tabId: tabId,
@@ -15,30 +26,21 @@
         };
     }
 
-    function initWebRequestListeners() {
-        const urlPattern = ns.urls.tempParkPage + '*';
-        chrome.webRequest.onBeforeRequest.addListener(function (details) {
-                const suspensionInfo = suspensionMap[details.url];
-                if (suspensionInfo) {
-                    const dataUri = suspensionInfo.htmlDataUri;
-                    const tabId = suspensionInfo.tabId;
-                    if (dataUri) {
-                        delete suspensionMap[details.url];
-                        const myTab = ns.getTabs().getTab(tabId);
-                        if (myTab) {
-                            myTab.suspended = true;
-                        }
-                        return {redirectUrl: dataUri};
-                    }
+    function onBeforeRequest(details) {
+        const suspensionInfo = suspensionMap[details.url];
+        if (suspensionInfo) {
+            const dataUri = suspensionInfo.htmlDataUri;
+            const tabId = suspensionInfo.tabId;
+            if (dataUri) {
+                delete suspensionMap[details.url];
+                const myTab = ns.getTabs().getTab(tabId);
+                if (myTab) {
+                    myTab.suspended = true;
                 }
-                return {};
-            },
-            {
-                urls: [urlPattern],
-                types: ["main_frame"],
-            },
-            ["blocking"]
-        );
+                return {redirectUrl: dataUri};
+            }
+        }
+        return {};
     }
 
 })();
