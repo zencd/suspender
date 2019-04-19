@@ -20,4 +20,10 @@
         window.close();
     };
 
+    function sendMSG() {
+        chrome.runtime.sendMessage(null, {
+            message: 'MESSAGE_SUSPEND_FROM_BROWSER_ACTION',
+        });
+    }
+
 })();

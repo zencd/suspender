@@ -41,18 +41,23 @@
     }
 
     function suspendTab(tab, isActiveTab) {
-        console.log("suspendTab", tab);
         if (!CommonUtils.isUrlSuspendable(tab.url)) {
             return;
         }
-        console.log("gonna reload", tab);
+        const t1 = new Date() - 0;
+        console.log("suspend 1");
         chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR}, function (bgResp) {
+            console.log("suspend 2", new Date() - t1);
             const screenshotId = Utils.uidString();
             getSuspendedPageContent(screenshotId, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
+                console.log("suspend 3", new Date() - t1);
                 if (isActiveTab) {
-                    // todo use windowId
-                    const opts = {format: "png"}; // also "jpeg"
-                    chrome.tabs.captureVisibleTab(null, opts, function (imageDataUri) {
+                    // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
+                    const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
+                    const opts = {format: imageFormat, quality: 30};
+                    chrome.tabs.captureVisibleTab(tab.windowId, opts, function (imageDataUri) {
+                        // todo capture screenshot first (move this atop)
+                        console.log("suspend 4", new Date() - t1, "chars:" + imageDataUri.length);
                         const scaleDown = isActiveTab;
                         suspendTabPhase2(screenshotId, tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
                     });
@@ -183,7 +188,7 @@
 
     function suspendCurrentTab() {
         Utils.getCurrentTabFromBackgroundScript((chtTab)=>{
-            suspendTab(chtTab);
+            suspendTab(chtTab, true);
         });
     }
 

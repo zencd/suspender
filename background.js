@@ -70,6 +70,8 @@ var backgroundScriptBts = {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
                 ns.suspendTabPhase2(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
+            } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_FROM_BROWSER_ACTION) {
+                ns.suspendCurrentTab();
             }
         });
     }
