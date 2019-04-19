@@ -41,7 +41,7 @@
       "options_lib.js",
       "aspects/tabs.js",
       "aspects/webrequest.js",
-      "aspects/context_menu.js",
+      "aspects/menus.js",
       "aspects/commands.js",
       "aspects/resources.js",
       "aspects/suspension.js",
