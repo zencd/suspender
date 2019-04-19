@@ -37,7 +37,7 @@
       "utils.js",
       "common.js",
       "TabList.js",
-      "options-lib.js",
+      "options_lib.js",
       "aspects/tabs.js",
       "aspects/webrequest.js",
       "aspects/context_menu.js",
