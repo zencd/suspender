@@ -35,6 +35,7 @@
   "background": {
     "scripts": [
       "utils.js",
+      "namespace.js",
       "common.js",
       "TabList.js",
       "options_lib.js",

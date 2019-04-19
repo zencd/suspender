@@ -1,4 +1,5 @@
 (() => {
+    'use strict';
 
     const bg = chrome.extension.getBackgroundPage().backgroundScriptBts;
 
