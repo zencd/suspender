@@ -1,6 +1,9 @@
+"use strict";
+
 class __BtsSharedNamespace {
     constructor() {
         function notExported() {}
+
         this.prefetchResources = notExported;
         this.initMenus = notExported;
         this.initWebRequestListeners = notExported;
@@ -16,7 +19,6 @@ class __BtsSharedNamespace {
         this.addThisSiteToWhitelist = notExported;
         this.onContextMenuDebugTabs = notExported;
         this.onContextMenuDiscardDataUriTabs = notExported;
-        this.findOldTabsAndSuspendThem = notExported;
         this.addToSuspensionMap = notExported;
         this.getParkHtmlText = notExported;
         this.getParkCssText = notExported;

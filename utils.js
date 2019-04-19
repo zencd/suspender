@@ -6,18 +6,15 @@
 class Utils {
 
     static getNS() {
-        let ns;
         const key = '__ns_4593395738';
         if (typeof window[key] === 'undefined') {
-            ns = new __BtsSharedNamespace();
-            window[key] = ns;
-        } else {
-            ns = window[key];
+            window[key] = new __BtsSharedNamespace();
         }
-        return ns;
+        return window[key];
     }
 
     static getCurrentTabFromBackgroundScript(onTab) {
+        // todo try using TabList
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             if (tabs.length > 0) {
                 onTab(tabs[0]);
