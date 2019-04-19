@@ -1,7 +1,7 @@
 var backgroundScriptBts = {
     // a global object to be accessible from other scripts like `browser_action.js`
     // XXX `var` is mandatory to be accessible
-    getNS: function () {
+    getTheNS: function () {
         return Utils.getNS();
     },
 };
