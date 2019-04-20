@@ -1,9 +1,10 @@
-(()=>{
+(() => {
     "use strict";
 
     const ns = Utils.getNS()
         .export(getTabs)
         .export(inspectExistingTabs)
+        .export(getCurrentTab)
         .export(initTabListeners);
 
     const cs0 = chrome.runtime.getManifest().content_scripts[0];
@@ -12,23 +13,41 @@
 
     const tabs = new TabList();
 
+    let currentTab = null;
+
     function getTabs() {
         return tabs;
     }
 
+    function getCurrentTab() {
+        return currentTab;
+    }
+
     function inspectExistingTabs() {
-        chrome.tabs.getAllInWindow(null, function (chromeTabs) {
+        function inspectWindow(window) {
+            const chromeTabs = window.tabs;
             for (let i = 0; i < chromeTabs.length; i++) {
                 const chrTab = chromeTabs[i];
-                // console.log("chrTab", chrTab);
                 const myTab = tabs.getOrCreateTab(chrTab.id);
                 myTab.updateFromChromeTab(chrTab);
                 if (chrTab.active === true) {
                     tabs.currentTabs[chrTab.windowId] = chrTab.id;
                 }
+                if (window.focused && chrTab.active) {
+                    currentTab = myTab;
+                }
                 injectContentScriptIntoTab(chrTab);
             }
-            // console.log("tabs.currentTabs", tabs.currentTabs);
+        }
+
+        chrome.windows.getAll({'populate': true}, function (windows) {
+            for (let i in windows) {
+                if (windows.hasOwnProperty(i)) {
+                    const window = windows[i];
+                    // console.log("window", window);
+                    inspectWindow(window);
+                }
+            }
         });
     }
 
@@ -44,9 +63,10 @@
             // Fires when the active tab in a window changes.
             // https://developer.chrome.com/extensions/tabs#event-onActivated
             // logToCurrentTab("tab activated", activeInfo.windowId, activeInfo.tabId);
-            const tab = tabs.getTab(activeInfo.tabId); // nullable
+            const myTab = tabs.getTab(activeInfo.tabId); // nullable
             tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
-            console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, 'tab', tab);
+            currentTab = myTab;
+            console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, 'tab', myTab);
         });
         chrome.tabs.onAttached.addListener(function (tabId, attachInfo) {
             // Fired when a tab is attached to a window

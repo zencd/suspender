@@ -3,7 +3,24 @@
 
     const bg = chrome.extension.getBackgroundPage().backgroundScriptBts;
 
-    document.querySelector('#suspend-current-tab').onclick = () => {
+    function isUrlSuspendable(url) {
+        // todo a copy from common.js
+        return url && (url.startsWith('http://') || url.startsWith('https://'));
+    }
+
+    const $suspendTab = document.querySelector('#suspend-current-tab');
+
+    const tab = bg.getTheNS().getCurrentTab();
+
+    if (tab) {
+        if (isUrlSuspendable(tab.url)) {
+            $suspendTab.classList.remove('disabled');
+        } else {
+            $suspendTab.classList.add('disabled');
+        }
+    }
+
+    $suspendTab.onclick = () => {
         bg.getTheNS().suspendCurrentTab();
         window.close();
     };

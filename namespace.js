@@ -27,6 +27,7 @@ class __BtsSharedNamespace {
         this.suspendCurrentTab = notExported;
         this.initOptions = notExported;
         this.getOptions = notExported;
+        this.getCurrentTab = notExported;
 
         for (let prop in this) {
             if (this.hasOwnProperty(prop)) {
