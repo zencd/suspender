@@ -55,17 +55,10 @@ export class Utils {
     }
 
     static toReadableUrl(s) {
-        if (!s) {
-            return s;
-        }
-        s = Utils.cutFromBeginning(s, 'http://');
-        s = Utils.cutFromBeginning(s, 'https://');
-        s = Utils.cutFromBeginning(s, 'www.');
-        const i = s.indexOf('/');
-        if (i >= 0) {
-            s = s.substring(0, i);
-        }
-        return Utils.cutFromEnd(s, '/');
+        if (!s) return s;
+        return s
+            .replace(/^https?:\/\/(www\.)?/, '') // cut off uninformative beginning
+            .replace(/\/.*/, ''); // cur off trailing stuff
     }
 
     static limit(s, numChars) {
