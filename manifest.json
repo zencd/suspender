@@ -19,54 +19,24 @@
   },
   "permissions": [
     "tabs",
-    "activeTab",
+    //"activeTab", // todo inexistent!
     "<all_urls>",
     "contextMenus",
     "webRequest",
     "webRequestBlocking",
     "webNavigation",
+    //"notifications",
     "storage",
-    "unlimitedStorage",
-    "notifications"
+    "unlimitedStorage"
   ],
   "web_accessible_resources": [
     "web/*"
   ],
   "background": {
     "page": "background.html",
-    "OUTDATED_scripts": [
-      "utils.js",
-      "namespace.js",
-      "common.js",
-      "TabList.js",
-      "options_lib.js",
-      "aspects/tabs.js",
-      "aspects/webrequest.js",
-      "aspects/menus.js",
-      "aspects/commands.js",
-      "aspects/resources.js",
-      "aspects/suspension.js",
-      "aspects/opts.js",
-      "background.js"
-    ],
     "persistent": true
   },
   "content_scripts": [
-    {
-      "js": [
-        "html2canvas.min.js",
-        //"utils.js",
-        //"common.js",
-        "content.js"
-      ],
-      "run_at": "document_idle", // also "document_start"
-      "matches": [
-        //"<all_urls>",
-        //"*://*/*",
-        "http://*/*",
-        "https://*/*"
-      ]
-    }
   ],
   "commands": {
     "command-suspend-current-tab": {

@@ -4,8 +4,6 @@ import {Utils} from '../utils.js';
 import {CommonUtils} from '../common.js';
 import {TabList} from '../TabList.js';
 
-const contentScriptManifest = parseContentScriptManifest();
-
 const tabs = new TabList();
 
 let currentTab = null;
@@ -15,14 +13,6 @@ initTabsAspect();
 function initTabsAspect() {
     initTabListeners();
     inspectExistingTabs();
-}
-
-function parseContentScriptManifest() {
-    const cs0 = chrome.runtime.getManifest().content_scripts[0];
-    return {
-        files: cs0.js,
-        runAt: cs0.run_at,
-    }
 }
 
 export function getTabs() {
@@ -46,7 +36,6 @@ function inspectExistingTabs() {
             if (window.focused && chrTab.active) {
                 currentTab = myTab;
             }
-            injectContentScriptIntoTab(chrTab);
         }
     }
 
@@ -59,13 +48,6 @@ function inspectExistingTabs() {
             }
         }
     });
-}
-
-function injectContentScriptIntoTab(chrTab) {
-    if (CommonUtils.isUrlSuspendable(chrTab.url)) {
-        console.log("injecting into", chrTab.url);
-        Utils.injectScriptsIntoTab(chrTab.id, contentScriptManifest.runAt, contentScriptManifest.files);
-    }
 }
 
 function initTabListeners() {

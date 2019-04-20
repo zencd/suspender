@@ -4,7 +4,8 @@ import {Utils} from './utils.js';
 import {CommonUtils} from './common.js';
 import {getTabs, getCurrentTab} from './aspects/tabs.js';
 import {
-    suspendTabPhase2,
+    suspendTabPhase1,
+    scaleStoreRedirect,
     suspendCurrentTab,
     suspendCurrentWindow,
     unsuspendCurrentWindow
@@ -68,9 +69,13 @@ export function onContextMenuDiscardDataUriTabs() {
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
-            suspendTabPhase2(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
+            scaleStoreRedirect(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
         } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_FROM_BROWSER_ACTION) {
             suspendCurrentTab();
+        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
+            suspendTabPhase1(msg.tabId, msg.backgroundColor, null);
+        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
+            suspendTabPhase1(msg.tabId, msg.backgroundColor, msg.imageDataUri);
         }
     });
 }

@@ -9,6 +9,8 @@ export class CommonUtils {
     static MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
     static MESSAGE_SUSPEND_FROM_BROWSER_ACTION = 'MESSAGE_SUSPEND_FROM_BROWSER_ACTION'; // todo unused
     static MESSAGE_GET_DOCUMENT_BG_COLOR = 'MESSAGE_GET_DOCUMENT_BG_COLOR';
+    static MESSAGE_SUSPEND_FG = 'MESSAGE_SUSPEND_FG';
+    static MESSAGE_SUSPEND_BG = 'MESSAGE_SUSPEND_BG';
     static MESSAGE_LOG = 'MESSAGE_LOG';
 
     static LOG_PREFIX = 'BTS:';
@@ -30,10 +32,10 @@ export class CommonUtils {
         return url && (url.startsWith('http://') || url.startsWith('https://'));
     }
 
-    static scaleDownRetinaImage(scaleDown, origDataUri, onLoad) {
+    static scaleDownRetinaImage(scaleDown, origDataUri, onResult) {
         const dpr = window.devicePixelRatio;
         if (dpr === 1 || !scaleDown) {
-            return onLoad(origDataUri);
+            return onResult(origDataUri);
         }
 
         const $canvas = document.createElement('canvas');
@@ -43,15 +45,11 @@ export class CommonUtils {
         img.onload = function () {
             const w2 = img.width / dpr;
             const h2 = img.height / dpr;
-            // console.log("img", img.width, 'x', img.height);
             $canvas.width = w2;
             $canvas.height = h2;
-            // ctx.globalAlpha = 0.5;
             ctx.drawImage(img, 0, 0, w2, h2);
             const dataUri = $canvas.toDataURL("image/png");
-            // console.log("final dataUri", dataUri.length);
-            // console.log("final dataUri", dataUri);
-            onLoad(dataUri);
+            onResult(dataUri);
         };
         img.src = origDataUri;
     }

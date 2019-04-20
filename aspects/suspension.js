@@ -10,6 +10,8 @@ import {getParkCssText, getParkHtmlText} from './resources.js';
 
 const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
+const JPEG_QUALITY = 40;
+
 initSuspensionAspect();
 
 function initSuspensionAspect() {
@@ -47,36 +49,88 @@ export function suspendTab(tab, isActiveTab) {
     if (!CommonUtils.isUrlSuspendable(tab.url)) {
         return;
     }
-    const t1 = new Date() - 0;
-    console.log("suspend 1");
-    chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR}, function (bgResp) {
-        console.log("suspend 2", new Date() - t1);
+
+    if (isActiveTab) {
+        suspendForegroundTab(tab);
+    } else {
+        suspendBackgroundTab(tab);
+    }
+}
+
+function suspendForegroundTab(tab) {
+    chrome.tabs.executeScript(tab.id, {
+        file: 'content_fg_tab.js',
+        runAt: 'document_idle'
+    }, (injected) => {
+        chrome.tabs.executeScript(tab.id, {
+            code: 'continueCapturing(' + tab.id + ');'
+        });
+    });
+}
+
+function suspendBackgroundTab(tab) {
+    const files = ['html2canvas.min.js', 'content_bg_tab.js'];
+    const runAt = 'document_idle';
+    chrome.tabs.executeScript(tab.id, {
+        file: files[0],
+        runAt: runAt
+    }, (injected1) => {
+        chrome.tabs.executeScript(tab.id, {
+            file: files[1],
+            runAt: runAt
+        }, (injected2) => {
+            chrome.tabs.executeScript(tab.id, {
+                code: 'continueCapturing(' + tab.id + ');'
+            });
+        });
+    });
+}
+
+export function suspendTabPhase1(tabId, backgroundColor, imageDataUri) {
+    const tab = getTabs().getTab(tabId);
+
+    function next(imageDataUri, scaleDown) {
         const screenshotId = Utils.uidString();
-        getSuspendedPageContent(screenshotId, tab.url, tab.title, bgResp.backgroundColor, function (htmlDataUri) {
-            console.log("suspend 3", new Date() - t1);
-            if (isActiveTab) {
-                // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
-                const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
-                const opts = {format: imageFormat, quality: 30};
-                chrome.tabs.captureVisibleTab(tab.windowId, opts, function (imageDataUri) {
-                    // todo capture screenshot first (move this atop)
-                    console.log("suspend 4", new Date() - t1, "chars:" + imageDataUri.length);
-                    const scaleDown = isActiveTab;
-                    suspendTabPhase2(screenshotId, tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
-                });
-            } else {
-                const msg = {
-                    message: CommonUtils.MESSAGE_TAKE_SCREENSHOT,
-                    screenshotId: screenshotId,
-                    htmlDataUri: htmlDataUri,
-                    tabId: tab.id,
-                    tabUrl: tab.url,
-                };
-                console.log("sending message", tab.id, msg);
-                chrome.tabs.sendMessage(tab.id, msg, function (response) {
-                    // console.log("response from CS:", response);
-                });
-            }
+        getSuspendedPageContent(screenshotId, tab.url, tab.title, backgroundColor, (htmlDataUri) => {
+            scaleStoreRedirect(screenshotId, tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
+        });
+    }
+
+    if (imageDataUri) {
+        next(imageDataUri, false);
+    } else {
+        // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
+        const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
+        const opts = {format: imageFormat, quality: JPEG_QUALITY};
+        chrome.tabs.captureVisibleTab(tab.windowId, opts, (imageDataUri) => {
+            next(imageDataUri, true);
+        });
+    }
+}
+
+export function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
+    CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
+        const nowMillis = new Date() - 0; // GMT epoch millis
+        const urlHash = Utils.fastIntHash(htmlDataUri);
+        const storage = chrome.storage.local;
+        const redirUrl = EXT_URLS.tempParkPage + '?uniq=' + Utils.getRandomInt();
+        const storageItems = {
+            ['screenshot.id=' + screenshotId]: {
+                created: nowMillis,
+                urlHash: urlHash,
+                content: imageDataUri2,
+            },
+            ['suspended.urlHash=' + urlHash]: {
+                screenshotId: screenshotId,
+                created: nowMillis,
+                urlHash: urlHash,
+                url: tabUrl,
+                tabId: tabId,
+            },
+        };
+        storage.set(storageItems, function () {
+            addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
+            chrome.tabs.update(tabId, {url: redirUrl});
         });
     });
 }
@@ -125,38 +179,6 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
     });
 }
 
-export function suspendTabPhase2(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
-    CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, function (imageDataUri2) {
-        const nowMillis = new Date() - 0; // GMT epoch millis
-        const urlHash = Utils.fastIntHash(htmlDataUri);
-        const storage = chrome.storage.local;
-        const storageItems = {
-            ['screenshot.id=' + screenshotId]: {
-                created: nowMillis,
-                urlHash: urlHash,
-                content: imageDataUri2,
-            }
-        };
-        storage.set(storageItems, function () {
-            const redirUrl = EXT_URLS.tempParkPage + '?uniq=' + Utils.getRandomInt();
-            addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
-
-            chrome.tabs.update(tabId, {url: redirUrl});
-
-            const storageItems2 = {
-                ['suspended.urlHash=' + urlHash]: {
-                    screenshotId: screenshotId,
-                    created: nowMillis,
-                    urlHash: urlHash,
-                    url: tabUrl,
-                    tabId: tabId,
-                }
-            };
-            storage.set(storageItems2, function () {
-            });
-        });
-    });
-}
 
 export function suspendWindow(windowId) {
     // todo start iterating my tab objects, not chrome's
