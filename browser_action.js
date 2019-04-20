@@ -2,6 +2,9 @@
     'use strict';
 
     const bg = chrome.extension.getBackgroundPage().backgroundScriptBts;
+    const glob = chrome.extension.getBackgroundPage().glob;
+
+    // alert("bg: " + bg + ", glob: " + glob);
 
     function isUrlSuspendable(url) {
         // todo a copy from common.js

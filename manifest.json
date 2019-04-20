@@ -33,7 +33,8 @@
     "web/*"
   ],
   "background": {
-    "scripts": [
+    "page": "background.html",
+    "xscripts": [
       "utils.js",
       "namespace.js",
       "common.js",
