@@ -1,17 +1,22 @@
 "use strict";
 
-console.log("content_bg_tab", new Date());
+// console.log("content_bg_tab", new Date());
 
 /**
- * XXX Don't rename - it's called from background script.
+ * XXX Don't rename - it's called from the background script.
  */
 function continueCapturing(tabId) {
-    capture();
+    if (document.body) {
+        capture();
+    }
 
     function findBgColor() {
-        let color = getComputedStyle(document.body).backgroundColor;
-        if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
-            color = 'rgb(255,255,255)';
+        let color = 'rgb(255,255,255)';
+        if (document.body) {
+            color = getComputedStyle(document.body).backgroundColor;
+            if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
+                color = 'rgb(255,255,255)';
+            }
         }
         return color;
     }

@@ -64,38 +64,38 @@ function initTabListeners() {
         const myTab = tabs.getTab(activeInfo.tabId); // nullable
         tabs.tabActivated(activeInfo.windowId, activeInfo.tabId);
         currentTab = myTab;
-        console.log("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, 'tab', myTab);
+        console.debug("onActivated", "wid", activeInfo.windowId, "id", activeInfo.tabId, 'tab', myTab);
     });
     chrome.tabs.onAttached.addListener(function (tabId, attachInfo) {
         // Fired when a tab is attached to a window
-        console.log("onAttached:", tabId, attachInfo);
+        console.debug("onAttached:", tabId, attachInfo);
     });
     chrome.tabs.onDetached.addListener(function (tabId, detachInfo) {
         // Fired when a tab is detached from a window
-        console.log("onDetached", tabId, detachInfo);
+        console.debug("onDetached", tabId, detachInfo);
     });
     chrome.tabs.onCreated.addListener(function (tab) {
         // Fired when a tab is created. Note that the tab's URL may not be set at the time this event is fired,
         // but you can listen to onUpdated events so as to be notified when a URL is set.
-        console.log("onCreated", tab);
+        console.debug("onCreated", tab);
         const myTab = tabs.getOrCreateTab(tab.id);
         myTab.updateFromChromeTab(tab);
     });
     chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         // Fired when a tab is updated.
-        console.log("onUpdated", tabId, changeInfo, tab);
+        console.debug("onUpdated", tabId, changeInfo, tab);
         const myTab = tabs.getOrCreateTab(tabId);
         myTab.updateFromChromeTab(tab);
         // console.log("onUpdated: myTab after all", myTab);
     });
     chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
         // Fired when a tab is replaced with another tab due to prerendering or instant.
-        console.log("onReplaced", "addedTabId", addedTabId, "removedTabId", removedTabId);
+        console.debug("onReplaced", "addedTabId", addedTabId, "removedTabId", removedTabId);
         tabs.removeById(removedTabId);
     });
     chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
         // Fired when a tab is closed.
-        console.log("onRemoved", tabId, removeInfo);
+        console.debug("onRemoved", tabId, removeInfo);
         tabs.removeById(tabId);
     });
 }

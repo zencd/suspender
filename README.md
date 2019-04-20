@@ -2,6 +2,8 @@
 
 ## todo p1
 
+- implement chrome.windows.onFocusChanged
+- parking: wait till screenshot get appeared in DB (because it is persisted asynchronously now)
 - suspend all
 - remove screenshots from storage when tab closed
 - remove a tab - it still stays in the tab list (debug tabs)
@@ -15,6 +17,7 @@
 
 ## todo p3
 
+- implement error handling/reporting?
 - browser action: show options: try to switch to existing tab first
 - the 19px browser_action icon gets auto resized on Windows
 - suspend current tab: it's unclear the process has started, with a shortcut especially
@@ -38,6 +41,7 @@
 
 ## done
 
++ now not waiting till screenshot is stored to DB
 + minimize permissions
 + OPTI: inject the content script programmatically, and only when it's time to take a screenshot (a Google's suggestion)
 + in BG page: need to close suspended tabs' ports somehow: The message port closed before a response was received.

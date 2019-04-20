@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Better Suspender",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Reduce Chrome's memory usage extensively suspending certain unused tabs automatically.",
   "author": "gmail@gmail.com",
   //"homepage_url": "http://extensionizr.com",
@@ -40,7 +40,7 @@
   ],
   "commands": {
     "command-suspend-current-tab": {
-      "description": "suspend current tab",
+      "description": "Suspend active tab",
       "suggested_key": {
         "default": "Alt+S"
       }

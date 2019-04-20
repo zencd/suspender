@@ -11,7 +11,7 @@ function initCommandsAspect() {
 
 function initCommandListener() {
     chrome.commands.onCommand.addListener((command) => {
-        console.log("command", command, typeof command);
+        console.debug("command triggered:", command);
         if (command === 'command-suspend-current-tab') {
             Utils.getCurrentTabFromBackgroundScript((chrTab) => {
                 suspendTab(chrTab, true);

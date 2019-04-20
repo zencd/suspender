@@ -1,5 +1,7 @@
 "use strict";
 
+const root = chrome.extension.getBackgroundPage().root;
+
 function fetchAndSetImage(screenshotId) {
     const storageKey = 'screenshot.id=' + screenshotId;
     const d1 = new Date();
@@ -9,7 +11,11 @@ function fetchAndSetImage(screenshotId) {
             const dataUri = obj.content;
             if (dataUri) {
                 console.log("screenshot fetched for", (new Date() - d1), "ms, " + Math.ceil(dataUri.length/1024) + " KB data uri");
-                window.parent.postMessage({call: 'setScreenshot', dataUri: dataUri}, '*');
+                window.parent.postMessage({
+                    call: 'setScreenshot',
+                    dataUri: dataUri,
+                    startTime: root.startTime,
+                }, '*');
             } else {
                 console.warn("no screenshot found for screenshotId", screenshotId);
             }

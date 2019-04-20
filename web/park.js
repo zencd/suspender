@@ -71,6 +71,8 @@
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
             fadeInScreenshot($screenshot);
             $screenshot.style.backgroundImage = 'url(' + messageEvent.data.dataUri + ')';
+            const took = new Date() - messageEvent.data.startTime;
+            console.log("from the click it took", took);
             // cleaning DOM
             $frame.remove();
             document.querySelector('script').remove();

@@ -6,7 +6,7 @@ import {EXT_URLS} from '../background.js';
 import {getTabs} from './tabs.js';
 import {getOptions} from './opts.js';
 import {addToSuspensionMap} from './webrequest.js';
-import {getParkCssText, getParkHtmlText} from './resources.js';
+import {isResourcesLoaded, getParkCssText, getParkHtmlText} from './resources.js';
 
 const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
@@ -46,9 +46,16 @@ function findOldTabsAndSuspendThem() {
 }
 
 export function suspendTab(tab, isActiveTab) {
+    if (!isResourcesLoaded()) {
+        console.info("internal resources not loaded yet - aborting");
+        return;
+    }
+
     if (!CommonUtils.isUrlSuspendable(tab.url)) {
         return;
     }
+
+    root.startTime = new Date() - 0;
 
     if (isActiveTab) {
         suspendForegroundTab(tab);
@@ -128,10 +135,9 @@ export function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, ima
                 tabId: tabId,
             },
         };
-        storage.set(storageItems, function () {
-            addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
-            chrome.tabs.update(tabId, {url: redirUrl});
-        });
+        storage.set(storageItems, ()=>{});
+        addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
+        chrome.tabs.update(tabId, {url: redirUrl});
     });
 }
 

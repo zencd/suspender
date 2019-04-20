@@ -9,7 +9,7 @@ initOptionsAspect();
 
 function initOptionsAspect() {
     options.load(function () {
-        console.log("options loaded from storage", options);
+        console.debug("options loaded from storage", options);
     });
     chrome.storage.onChanged.addListener(function (changes, areaName) {
         options.processChanges(changes, areaName);
