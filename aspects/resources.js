@@ -26,8 +26,14 @@
             });
         }
 
-        prefetchParkPageHtml();
-        prefetchParkPageCss();
+        const t1 = new Date();
+        // console.log("t1", t1);
+        // console.log("gParkCssText", gParkCssText);
+        window.requestIdleCallback(() => {
+            // console.log("resources requestIdleCallback, started in", (new Date() - t1), "ms");
+            prefetchParkPageHtml();
+            prefetchParkPageCss();
+        }, { timeout: 3000 });
     }
 
     function getParkHtmlText() {

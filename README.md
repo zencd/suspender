@@ -13,6 +13,8 @@
 
 ## todo p2
 
+- in BG page: need to close suspended tabs' ports somehow: The message port closed before a response was received.
+
 ## todo p3
 
 - browser action: show options: try to switch to existing tab first
@@ -30,6 +32,7 @@
 - learn about: queueMicrotask() https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 - maybe there is a better place for 500KB objects than local storage
 - maybe check `suspensionMap` periodically for old entries to avoid memory leaks
+- OPTI: inject the content script programmatically, and only when it's time to take a screenshot (a Google's suggestion)
 
 ## bugs
 

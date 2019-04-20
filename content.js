@@ -59,6 +59,7 @@
                 if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
                     color = 'rgb(255,255,255)';
                 }
+                // chrome.runtime.Port.disconnect();
                 sendResponse({backgroundColor: color});
             } else {
                 console.debug("Got message", msg.message);

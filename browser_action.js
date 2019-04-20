@@ -39,7 +39,7 @@
 
     function sendMSG() {
         chrome.runtime.sendMessage(null, {
-            message: 'MESSAGE_SUSPEND_FROM_BROWSER_ACTION',
+            message: 'MESSAGE_SUSPEND_FROM_BROWSER_ACTION', // todo unused
         });
     }
 

@@ -59,6 +59,12 @@
     }
 
     function initTabListeners() {
+
+        chrome.windows.onFocusChanged.addListener(function (windowId) {
+            // todo handle it
+            // handleWindowFocusChanged(windowId);
+        });
+
         chrome.tabs.onActivated.addListener(function (activeInfo) {
             // Fires when the active tab in a window changes.
             // https://developer.chrome.com/extensions/tabs#event-onActivated
