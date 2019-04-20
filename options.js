@@ -3,7 +3,7 @@
 import {CommonUtils} from './common.js';
 import {Options} from './options_lib.js';
 
-const options = new Options(optionsPersisted);
+const options = new Options(onOptionsPersisted);
 
 let notifierFadeOutTimer;
 
@@ -12,19 +12,20 @@ const ogm = new OptionsToGuiMapping(options);
 disableLabelsForDisabledElements();
 
 const manifest = chrome.runtime.getManifest();
-// console.log("manifest", manifest);
 document.title = manifest.name;
 qs('h1').childNodes[0].nodeValue = manifest.name + ' '; // set text node
 qs('.version').innerText = '' + manifest.version;
 
 document.addEventListener('DOMContentLoaded', function () {
     ogm.init();
-    setControlsAsByStorage();
+    options.load(function () {
+        ogm.gotOptions();
+    });
 });
 
 CommonUtils.makeSpecialLinkClickable(qs('#open-keyboard-shortcuts'), true);
 
-function optionsPersisted() {
+function onOptionsPersisted() {
     clearTimeout(notifierFadeOutTimer);
     qs('.notify').style.display = 'block';
     notifierFadeOutTimer = setTimeout(function () {
@@ -87,12 +88,6 @@ function OptionsToGuiMapping(options) {
         }
     };
     return this;
-}
-
-function setControlsAsByStorage() {
-    options.load(function () {
-        ogm.gotOptions();
-    });
 }
 
 function disableLabelsForDisabledElements() {

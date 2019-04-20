@@ -34,8 +34,8 @@ export class Utils {
     }
 
     static expandStringTemplate(tplText, vars) {
-        return tplText.replace(/\$[a-zA-Z0-9_]+\$/g, function (match) {
-            const val = vars[match];
+        return tplText.replace(/\$[a-zA-Z0-9_]+\$/g, function (wholeMatch) {
+            const val = vars[wholeMatch];
             return (val === undefined) ? '' : val;
         });
     }
@@ -112,10 +112,6 @@ export class Utils {
         }
 
         inject_one();
-    }
-
-    static toMB(bytes) {
-        return Math.ceil(bytes / 1024 / 1024);
     }
 
     static qs(selector) {
@@ -197,5 +193,10 @@ export class Utils {
     }
 }
 
-window.qs = Utils.qs;
-window.qsa = Utils.qsa;
+if (window.qs === undefined) {
+    window.qs = Utils.qs;
+}
+
+if (window.qsa === undefined) {
+    window.qsa = Utils.qsa;
+}
