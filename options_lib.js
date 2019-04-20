@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * XXX Please name properties prepended with two underscores.
  * Normal names are reserved for option names (in subclasses).
@@ -93,7 +95,7 @@ class StorageOptions {
     }
 }
 
-class Options extends StorageOptions {
+export class Options extends StorageOptions {
     constructor(onPersisted) {
         super('options.', chrome.storage.sync, onPersisted);
         this.suspendTimeout = 3600; // seconds

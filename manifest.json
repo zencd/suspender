@@ -34,7 +34,7 @@
   ],
   "background": {
     "page": "background.html",
-    "xscripts": [
+    "OUTDATED_scripts": [
       "utils.js",
       "namespace.js",
       "common.js",
@@ -54,9 +54,9 @@
   "content_scripts": [
     {
       "js": [
-        "html2canvas.js",
-        "utils.js",
-        "common.js",
+        "html2canvas.min.js",
+        //"utils.js",
+        //"common.js",
         "content.js"
       ],
       "run_at": "document_idle", // also "document_start"

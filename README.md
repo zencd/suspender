@@ -2,6 +2,7 @@
 
 ## todo p1
 
+- make sure "never" suspend works
 - suspend all
 - remove screenshots from storage when tab closed
 - remove a tab - it still stays in the tab list (debug tabs)

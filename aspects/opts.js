@@ -1,27 +1,24 @@
-(() => {
-    'use strict';
+'use strict';
 
-    const ns = Utils.getNS()
-        .export(initOptions)
-        .export(getOptions)
-        .export(addThisSiteToWhitelist);
+import {Utils} from '../utils.js';
+import {Options} from '../options_lib.js';
 
-    const options = new Options();
+const options = new Options();
 
-    function initOptions() {
-        options.load(function () {
-            console.log("options loaded from storage", options);
-        });
-        chrome.storage.onChanged.addListener(function (changes, areaName) {
-            options.processChanges(changes, areaName);
-        });
-    }
+initOptionsAspect();
 
-    function getOptions() {
-        return options;
-    }
+function initOptionsAspect() {
+    options.load(function () {
+        console.log("options loaded from storage", options);
+    });
+    chrome.storage.onChanged.addListener(function (changes, areaName) {
+        options.processChanges(changes, areaName);
+    });
+}
 
-    function addThisSiteToWhitelist() {
-    }
+export function getOptions() {
+    return options;
+}
 
-})();
+export function addThisSiteToWhitelist() {
+}

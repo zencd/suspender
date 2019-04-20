@@ -1,17 +1,21 @@
-(() => {
-    "use strict";
+"use strict";
 
-    const ns = Utils.getNS().export(initCommandListener);
+import {Utils} from '../utils.js';
+import {suspendTab} from './suspension.js';
 
-    function initCommandListener() {
-        chrome.commands.onCommand.addListener((command) => {
-            console.log("command", command, typeof command);
-            if (command === 'command-suspend-current-tab') {
-                Utils.getCurrentTabFromBackgroundScript((chrTab) => {
-                    ns.suspendTab(chrTab, true);
-                });
-            }
-        });
-    }
+initCommandsAspect();
 
-})();
+function initCommandsAspect() {
+    initCommandListener();
+}
+
+function initCommandListener() {
+    chrome.commands.onCommand.addListener((command) => {
+        console.log("command", command, typeof command);
+        if (command === 'command-suspend-current-tab') {
+            Utils.getCurrentTabFromBackgroundScript((chrTab) => {
+                suspendTab(chrTab, true);
+            });
+        }
+    });
+}

@@ -11,7 +11,7 @@
 
     function log() {
         const args = Array.prototype.slice.call(arguments);
-        args.unshift(CommonUtils.LOG_PREFIX);
+        args.unshift('BTS:');
         window.console.log.apply(null, args);
     }
 
@@ -26,11 +26,7 @@
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
             // console.debug("received msg", msg);
-            if (msg.message === CommonUtils.MESSAGE_LOG) {
-                const argArray = Object.values(msg.arguments);
-                argArray.splice(0, 0, "BG:");
-                logArray(argArray);
-            } else if (msg.message === CommonUtils.MESSAGE_TAKE_SCREENSHOT) {
+            if (msg.message === 'MESSAGE_TAKE_SCREENSHOT') {
                 const root = document.body;
                 const opts = {
                     height: window.innerHeight, // capturing only the visible area
@@ -46,7 +42,7 @@
                     // console.log("imageDataUri", imageDataUri);
                     // sendResponse({imageDataUri: imageDataUri});
                     chrome.runtime.sendMessage(null, {
-                        message: CommonUtils.MESSAGE_SCREENSHOT_READY,
+                        message: 'MESSAGE_SCREENSHOT_READY',
                         screenshotId: msg.screenshotId,
                         imageDataUri: imageDataUri,
                         htmlDataUri: msg.htmlDataUri,
@@ -54,7 +50,7 @@
                         tabUrl: msg.tabUrl,
                     });
                 });
-            } else if (msg.message === CommonUtils.MESSAGE_GET_DOCUMENT_BG_COLOR) {
+            } else if (msg.message === 'MESSAGE_GET_DOCUMENT_BG_COLOR') {
                 let color = getComputedStyle(document.body).backgroundColor;
                 if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
                     color = 'rgb(255,255,255)';

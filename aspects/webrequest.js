@@ -1,46 +1,49 @@
-(() => {
-    "use strict";
+"use strict";
 
-    const ns = Utils.getNS()
-        .export(initWebRequestListeners)
-        .export(addToSuspensionMap);
+import {Utils} from '../utils.js';
+import {EXT_URLS} from '../background.js';
+import {getTabs} from './tabs.js';
 
-    const suspensionMap = {};
+const suspensionMap = {};
 
-    function initWebRequestListeners() {
-        const urlPattern = ns.urls.tempParkPage + '*';
-        chrome.webRequest.onBeforeRequest.addListener(onBeforeRequest,
-            {
-                urls: [urlPattern],
-                types: ["main_frame"],
-            },
-            ["blocking"]
-        );
-    }
+initWebRequestAspect();
 
-    function addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis) {
-        suspensionMap[redirUrl] = {
-            tabId: tabId,
-            htmlDataUri: htmlDataUri,
-            date: nowMillis,
-        };
-    }
+function initWebRequestAspect() {
+    initWebRequestListeners();
+}
 
-    function onBeforeRequest(details) {
-        const suspensionInfo = suspensionMap[details.url];
-        if (suspensionInfo) {
-            const dataUri = suspensionInfo.htmlDataUri;
-            const tabId = suspensionInfo.tabId;
-            if (dataUri) {
-                delete suspensionMap[details.url];
-                const myTab = ns.getTabs().getTab(tabId);
-                if (myTab) {
-                    myTab.suspended = true;
-                }
-                return {redirectUrl: dataUri};
+function initWebRequestListeners() {
+    const urlPattern = EXT_URLS.tempParkPage + '*';
+    chrome.webRequest.onBeforeRequest.addListener(onBeforeRequest,
+        {
+            urls: [urlPattern],
+            types: ["main_frame"],
+        },
+        ["blocking"]
+    );
+}
+
+export function addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis) {
+    suspensionMap[redirUrl] = {
+        tabId: tabId,
+        htmlDataUri: htmlDataUri,
+        date: nowMillis,
+    };
+}
+
+function onBeforeRequest(details) {
+    const suspensionInfo = suspensionMap[details.url];
+    if (suspensionInfo) {
+        const dataUri = suspensionInfo.htmlDataUri;
+        const tabId = suspensionInfo.tabId;
+        if (dataUri) {
+            delete suspensionMap[details.url];
+            const myTab = getTabs().getTab(tabId);
+            if (myTab) {
+                myTab.suspended = true;
             }
+            return {redirectUrl: dataUri};
         }
-        return {};
     }
-
-})();
+    return {};
+}

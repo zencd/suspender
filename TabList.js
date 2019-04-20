@@ -1,4 +1,6 @@
-class TabList {
+"use strict";
+
+export class TabList {
     constructor() {
         this.tabById = {}; // tab id => TabHandle object
         this.currentTabs = {}; // window id => tab id

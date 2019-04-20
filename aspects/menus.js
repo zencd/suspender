@@ -1,117 +1,119 @@
-(() => {
-    "use strict";
+"use strict";
 
-    const ns = Utils.getNS().export(initMenus);
+import {Utils} from '../utils.js';
+import {onContextMenuDebugTabs, onContextMenuDiscardDataUriTabs} from '../background.js';
+import {addThisSiteToWhitelist} from './opts.js';
+import {suspendTab, suspendWindow, unsuspendWindow} from './suspension.js';
 
-    function initMenus() {
-        chrome.runtime.onInstalled.addListener(function () {
-            initContextMenu();
-            initBrowserActionMenu();
-        });
-    }
+initMenus();
 
-    function initBrowserActionMenu() {
-        const contexts = ['browser_action'];
+function initMenus() {
+    chrome.runtime.onInstalled.addListener(function () {
+        initContextMenu();
+        initBrowserActionMenu();
+    });
+}
 
-        makeContextMenu({
-            title: "Suspend",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.suspendTab(tab, true);
-            }
-        });
-        makeContextMenu({
-            title: "Suspend this window",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.suspendWindow(tab.windowId);
-            }
-        });
-        makeContextMenu({
-            title: "Unsuspend this window",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.unsuspendWindow(tab.windowId);
-            }
-        });
-        makeContextMenu({
-            title: "Never suspend this site",
-            contexts: contexts,
-            onclick: (info, tab) => {
-            }
-        });
-    }
+function initBrowserActionMenu() {
+    const contexts = ['browser_action'];
 
-    function initContextMenu() {
-        const contexts = [
-            "page", "frame", "selection", "link", "editable", "image", "video", "audio"
-        ];
+    makeContextMenu({
+        title: "Suspend",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            suspendTab(tab, true);
+        }
+    });
+    makeContextMenu({
+        title: "Suspend this window",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            suspendWindow(tab.windowId);
+        }
+    });
+    makeContextMenu({
+        title: "Unsuspend this window",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            unsuspendWindow(tab.windowId);
+        }
+    });
+    makeContextMenu({
+        title: "Never suspend this site",
+        contexts: contexts,
+        onclick: (info, tab) => {
+        }
+    });
+}
 
-        makeContextMenu({
-            title: "Suspend",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.suspendTab(tab, true);
-            }
-        });
-        makeContextMenu({
-            type: 'separator',
-            contexts: contexts,
-        });
-        makeContextMenu({
-            title: "Suspend this window",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.suspendWindow(tab.windowId);
-            }
-        });
-        makeContextMenu({
-            title: "Unsuspend this window",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.unsuspendWindow(tab.windowId);
-            }
-        });
-        makeContextMenu({
-            type: 'separator',
-            contexts: contexts,
-        });
-        makeContextMenu({
-            title: "Never suspend this site",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.addThisSiteToWhitelist();
-            }
-        });
-        makeContextMenu({
-            type: 'separator',
-            contexts: contexts,
-        });
-        makeContextMenu({
-            title: "Debug Tabs",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.onContextMenuDebugTabs();
-            }
-        });
-        makeContextMenu({
-            title: "Discard Data URI Tabs",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.onContextMenuDiscardDataUriTabs();
-            }
-        });
-        makeContextMenu({
-            title: "Suspend via H2C",
-            contexts: contexts,
-            onclick: (info, tab) => {
-                ns.suspendTab(tab, false);
-            }
-        });
-    }
-    
-    function makeContextMenu(params) {
-        return chrome.contextMenus.create(params);
-    }
+function initContextMenu() {
+    const contexts = [
+        "page", "frame", "selection", "link", "editable", "image", "video", "audio"
+    ];
 
-})();
+    makeContextMenu({
+        title: "Suspend",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            suspendTab(tab, true);
+        }
+    });
+    makeContextMenu({
+        type: 'separator',
+        contexts: contexts,
+    });
+    makeContextMenu({
+        title: "Suspend this window",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            suspendWindow(tab.windowId);
+        }
+    });
+    makeContextMenu({
+        title: "Unsuspend this window",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            unsuspendWindow(tab.windowId);
+        }
+    });
+    makeContextMenu({
+        type: 'separator',
+        contexts: contexts,
+    });
+    makeContextMenu({
+        title: "Never suspend this site",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            addThisSiteToWhitelist();
+        }
+    });
+    makeContextMenu({
+        type: 'separator',
+        contexts: contexts,
+    });
+    makeContextMenu({
+        title: "Debug Tabs",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            onContextMenuDebugTabs();
+        }
+    });
+    makeContextMenu({
+        title: "Discard Data URI Tabs",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            onContextMenuDiscardDataUriTabs();
+        }
+    });
+    makeContextMenu({
+        title: "Suspend via H2C",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            suspendTab(tab, false);
+        }
+    });
+}
+
+function makeContextMenu(params) {
+    return chrome.contextMenus.create(params);
+}

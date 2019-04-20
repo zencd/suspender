@@ -1,10 +1,7 @@
 (() => {
     'use strict';
 
-    const bg = chrome.extension.getBackgroundPage().backgroundScriptBts;
-    const glob = chrome.extension.getBackgroundPage().glob;
-
-    // alert("bg: " + bg + ", glob: " + glob);
+    const root = chrome.extension.getBackgroundPage().root;
 
     function isUrlSuspendable(url) {
         // todo a copy from common.js
@@ -13,8 +10,7 @@
 
     const $suspendTab = document.querySelector('#suspend-current-tab');
 
-    const tab = bg.getTheNS().getCurrentTab();
-
+    const tab = root.getCurrentTab();
     if (tab) {
         if (isUrlSuspendable(tab.url)) {
             $suspendTab.classList.remove('disabled');
@@ -24,19 +20,19 @@
     }
 
     $suspendTab.onclick = () => {
-        bg.getTheNS().suspendCurrentTab();
+        root.suspendCurrentTab();
         window.close();
     };
     document.querySelector('#suspend-current-window').onclick = () => {
-        bg.getTheNS().suspendCurrentWindow();
+        root.suspendCurrentWindow();
         window.close();
     };
     document.querySelector('#unsuspend-current-window').onclick = () => {
-        bg.getTheNS().unsuspendCurrentWindow();
+        root.unsuspendCurrentWindow();
         window.close();
     };
     document.querySelector('#show-options').onclick = () => {
-        chrome.tabs.create({url: bg.getTheNS().urls.optionsHtml});
+        chrome.tabs.create({url: root.urls.optionsHtml});
         window.close();
     };
 

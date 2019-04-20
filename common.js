@@ -3,7 +3,7 @@
 /**
  * Extension specific utils.
  */
-class CommonUtils {
+export class CommonUtils {
 
     static MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
     static MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
@@ -80,7 +80,6 @@ class CommonUtils {
     static getChromeFaviconUrl(url) {
         const i = url.indexOf('/', 8);
         url = (i >= 0) ? url.substring(0, i + 1) : url;
-        console.log("tmp", url);
         return 'chrome://favicon/' + url
     }
 

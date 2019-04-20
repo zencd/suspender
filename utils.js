@@ -3,15 +3,7 @@
 /**
  * Abstract utils.
  */
-class Utils {
-
-    static getNS() {
-        const key = '__ns_4593395738';
-        if (typeof window[key] === 'undefined') {
-            window[key] = new __BtsSharedNamespace();
-        }
-        return window[key];
-    }
+export class Utils {
 
     static getCurrentTabFromBackgroundScript(onTab) {
         // todo try using TabList
