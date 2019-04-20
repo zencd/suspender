@@ -2,7 +2,6 @@
 
 ## todo p1
 
-- make sure "never" suspend works
 - suspend all
 - remove screenshots from storage when tab closed
 - remove a tab - it still stays in the tab list (debug tabs)
@@ -14,8 +13,6 @@
 
 ## todo p2
 
-- in BG page: need to close suspended tabs' ports somehow: The message port closed before a response was received.
-
 ## todo p3
 
 - browser action: show options: try to switch to existing tab first
@@ -23,7 +20,6 @@
 - suspend current tab: it's unclear the process has started, with a shortcut especially
 - a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
-- minimize permissions
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - there is a Chrome's feature: multi-tab selection
@@ -33,7 +29,6 @@
 - learn about: queueMicrotask() https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 - maybe there is a better place for 500KB objects than local storage
 - maybe check `suspensionMap` periodically for old entries to avoid memory leaks
-- OPTI: inject the content script programmatically, and only when it's time to take a screenshot (a Google's suggestion)
 
 ## bugs
 
@@ -43,6 +38,10 @@
 
 ## done
 
++ minimize permissions
++ OPTI: inject the content script programmatically, and only when it's time to take a screenshot (a Google's suggestion)
++ in BG page: need to close suspended tabs' ports somehow: The message port closed before a response was received.
++ "never" suspend does not work
 + park.html: minify template
 + park.html: inline CSS to work smoothly even without the extension
 + try different gradients for bright/dark sites

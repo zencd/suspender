@@ -30,7 +30,7 @@ function findOldTabsAndSuspendThem() {
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
         const diffSec = (now - tab.lastSeen) / 1000;
-        const timeoutOk = tab.lastSeen && diffSec >= options.suspendTimeout;
+        const timeoutOk = tab.lastSeen && (diffSec >= options.suspendTimeout) && (options.suspendTimeout > 0);
         const schemaOk = CommonUtils.isUrlSuspendable(tab.url);
         const activeTabOk = options.suspendActive || !tab.active;
         const pinnedOk = options.suspendPinned || !tab.pinned;

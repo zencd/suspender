@@ -33,14 +33,11 @@ export class Utils {
             }));
     }
 
-    static expandStringTemplate(tplContent, vars) {
-        let res = tplContent;
-        for (let key in vars) {
-            if (vars.hasOwnProperty(key)) {
-                res = Utils.replaceAll(res, key, vars[key]);
-            }
-        }
-        return res;
+    static expandStringTemplate(tplText, vars) {
+        return tplText.replace(/\$[a-zA-Z0-9_]+\$/g, function (match) {
+            const val = vars[match];
+            return (val === undefined) ? '' : val;
+        });
     }
 
     static cutFromBeginning(inp, pattern) {

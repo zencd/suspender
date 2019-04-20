@@ -1,0 +1,82 @@
+<template>
+    <!--
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>$TITLE$</title>
+<link rel="icon" href="$FAVICON_DATA_URI$">
+<style>$CSS_TEXT$</style>
+</head>
+<body style="background-color:$BG_COLOR$">
+<div class="screenshot"></div>
+<div class="overlay" onclick="location.href=querySelector('.title a').href">
+<div class="title"><a href="$LINK_URL$">$TITLE$</a></div>
+<div class="link">$LINK_TEXT$</div>
+</div>
+</body>
+<script>let S = "$SCREENSHOT_ID$", F = "$IFRAME_URL$", B = "$BG_DARKEN$";</script>
+<script src="$PARK_JS_URL$"></script>
+</html>
+-->
+</template>
+
+<script>
+    const tplText = document.querySelector('template').innerHTML;
+    // console.log("tplText [", tplText, "]");
+    function populateTemplate(tplText, vars) {
+        return tplText.replace(/\$[a-zA-Z0-9_]+\$/g, function (match) {
+            const val = vars[match];
+            return val === undefined ? '' : val;
+        });
+    }
+    function expandStringTemplate(tplContent, vars) {
+        const replaceAll = function(input, search, replacement) {
+            return input.split(search).join(replacement);
+        };
+        let res = tplContent;
+        for (let key in vars) {
+            if (vars.hasOwnProperty(key)) {
+                res = replaceAll(res, key, vars[key]);
+            }
+        }
+        return res;
+    }
+    const vars = {
+        '$CSS_TEXT$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$FAVICON_DATA_URI$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$TITLE$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$LINK_URL$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$LINK_TEXT$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$SCREENSHOT_ID$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        '$BG_DARKEN$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$IFRAME_URL$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL1$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL2$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL3$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL4$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL5$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL6$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL7$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL8$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL89$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL89$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL8912$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL891234$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+        // '$PARK_JS_URL8912345$': '12123kffpwokfoepkfopkfopfkop3qkfop3kfopkfop§krdop§kodk3okowekfopwkfopwk',
+    };
+    const MAX = 100*1000;
+
+    let t1 = new Date();
+    for (let i = 0; i < MAX; i++) {
+        populateTemplate(tplText, vars);
+    }
+    console.log("good:", (new Date() - t1));
+
+    t1 = new Date();
+    for (let i = 0; i < MAX; i++) {
+        expandStringTemplate(tplText, vars);
+    }
+    console.log("old:", (new Date() - t1));
+</script>
