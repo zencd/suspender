@@ -4,6 +4,8 @@
 
     chrome.storage.local.get((result)=>{console.log(Object.keys(result))})
     
+    chrome.storage.local.get((result)=>{console.log(result)})
+    
     chrome.storage.local.remove(keys, ()=>{console.log('removed')})
     
     chrome.storage.local.clear();

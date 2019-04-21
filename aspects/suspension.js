@@ -55,7 +55,7 @@ export function suspendTab(tab, isActiveTab) {
         return;
     }
 
-    root.startTime = new Date() - 0;
+    extBg.startTime = new Date() - 0; // for debug only
 
     if (isActiveTab) {
         suspendForegroundTab(tab);

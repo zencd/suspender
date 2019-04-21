@@ -5,6 +5,14 @@
  */
 export class Utils {
 
+    static toggleCssClass($elem, condition, className) {
+        if (condition) {
+            $elem.classList.add(className);
+        } else {
+            $elem.classList.remove(className);
+        }
+    }
+
     static getCurrentTabFromBackgroundScript(onTab) {
         // todo try using TabList
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {

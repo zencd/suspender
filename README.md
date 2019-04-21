@@ -14,8 +14,11 @@
 
 ## todo p2
 
+- parked page: selecting text with mouse leads to tab unsuspended
+
 ## todo p3
 
+- pre-build parking html template for the zip version
 - implement error handling/reporting?
 - browser action: show options: try to switch to existing tab first
 - the 19px browser_action icon gets auto resized on Windows

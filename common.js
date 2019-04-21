@@ -5,28 +5,10 @@
  */
 export class CommonUtils {
 
-    static MESSAGE_TAKE_SCREENSHOT = 'MESSAGE_TAKE_SCREENSHOT';
-    static MESSAGE_SCREENSHOT_READY = 'MESSAGE_SCREENSHOT_READY';
-    static MESSAGE_SUSPEND_FROM_BROWSER_ACTION = 'MESSAGE_SUSPEND_FROM_BROWSER_ACTION'; // todo unused
-    static MESSAGE_GET_DOCUMENT_BG_COLOR = 'MESSAGE_GET_DOCUMENT_BG_COLOR';
     static MESSAGE_SUSPEND_FG = 'MESSAGE_SUSPEND_FG';
     static MESSAGE_SUSPEND_BG = 'MESSAGE_SUSPEND_BG';
-    static MESSAGE_LOG = 'MESSAGE_LOG';
-
-    static LOG_PREFIX = 'BTS:';
 
     static SUSPENDED_FAVICON_OPACITY = 0.4;
-
-    static logToCurrentTab() {
-        const logArgs = arguments;
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-            const msg = {message: CommonUtils.MESSAGE_LOG, arguments: logArgs};
-            if (tabs.length > 0) {
-                chrome.tabs.sendMessage(tabs[0].id, msg, function (response) {
-                });
-            }
-        });
-    }
 
     static isUrlSuspendable(url) {
         return url && (url.startsWith('http://') || url.startsWith('https://'));

@@ -22,12 +22,16 @@ export const EXT_URLS = {
     optionsHtml: chrome.runtime.getURL('/options.html'),
 };
 
-root = {
+extBg = {
+    isUrlSuspendable: CommonUtils.isUrlSuspendable,
+    Utils: Utils,
+    showOptions: showOptions,
     suspendCurrentTab: suspendCurrentTab,
     suspendCurrentWindow: suspendCurrentWindow,
     unsuspendCurrentWindow: unsuspendCurrentWindow,
     getCurrentTab: getCurrentTab,
     urls: EXT_URLS,
+    suspendTabPhase1: suspendTabPhase1,
 };
 
 initAll();
@@ -68,14 +72,14 @@ export function onContextMenuDiscardDataUriTabs() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-        if (msg.message === CommonUtils.MESSAGE_SCREENSHOT_READY) {
-            scaleStoreRedirect(msg.screenshotId, msg.tabId, msg.tabUrl, msg.htmlDataUri, msg.imageDataUri, false);
-        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_FROM_BROWSER_ACTION) {
-            suspendCurrentTab();
-        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
+        if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
             suspendTabPhase1(msg.tabId, msg.backgroundColor, null);
         } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
             suspendTabPhase1(msg.tabId, msg.backgroundColor, msg.imageDataUri);
         }
     });
+}
+
+function showOptions() {
+    chrome.tabs.create({url: EXT_URLS.optionsHtml})
 }
