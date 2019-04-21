@@ -23,14 +23,14 @@ export const EXT_URLS = {
 };
 
 extBg = {
-    isUrlSuspendable: CommonUtils.isUrlSuspendable,
+    urls: EXT_URLS,
     Utils: Utils,
+    CommonUtils: CommonUtils,
     showOptions: showOptions,
     suspendCurrentTab: suspendCurrentTab,
     suspendCurrentWindow: suspendCurrentWindow,
     unsuspendCurrentWindow: unsuspendCurrentWindow,
     getCurrentTab: getCurrentTab,
-    urls: EXT_URLS,
     suspendTabPhase1: suspendTabPhase1,
 };
 
@@ -72,11 +72,6 @@ export function onContextMenuDiscardDataUriTabs() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-        if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
-            suspendTabPhase1(msg.tabId, msg.backgroundColor, null);
-        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
-            suspendTabPhase1(msg.tabId, msg.backgroundColor, msg.imageDataUri);
-        }
     });
 }
 

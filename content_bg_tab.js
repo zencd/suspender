@@ -1,28 +1,13 @@
 "use strict";
 
-// console.log("content_bg_tab", new Date());
-
 /**
  * XXX Don't rename - it's called from the background script.
  */
 function continueCapturing(tabId) {
     if (document.body) {
-        capture();
-    }
+        const extBg = chrome.extension.getBackgroundPage().extBg;
+        const color = extBg.Utils.findBgColor(document);
 
-    function findBgColor() {
-        let color = 'rgb(255,255,255)';
-        if (document.body) {
-            color = getComputedStyle(document.body).backgroundColor;
-            if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
-                color = 'rgb(255,255,255)';
-            }
-        }
-        return color;
-    }
-
-    function capture() {
-        const root = document.body;
         const opts = {
             height: window.innerHeight, // capturing only the visible area
             width: window.innerWidth, // force it, otherwise it will be calculated automatically and slightly wrong
@@ -31,17 +16,8 @@ function continueCapturing(tabId) {
             //allowTaint: true,
             useCORS: true, // I found, with 'false' it even won't try to fetch images from different domains
         };
-        html2canvas(root, opts).then(canvas => {
-            console.log("canvas", canvas);
-            const imageDataUri = canvas.toDataURL();
-            // console.log("imageDataUri", imageDataUri);
-            // sendResponse({imageDataUri: imageDataUri});
-            chrome.runtime.sendMessage(null, {
-                message: 'MESSAGE_SUSPEND_BG',
-                tabId: tabId,
-                backgroundColor: findBgColor(),
-                imageDataUri: imageDataUri,
-            });
+        html2canvas(document.body, opts).then(canvas => {
+            extBg.suspendTabPhase1(tabId, color, canvas.toDataURL());
         });
     }
 }
