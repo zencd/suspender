@@ -2,7 +2,8 @@
 
 import {Utils} from './utils.js';
 import {CommonUtils} from './common.js';
-import {getTabs, getCurrentTab} from './aspects/tabs.js';
+import {showOptions} from './aspects/opts.js';
+import {getCurrentTab} from './aspects/tabs.js';
 import {
     suspendTabPhase1,
     suspendCurrentTab,
@@ -42,8 +43,4 @@ function initAll() {
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
     });
-}
-
-function showOptions() {
-    chrome.tabs.create({url: EXT_URLS.optionsHtml})
 }

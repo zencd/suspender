@@ -2,6 +2,7 @@
 
 import {Utils} from '../utils.js';
 import {Options} from '../options_lib.js';
+import {EXT_URLS} from "../background";
 
 const options = new Options();
 
@@ -12,7 +13,7 @@ function initOptionsAspect() {
         console.debug("options loaded from storage", options);
     });
     chrome.storage.onChanged.addListener(function (changes, areaName) {
-        options.processChanges(changes, areaName);
+        options.applyChanges(changes, areaName);
     });
 }
 
@@ -21,4 +22,8 @@ export function getOptions() {
 }
 
 export function addThisSiteToWhitelist() {
+}
+
+export function showOptions() {
+    chrome.tabs.create({url: EXT_URLS.optionsHtml})
 }

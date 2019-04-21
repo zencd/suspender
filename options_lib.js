@@ -80,7 +80,7 @@ class StorageOptions {
         });
     }
 
-    processChanges(changes, areaName) {
+    applyChanges(changes, areaName) {
         // todo consider areaName
         for (const storageKey in changes) {
             if (changes.hasOwnProperty(storageKey)) {
@@ -88,7 +88,7 @@ class StorageOptions {
                 const propName = this.__storageKeyToPropertyName[storageKey];
                 if (propName) {
                     this[propName] = newValue;
-                    console.log("options changed", propName, newValue);
+                    console.debug("options changed", propName, newValue);
                 }
             }
         }
