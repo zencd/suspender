@@ -3,7 +3,7 @@
 /**
  * XXX Don't rename - it's called from the background script.
  */
-function continueCapturing(tabId) {
+function __BTS_continueCapturing(tabId) {
     if (document.body) {
         const extBg = chrome.extension.getBackgroundPage().extBg;
         const color = extBg.Utils.findBgColor(document);

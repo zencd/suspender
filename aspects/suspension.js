@@ -12,6 +12,8 @@ const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
 const JPEG_QUALITY = 40;
 
+const INJECT_CONTENT_SCRIPT_AT = 'document_idle';
+
 initSuspensionAspect();
 
 function initSuspensionAspect() {
@@ -67,27 +69,26 @@ export function suspendTab(tab, isActiveTab) {
 function suspendForegroundTab(tab) {
     chrome.tabs.executeScript(tab.id, {
         file: 'content_fg_tab.js',
-        runAt: 'document_idle'
+        runAt: INJECT_CONTENT_SCRIPT_AT
     }, (injected) => {
         chrome.tabs.executeScript(tab.id, {
-            code: 'continueCapturing(' + tab.id + ');'
+            code: '__BTS_continueCapturing(' + tab.id + ');'
         });
     });
 }
 
 function suspendBackgroundTab(tab) {
     const files = ['html2canvas.min.js', 'content_bg_tab.js'];
-    const runAt = 'document_idle';
     chrome.tabs.executeScript(tab.id, {
         file: files[0],
-        runAt: runAt
+        runAt: INJECT_CONTENT_SCRIPT_AT
     }, (injected1) => {
         chrome.tabs.executeScript(tab.id, {
             file: files[1],
-            runAt: runAt
+            runAt: INJECT_CONTENT_SCRIPT_AT
         }, (injected2) => {
             chrome.tabs.executeScript(tab.id, {
-                code: 'continueCapturing(' + tab.id + ');'
+                code: '__BTS_continueCapturing(' + tab.id + ');'
             });
         });
     });
