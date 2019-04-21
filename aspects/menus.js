@@ -1,8 +1,9 @@
 "use strict";
 
 import {Utils} from '../utils.js';
-import {onContextMenuDebugTabs, onContextMenuDiscardDataUriTabs} from '../background.js';
+import {CommonUtils} from "../common";
 import {addThisSiteToWhitelist} from './opts.js';
+import {discardDataUriTabs} from './tabs.js';
 import {suspendTab, suspendWindow, unsuspendWindow} from './suspension.js';
 
 initMenus();
@@ -95,14 +96,14 @@ function initContextMenu() {
         title: "Debug Tabs",
         contexts: contexts,
         onclick: (info, tab) => {
-            onContextMenuDebugTabs();
+            CommonUtils.debugTabs();
         }
     });
     makeContextMenu({
         title: "Discard Data URI Tabs",
         contexts: contexts,
         onclick: (info, tab) => {
-            onContextMenuDiscardDataUriTabs();
+            discardDataUriTabs();
         }
     });
     makeContextMenu({

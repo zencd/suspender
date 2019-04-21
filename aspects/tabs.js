@@ -50,6 +50,18 @@ function inspectExistingTabs() {
     });
 }
 
+export function discardDataUriTabs() {
+    const tt = getTabs().getAllTabs();
+    for (let i = 0; i < tt.length; i++) {
+        const tab = tt[i];
+        if (tab.url && Utils.isDataUri(tab.url)) {
+            chrome.tabs.discard(tab.id, function (resTab) {
+                console.log("discarded tab", resTab);
+            });
+        }
+    }
+}
+
 function initTabListeners() {
 
     chrome.windows.onFocusChanged.addListener(function (windowId) {
