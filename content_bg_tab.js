@@ -5,7 +5,7 @@
  */
 function __BTS_continueCapturing(tabId) {
     if (document.body) {
-        const extBg = chrome.extension.getBackgroundPage().extBg;
+        const extBg = chrome.extension.getBackgroundPage()['extBg'];
         const color = extBg.Utils.findBgColor(document);
 
         const opts = {

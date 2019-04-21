@@ -1,6 +1,6 @@
 "use strict";
 
-const extBg = chrome.extension.getBackgroundPage().extBg;
+const extBg = chrome.extension.getBackgroundPage()['extBg'];
 let numTries = 0; // num of attempts to obtain screenshot
 
 function fetchAndSetImage(screenshotId) {
