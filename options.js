@@ -97,7 +97,7 @@ function disableLabelsForDisabledElements() {
         if (id) {
             const $label = qs('label[for="' + id + '"]');
             if ($label) {
-                $label.className += ' disabled';
+                $label.classList.add('disabled');
             }
         }
     }

@@ -119,7 +119,6 @@ export function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, ima
     CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
         const nowMillis = new Date() - 0; // GMT epoch millis
         const urlHash = Utils.fastIntHash(htmlDataUri);
-        const storage = chrome.storage.local;
         const redirUrl = EXT_URLS.tempParkPage + '?uniq=' + Utils.getRandomInt();
         const storageItems = {
             ['screenshot.id=' + screenshotId]: {
@@ -135,7 +134,7 @@ export function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, ima
                 tabId: tabId,
             },
         };
-        storage.set(storageItems, ()=>{});
+        chrome.storage.local.set(storageItems, ()=>{});
         addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
         chrome.tabs.update(tabId, {url: redirUrl});
     });
