@@ -56,7 +56,7 @@ export class CommonUtils {
      */
     static getChromeFaviconUrl(url) {
         const i = url.indexOf('/', 8);
-        url = (i >= 0) ? url.substring(0, i + 1) : url;
+        url = (i >= 0) ? url.substring(0, i + 1) : url; // cut off protocol
         return 'chrome://favicon/' + url
     }
 
