@@ -115,7 +115,7 @@ export function suspendTabPhase1(tabId, backgroundColor, imageDataUri) {
     }
 }
 
-export function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
+function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
     CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
         const nowMillis = new Date() - 0; // GMT epoch millis
         const urlHash = Utils.fastIntHash(htmlDataUri);

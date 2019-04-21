@@ -5,7 +5,6 @@ import {CommonUtils} from './common.js';
 import {getTabs, getCurrentTab} from './aspects/tabs.js';
 import {
     suspendTabPhase1,
-    scaleStoreRedirect,
     suspendCurrentTab,
     suspendCurrentWindow,
     unsuspendCurrentWindow
