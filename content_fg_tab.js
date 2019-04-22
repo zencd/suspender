@@ -3,10 +3,11 @@
 /**
  * XXX Don't rename - it's called from the background script.
  */
-function __BTS_continueCapturing(tabId) {
+function __BTS_continueCapturing(tabId, screenshotId) {
     chrome.runtime.sendMessage(null, {
         message: 'MESSAGE_SUSPEND_FG',
         tabId: tabId,
+        screenshotId: screenshotId,
         backgroundColor: findBgColor(),
     });
 

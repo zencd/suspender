@@ -67,21 +67,23 @@ export function suspendTab(tab, isActiveTab) {
 }
 
 function suspendForegroundTab(tab) {
-    // todo take screenshot first
-    // const file = chrome.runtime.getURL('content_fg_tab.js');
+    const screenshotId = Utils.uidString();
+    captureVisibleTab_Scale_Persist(tab, screenshotId);
+
     const file = 'content_fg_tab.js';
-    // console.log("injecting file", file);
     chrome.tabs.executeScript(tab.id, {
         file: file,
         runAt: INJECT_CONTENT_SCRIPT_AT
     }, (injected) => {
         chrome.tabs.executeScript(tab.id, {
-            code: '__BTS_continueCapturing(' + tab.id + ');'
+            code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
         });
     });
 }
 
 function suspendBackgroundTab(tab) {
+    const screenshotId = Utils.uidString();
+
     const files = ['html2canvas.min.js', 'content_bg_tab.js'];
     chrome.tabs.executeScript(tab.id, {
         file: files[0],
@@ -92,27 +94,25 @@ function suspendBackgroundTab(tab) {
             runAt: INJECT_CONTENT_SCRIPT_AT
         }, (injected2) => {
             chrome.tabs.executeScript(tab.id, {
-                code: '__BTS_continueCapturing(' + tab.id + ');'
+                code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
             });
         });
     });
 }
 
-export function suspendTabPhase1(tabId, backgroundColor, imageDataUri) {
+export function suspendTabPhase1(tabId, screenshotId, backgroundColor, imageDataUri) {
     const tab = getTabs().getTab(tabId);
-    const screenshotId = Utils.uidString();
-
-    if (imageDataUri) {
-        // H2C
-        scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, false);
-    } else {
-        // captureVisibleTab
-        captureVisibleTabAndPersistIt(tab, screenshotId);
+    if (tab) {
+        if (imageDataUri) { // H2C
+            scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, false);
+        } else { // captureVisibleTab
+            captureVisibleTab_Scale_Persist(tab, screenshotId);
+        }
+        storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor);
     }
-    storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor);
 }
 
-function captureVisibleTabAndPersistIt(tab, screenshotId) {
+function captureVisibleTab_Scale_Persist(tab, screenshotId) {
     // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
     const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
     const opts = {format: imageFormat, quality: JPEG_QUALITY};

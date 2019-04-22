@@ -3,7 +3,7 @@
 /**
  * XXX Don't rename - it's called from the background script.
  */
-function __BTS_continueCapturing(tabId) {
+function __BTS_continueCapturing(tabId, screenshotId) {
     if (document.body) {
         const opts = {
             height: window.innerHeight, // capturing only the visible area
@@ -17,6 +17,7 @@ function __BTS_continueCapturing(tabId) {
             chrome.runtime.sendMessage(null, {
                 message: 'MESSAGE_SUSPEND_BG',
                 tabId: tabId,
+                screenshotId: screenshotId,
                 backgroundColor: findBgColor(),
                 imageDataUri: canvas.toDataURL(),
             });
