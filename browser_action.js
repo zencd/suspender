@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    const extBg = chrome.extension.getBackgroundPage()['extBg'];
+    const extBg = chrome.extension.getBackgroundPage().extBg;
 
     const $suspendTab = document.querySelector('#suspend-current-tab');
     const $suspendWindow = document.querySelector('#suspend-current-window');

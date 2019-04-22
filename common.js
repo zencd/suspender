@@ -1,7 +1,7 @@
 "use strict";
 
-import {Utils} from "./utils";
-import {getTabs} from "./aspects/tabs";
+import {Utils} from "./utils.js";
+import {getTabs} from "./aspects/tabs.js";
 
 /**
  * Extension specific utils.
