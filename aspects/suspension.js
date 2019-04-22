@@ -67,6 +67,7 @@ export function suspendTab(tab, isActiveTab) {
 }
 
 function suspendForegroundTab(tab) {
+    // todo take screenshot first
     // const file = chrome.runtime.getURL('content_fg_tab.js');
     const file = 'content_fg_tab.js';
     // console.log("injecting file", file);
@@ -99,48 +100,58 @@ function suspendBackgroundTab(tab) {
 
 export function suspendTabPhase1(tabId, backgroundColor, imageDataUri) {
     const tab = getTabs().getTab(tabId);
-
-    function next(imageDataUri, scaleDown) {
-        const screenshotId = Utils.uidString();
-        getSuspendedPageContent(screenshotId, tab.url, tab.title, backgroundColor, (htmlDataUri) => {
-            scaleStoreRedirect(screenshotId, tab.id, tab.url, htmlDataUri, imageDataUri, scaleDown);
-        });
-    }
+    const screenshotId = Utils.uidString();
 
     if (imageDataUri) {
-        next(imageDataUri, false);
+        // H2C
+        scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, false);
     } else {
-        // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
-        const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
-        const opts = {format: imageFormat, quality: JPEG_QUALITY};
-        chrome.tabs.captureVisibleTab(tab.windowId, opts, (imageDataUri) => {
-            next(imageDataUri, true);
-        });
+        // captureVisibleTab
+        captureVisibleTabAndPersistIt(tab, screenshotId);
     }
+    storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor);
 }
 
-function scaleStoreRedirect(screenshotId, tabId, tabUrl, htmlDataUri, imageDataUri, scaleDown) {
+function captureVisibleTabAndPersistIt(tab, screenshotId) {
+    // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
+    const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
+    const opts = {format: imageFormat, quality: JPEG_QUALITY};
+    chrome.tabs.captureVisibleTab(tab.windowId, opts, (imageDataUri) => {
+        scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, true);
+    });
+}
+
+function scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, scaleDown) {
+    const nowMillis = new Date() - 0; // GMT epoch millis
     CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
+        const storageItems = {
+            ['screenshot.id=' + screenshotId]: {
+                created: nowMillis,
+                content: imageDataUri2,
+            },
+        };
+        chrome.storage.local.set(storageItems, ()=>{});
+    });
+}
+
+function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
+    getSuspendedPageContent(screenshotId, tab.url, tab.title, backgroundColor, (htmlDataUri) => {
         const nowMillis = new Date() - 0; // GMT epoch millis
         const urlHash = Utils.fastIntHash(htmlDataUri);
         const redirUrl = EXT_URLS.tempParkPage + '?uniq=' + Utils.getRandomInt();
         const storageItems = {
-            ['screenshot.id=' + screenshotId]: {
-                created: nowMillis,
-                urlHash: urlHash,
-                content: imageDataUri2,
-            },
             ['suspended.urlHash=' + urlHash]: {
                 screenshotId: screenshotId,
                 created: nowMillis,
                 urlHash: urlHash,
-                url: tabUrl,
-                tabId: tabId,
+                url: tab.url,
+                tabId: tab.id,
             },
         };
-        chrome.storage.local.set(storageItems, ()=>{});
-        addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis);
-        chrome.tabs.update(tabId, {url: redirUrl});
+        chrome.storage.local.set(storageItems, () => {
+        });
+        addToSuspensionMap(redirUrl, tab.id, htmlDataUri, nowMillis);
+        chrome.tabs.update(tab.id, {url: redirUrl});
     });
 }
 

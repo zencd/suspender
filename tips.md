@@ -109,3 +109,12 @@ https://developer.chrome.com/extensions/user_interface
         console.log.apply(null, args);
     };
 
+## detect form editing
+
+      if (event.keyCode >= 48 && event.keyCode <= 90 && event.target.tagName) {
+        if (
+          event.target.tagName.toUpperCase() === 'INPUT' ||
+          event.target.tagName.toUpperCase() === 'TEXTAREA' ||
+          event.target.tagName.toUpperCase() === 'FORM' ||
+          event.target.isContentEditable === true ||
+          event.target.type === "application/pdf"
