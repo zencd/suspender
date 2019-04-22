@@ -96,3 +96,16 @@ http://www.adambarth.com/experimental/crx/docs/crx.html
 ## misc
 
 https://developer.chrome.com/extensions/user_interface
+
+## log array
+
+    function log() {
+        const args = Array.prototype.slice.call(arguments);
+        args.unshift('BTS:');
+        window.console.log.apply(null, args);
+    }
+
+    const logArray = function (args) {
+        console.log.apply(null, args);
+    };
+
