@@ -5,9 +5,6 @@
  */
 function __BTS_continueCapturing(tabId) {
     if (document.body) {
-        const extBg = chrome.extension.getBackgroundPage()['extBg'];
-        const color = extBg.Utils.findBgColor(document);
-
         const opts = {
             height: window.innerHeight, // capturing only the visible area
             width: window.innerWidth, // force it, otherwise it will be calculated automatically and slightly wrong
@@ -17,7 +14,23 @@ function __BTS_continueCapturing(tabId) {
             useCORS: true, // I found, with 'false' it even won't try to fetch images from different domains
         };
         html2canvas(document.body, opts).then(canvas => {
-            extBg.suspendTabPhase1(tabId, color, canvas.toDataURL());
+            chrome.runtime.sendMessage(null, {
+                message: 'MESSAGE_SUSPEND_BG',
+                tabId: tabId,
+                backgroundColor: findBgColor(),
+                imageDataUri: canvas.toDataURL(),
+            });
         });
+    }
+
+    function findBgColor() {
+        let color = 'rgb(255,255,255)';
+        if (document.body) {
+            color = getComputedStyle(document.body).backgroundColor;
+            if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
+                color = 'rgb(255,255,255)';
+            }
+        }
+        return color;
     }
 }

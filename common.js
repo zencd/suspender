@@ -8,6 +8,9 @@ import {getTabs} from "./aspects/tabs.js";
  */
 export class CommonUtils {
 
+    static MESSAGE_SUSPEND_FG = 'MESSAGE_SUSPEND_FG';
+    static MESSAGE_SUSPEND_BG = 'MESSAGE_SUSPEND_BG';
+
     static SUSPENDED_FAVICON_OPACITY = 0.4;
 
     static isUrlSuspendable(url) {

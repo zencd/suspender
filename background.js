@@ -42,5 +42,10 @@ function initAll() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+        if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
+            suspendTabPhase1(msg.tabId, msg.backgroundColor, null);
+        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
+            suspendTabPhase1(msg.tabId, msg.backgroundColor, msg.imageDataUri);
+        }
     });
 }
