@@ -67,8 +67,11 @@ export function suspendTab(tab, isActiveTab) {
 }
 
 function suspendForegroundTab(tab) {
+    // const file = chrome.runtime.getURL('content_fg_tab.js');
+    const file = 'content_fg_tab.js';
+    // console.log("injecting file", file);
     chrome.tabs.executeScript(tab.id, {
-        file: 'content_fg_tab.js',
+        file: file,
         runAt: INJECT_CONTENT_SCRIPT_AT
     }, (injected) => {
         chrome.tabs.executeScript(tab.id, {
