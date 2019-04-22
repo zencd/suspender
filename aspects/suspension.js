@@ -100,7 +100,7 @@ function suspendBackgroundTab(tab) {
     });
 }
 
-export function suspendTabPhase1(tabId, screenshotId, backgroundColor, imageDataUri) {
+export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageDataUri) {
     const tab = getTabs().getTab(tabId);
     if (tab) {
         if (imageDataUri) { // H2C

@@ -5,7 +5,7 @@ import {CommonUtils} from './common.js';
 import {showOptions} from './aspects/opts.js';
 import {getCurrentTab} from './aspects/tabs.js';
 import {
-    suspendTabPhase1,
+    suspendTabPhase2,
     suspendCurrentTab,
     suspendCurrentWindow,
     unsuspendCurrentWindow
@@ -31,7 +31,7 @@ extBg = {
     suspendCurrentWindow: suspendCurrentWindow,
     unsuspendCurrentWindow: unsuspendCurrentWindow,
     getCurrentTab: getCurrentTab,
-    suspendTabPhase1: suspendTabPhase1,
+    suspendTabPhase1: suspendTabPhase2,
 };
 
 initAll();
@@ -43,9 +43,9 @@ function initAll() {
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
-            suspendTabPhase1(msg.tabId, msg.screenshotId, msg.backgroundColor, null);
+            suspendTabPhase2(msg.tabId, msg.screenshotId, msg.backgroundColor, null);
         } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
-            suspendTabPhase1(msg.tabId, msg.screenshotId, msg.backgroundColor, msg.imageDataUri);
+            suspendTabPhase2(msg.tabId, msg.screenshotId, msg.backgroundColor, msg.imageDataUri);
         }
     });
 }
