@@ -55,17 +55,15 @@
     }
 
     function initFormFillingListener() {
-        const evName = 'keydown';
+        const evName = 'keypress';
+        // String.fromCharCode(charcode);
         window.addEventListener(evName, function lookForFormFilling(event) {
-            const keyCode = event.keyCode;
-            if (keyCode >= 48 && keyCode <= 90 && event.target.tagName) {
+            if (event.target.tagName) {
                 const tagUpper = event.target.tagName.toUpperCase();
-                const inputOk = tagUpper === 'INPUT' || tagUpper === 'TEXTAREA';
-                const contentEditable = event.target.isContentEditable === true;
-                const pdf = event.target.type === "application/pdf";
-                if (inputOk || contentEditable || pdf) {
+                if (tagUpper === 'INPUT' || tagUpper === 'TEXTAREA' || event.target.isContentEditable === true || event.target.type === "application/pdf") {
                     console.log("form filling noticed");
                     formFilled = true;
+                    console.debug("form filling noticed");
                     window.removeEventListener(evName, lookForFormFilling);
                 }
             }
