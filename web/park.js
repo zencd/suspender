@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    function easeInOutQuad(t) {
-        return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t
-    }
-
     function generateAndSetGradient() {
+        function easeInOutQuad(t) {
+            return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+        }
+
         const gradientStartColor = B.split(',').map((s) => parseInt(s));
         // console.log("gradientStartColor", gradientStartColor);
 
@@ -69,6 +69,7 @@
 
     window.addEventListener('message', function messageListener(messageEvent) {
         if (typeof messageEvent.data === 'object' && messageEvent.data.call === 'setScreenshot') {
+            console.log("park.js received setScreenshot at", (new Date() - messageEvent.data.startTime));
             fadeInScreenshot($screenshot);
             $screenshot.style.backgroundImage = 'url(' + messageEvent.data.dataUri + ')';
             const took = new Date() - messageEvent.data.startTime;

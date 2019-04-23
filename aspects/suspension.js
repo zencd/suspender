@@ -118,8 +118,8 @@ export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageData
     if (tab) {
         if (imageDataUri) { // H2C
             scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, false);
-        } else { // captureVisibleTab
-            captureVisibleTab_Scale_Persist(tab, screenshotId);
+        } else {
+            // captureVisibleTab - screenshot already taken
         }
         storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor);
     }
@@ -130,6 +130,7 @@ function captureVisibleTab_Scale_Persist(tab, screenshotId) {
     const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
     const opts = {format: imageFormat, quality: JPEG_QUALITY};
     chrome.tabs.captureVisibleTab(tab.windowId, opts, (imageDataUri) => {
+        console.log("screenshot taken at", (new Date() - extBg.startTime));
         scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, true);
     });
 }
@@ -148,7 +149,9 @@ function scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, scaleDown) {
 }
 
 function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
+    console.log("content generating at", (new Date() - extBg.startTime));
     getSuspendedPageContent(screenshotId, tab.url, tab.title, backgroundColor, (htmlDataUri) => {
+        console.log("content generated at", (new Date() - extBg.startTime));
         const nowMillis = new Date() - 0; // GMT epoch millis
         const urlHash = Utils.fastIntHash(htmlDataUri);
         const redirUrl = EXT_URLS.tempParkPage + '?uniq=' + Utils.getRandomInt();
@@ -164,6 +167,7 @@ function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
         chrome.storage.local.set(storageItems, () => {
         });
         addToSuspensionMap(redirUrl, tab.id, htmlDataUri, nowMillis);
+        console.log("redirecting to temp page at", (new Date() - extBg.startTime));
         chrome.tabs.update(tab.id, {url: redirUrl});
     });
 }

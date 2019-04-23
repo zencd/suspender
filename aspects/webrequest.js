@@ -42,6 +42,7 @@ function onBeforeRequest(details) {
             if (myTab) {
                 myTab.suspended = true;
             }
+            console.log("redirecting to data uri at", (new Date() - extBg.startTime));
             return {redirectUrl: dataUri};
         }
     }

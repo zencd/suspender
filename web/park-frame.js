@@ -2,6 +2,8 @@
 
 const extBg = chrome.extension.getBackgroundPage()['extBg'];
 let numTries = 0; // num of attempts to obtain screenshot
+console.log("park-frame.js started at", (new Date() - extBg.startTime));
+addMessageListener();
 
 function fetchAndSetImage(screenshotId) {
     const storageKey = 'screenshot.id=' + screenshotId;
@@ -29,6 +31,7 @@ function fetchAndSetImage(screenshotId) {
 }
 
 function sendScreenshot(dataUri) {
+    console.log("sendScreenshot at", (new Date() - extBg.startTime));
     window.parent.postMessage({
         call: 'setScreenshot',
         dataUri: dataUri,
@@ -37,13 +40,15 @@ function sendScreenshot(dataUri) {
     }, '*');
 }
 
-window.addEventListener('message', function (messageEvent) {
-    // waiting for extended info from the parent frame
-    const origin = messageEvent.origin || messageEvent.originalEvent.origin;
-    // here `origin` gonna be checked, but it is always 'null' (string!) for me
-    // const originOk = !origin || origin === 'null';
-    const originOk = true;
-    if (originOk && typeof messageEvent.data === 'object' && messageEvent.data.call === 'setFrameParams') {
-        fetchAndSetImage(messageEvent.data.screenshotId);
-    }
-}, false);
+function addMessageListener() {
+    window.addEventListener('message', function (messageEvent) {
+        // waiting for extended info from the parent frame
+        const origin = messageEvent.origin || messageEvent.originalEvent.origin;
+        // here `origin` gonna be checked, but it is always 'null' (string!) for me
+        // const originOk = !origin || origin === 'null';
+        const originOk = true;
+        if (originOk && typeof messageEvent.data === 'object' && messageEvent.data.call === 'setFrameParams') {
+            fetchAndSetImage(messageEvent.data.screenshotId);
+        }
+    }, false);
+}
