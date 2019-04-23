@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    console.log("park.js started at", new Date() - startTime);
+
     function generateAndSetGradient() {
         function easeInOutQuad(t) {
             return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t
@@ -54,17 +56,23 @@
         });
     }
 
+    function getFrameUrl() {
+        // return url like "chrome-extension://xxx/web/park-frame.html"
+        const $script = document.querySelector('script[src^="chrome-extension:"]');
+        return $script.src.substring(0, $script.src.indexOf('/', 20)) + '/web/park-frame.html';
+    }
+
     const $screenshot = document.querySelector('.screenshot');
-    const $anchor = document.querySelector('.title a');
+    // const $anchor = document.querySelector('.title a');
 
     // const $frame = document.querySelector('iframe');
     const $frame = document.createElement('iframe');
     $frame.style.display = 'none';
-    $frame.src = F;
+    $frame.src = getFrameUrl();
     $frame.addEventListener("load", function loadListener() {
-        console.log("frame loaded after", (new Date() - parkHtmlTime));
+        console.log("frame loaded after", (new Date() - startTime));
         // pass the original url to the frame, so we can redirect user to it onlick
-        $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, screenshotId: S}, '*');
+        $frame.contentWindow.postMessage({call: 'setFrameParams', screenshotId: S}, '*');
         $frame.removeEventListener("load", loadListener);
     });
     document.body.appendChild($frame);

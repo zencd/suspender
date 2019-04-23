@@ -14,10 +14,11 @@
 <div class="link">$LINK_TEXT$</div>
 </div>
 </body>
-<script>let S="$SCREENSHOT_ID$",F="$IFRAME_URL$",B="$BG_DARKEN$";</script>
-<!--<iframe src="$IFRAME_URL$" frameborder="0" style="display: none"></iframe>-->
+<script>let S="$SCREENSHOT_ID$",B="$BG_DARKEN$";</script>
 <script>
-    const parkHtmlTime = new Date() - 0;
+const startTime = $START_TIME$;
+console.log("park.html started at", new Date() - startTime);
 </script>
-<script src="$PARK_JS_URL$" async></script>
+<script src="chrome-extension://mmmjhcioolknafdgaeoffcmbfkhccbao/web/park-empty.js"></script>
+<script src="$PARK_JS_URL$"></script>
 </html>

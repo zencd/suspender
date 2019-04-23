@@ -15,7 +15,10 @@
                     backgroundColor: findBgColor(),
                 });
             } else if (msg.message === 'MESSAGE_TAKE_H2C_SCREENSHOT') {
+                console.log("formFilled", formFilled);
+                console.log("msg.suspendFilledForms", msg.suspendFilledForms);
                 if (!formFilled || msg.suspendFilledForms === true) {
+                    logToBg("gonna suspend tab", "formFilled:", formFilled, "suspendFilledForms:", msg.suspendFilledForms, document.location.href);
                     takeScreenshot(canvas => {
                         chrome.runtime.sendMessage(null, {
                             message: 'MESSAGE_H2C_SCREENSHOT_READY',
@@ -25,10 +28,16 @@
                         });
                     });
                 } else {
+                    logToBg("tab won't be suspended because of a form", document.location.href);
                     console.debug("won't suspend this tab: form filling noticed");
                 }
             }
         });
+    }
+
+    function logToBg() {
+        const args = Array.prototype.slice.call(arguments);
+        chrome.runtime.sendMessage(null, {message: 'MESSAGE_LOG_TO_BG', args: args});
     }
 
     function takeScreenshot(onCanvas) {
@@ -61,7 +70,6 @@
             if (event.target.tagName) {
                 const tagUpper = event.target.tagName.toUpperCase();
                 if (tagUpper === 'INPUT' || tagUpper === 'TEXTAREA' || event.target.isContentEditable === true || event.target.type === "application/pdf") {
-                    console.log("form filling noticed");
                     formFilled = true;
                     console.debug("form filling noticed");
                     window.removeEventListener(evName, lookForFormFilling);

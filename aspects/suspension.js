@@ -93,6 +93,7 @@ function suspendBackgroundTab(tab) {
         message: CommonUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
         suspendFilledForms: getOptions().suspendFilledForms,
     };
+    console.log("sending msg to tab", msg);
     chrome.tabs.sendMessage(tab.id, msg);
     // the async answer gonna come to the message listener
     // although the answer may not come if the tab cannot be suspended
@@ -201,13 +202,14 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
             '$TITLE$': pageTitle,
             '$LINK_URL$': pageUrl,
             '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
-            '$IFRAME_URL$': EXT_URLS.parkFrame,
+            // '$IFRAME_URL$': EXT_URLS.parkFrame,
             //'$CSS_URL$': '',
             '$CSS_TEXT$': getParkCssText(),
             '$SCREENSHOT_ID$': screenshotId,
             '$FAVICON_DATA_URI$': faviconDataUri,
             // '$DATE$': Utils.formatHumanReadableDateTime(),
             '$PARK_JS_URL$': EXT_URLS.parkJs,
+            '$START_TIME$': extBg.startTime,
         };
         const htmlStr = Utils.expandStringTemplate(getParkHtmlText(), tplVars);
         const b64 = Utils.b64EncodeUnicode(htmlStr);

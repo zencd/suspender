@@ -46,6 +46,8 @@ function initMessageListener() {
             const screenshotId = Utils.uidString();
             const bg = msg.backgroundColor;
             suspendTabPhase2(msg.tabId, screenshotId, bg, msg.imageDataUri);
+        } else if (msg.message === CommonUtils.MESSAGE_LOG_TO_BG) {
+            console.log.apply(null, msg.args);
         }
     });
 }
