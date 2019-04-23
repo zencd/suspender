@@ -8,7 +8,7 @@ const tabs = new TabList();
 
 let currentTab = null;
 
-const contentScriptManifest = parseContentScriptManifest();
+const csInfo = parseContentScriptManifest();
 
 initTabsAspect();
 
@@ -56,7 +56,7 @@ function inspectExistingTabs() {
 function injectContentScriptIntoTab(chrTab) {
     if (CommonUtils.isUrlSuspendable(chrTab.url)) {
         console.debug("injecting CS into existing tab", chrTab.url);
-        Utils.injectScriptsIntoTab(chrTab.id, contentScriptManifest.runAt, contentScriptManifest.files);
+        Utils.injectScriptsIntoTab(chrTab.id, csInfo.runAt, csInfo.files);
     }
 }
 
@@ -65,10 +65,10 @@ function parseContentScriptManifest() {
     if (css.length !== 1) {
         console.warn("expecting a single content script entry in manifest.json");
     }
-    const cs0 = css[0];
+    const cs = css[0];
     return {
-        files: cs0.js,
-        runAt: cs0.run_at,
+        files: cs.js,
+        runAt: cs.run_at,
     }
 }
 
