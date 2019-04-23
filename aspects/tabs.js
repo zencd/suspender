@@ -45,10 +45,10 @@ function inspectExistingTabs() {
     Utils.iteratePopulatedWindows(inspectWindow);
 }
 
-function injectContentScriptIntoTab(chrTab) {
-    if (CommonUtils.isUrlSuspendable(chrTab.url)) {
-        console.debug("injecting CS into existing tab", chrTab.url);
-        Utils.injectScriptsIntoTab(chrTab.id, csInfo.runAt, csInfo.files);
+function injectContentScriptIntoTab(tab) {
+    if (CommonUtils.isUrlSuspendable(tab.url)) {
+        console.debug("injecting CS into existing tab", tab.url);
+        Utils.injectScriptsIntoTab(tab.id, csInfo.runAt, csInfo.files);
     }
 }
 
