@@ -57,10 +57,12 @@
     const $screenshot = document.querySelector('.screenshot');
     const $anchor = document.querySelector('.title a');
 
+    // const $frame = document.querySelector('iframe');
     const $frame = document.createElement('iframe');
     $frame.style.display = 'none';
     $frame.src = F;
     $frame.addEventListener("load", function loadListener() {
+        console.log("frame loaded after", (new Date() - parkHtmlTime));
         // pass the original url to the frame, so we can redirect user to it onlick
         $frame.contentWindow.postMessage({call: 'setFrameParams', url: $anchor.href, screenshotId: S}, '*');
         $frame.removeEventListener("load", loadListener);

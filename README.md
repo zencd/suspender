@@ -37,6 +37,7 @@
 - learn about: queueMicrotask() https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 - maybe there is a better place for 500KB objects than local storage
 - maybe check `suspensionMap` periodically for old entries to avoid memory leaks
+- try find safe colors for gradient - currently it looks distinguishably stepped
 
 ## bugs
 
