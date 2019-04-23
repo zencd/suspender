@@ -15,15 +15,18 @@
                     backgroundColor: findBgColor(),
                 });
             } else if (msg.message === 'MESSAGE_TAKE_H2C_SCREENSHOT') {
-                // todo skip this if formFilled==true and it's required to skip those tabs
-                takeScreenshot(canvas => {
-                    chrome.runtime.sendMessage(null, {
-                        message: 'MESSAGE_H2C_SCREENSHOT_READY',
-                        tabId: msg.tabId,
-                        imageDataUri: canvas.toDataURL(),
-                        backgroundColor: findBgColor(),
+                if (!formFilled || msg.suspendFilledForms === true) {
+                    takeScreenshot(canvas => {
+                        chrome.runtime.sendMessage(null, {
+                            message: 'MESSAGE_H2C_SCREENSHOT_READY',
+                            tabId: msg.tabId,
+                            imageDataUri: canvas.toDataURL(),
+                            backgroundColor: findBgColor(),
+                        });
                     });
-                });
+                } else {
+                    console.debug("won't suspend this tab: form filling noticed");
+                }
             }
         });
     }

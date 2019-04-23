@@ -11,6 +11,9 @@
 - encode variables passed to template `park.html`
 - implement a job to cleanup unused local storage objects
 - whitelist
+- check how redirect to data uri works offline
+- try inject large lib H2C asynchronously
+- inject content scripts into existing tabs
 
 ## todo p2
 

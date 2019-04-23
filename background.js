@@ -42,12 +42,6 @@ function initAll() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-        if (msg.message === CommonUtils.MESSAGE_SUSPEND_FG) {
-            suspendTabPhase2(msg.tabId, msg.screenshotId, msg.backgroundColor, null);
-        } else if (msg.message === CommonUtils.MESSAGE_SUSPEND_BG) {
-            suspendTabPhase2(msg.tabId, msg.screenshotId, msg.backgroundColor, msg.imageDataUri);
-        } else {}
-
         if (msg.message === CommonUtils.MESSAGE_H2C_SCREENSHOT_READY) {
             const screenshotId = Utils.uidString();
             const bg = msg.backgroundColor;

@@ -8,8 +8,6 @@ import {getTabs} from "./aspects/tabs.js";
  */
 export class CommonUtils {
 
-    static MESSAGE_SUSPEND_FG = 'MESSAGE_SUSPEND_FG';
-    static MESSAGE_SUSPEND_BG = 'MESSAGE_SUSPEND_BG';
     static MESSAGE_GET_PAGE_INFO = 'MESSAGE_GET_PAGE_INFO';
     static MESSAGE_TAKE_H2C_SCREENSHOT = 'MESSAGE_TAKE_H2C_SCREENSHOT';
     static MESSAGE_H2C_SCREENSHOT_READY = 'MESSAGE_H2C_SCREENSHOT_READY';

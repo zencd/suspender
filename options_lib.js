@@ -104,6 +104,7 @@ export class Options extends StorageOptions {
         this.suspendActive = false;
         this.suspendAudible = false;
         this.suspendOffline = false;
+        this.suspendFilledForms = false;
         this.defineOptionsFromProperties(); // XXX call it AFTER all properties defined
     }
 }

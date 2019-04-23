@@ -91,9 +91,11 @@ function suspendBackgroundTab(tab) {
     const msg = {
         tabId: tab.id,
         message: CommonUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
+        suspendFilledForms: getOptions().suspendFilledForms,
     };
     chrome.tabs.sendMessage(tab.id, msg);
     // the async answer gonna come to the message listener
+    // although the answer may not come if the tab cannot be suspended
 
     // const files = ['html2canvas.min.js', 'content_bg_tab.js'];
     // chrome.tabs.executeScript(tab.id, {
