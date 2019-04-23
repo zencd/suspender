@@ -3,27 +3,27 @@
 
     console.log('content.js init');
 
+    let formFilled = false;
+
     initMessageListener();
+    initFormFillingListener();
 
     function initMessageListener() {
         chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-            if (msg.message === 'MESSAGE_TAKE_SCREENSHOT') {
+            if (msg.message === 'MESSAGE_GET_PAGE_INFO') {
+                sendResponse({
+                    backgroundColor: findBgColor(),
+                });
+            } else if (msg.message === 'MESSAGE_TAKE_H2C_SCREENSHOT') {
+                // todo skip this if formFilled==true and it's required to skip those tabs
                 takeScreenshot(canvas => {
-                    console.log("canvas", canvas);
-                    const imageDataUri = canvas.toDataURL();
                     chrome.runtime.sendMessage(null, {
-                        message: 'MESSAGE_SCREENSHOT_READY',
-                        screenshotId: msg.screenshotId,
-                        imageDataUri: imageDataUri,
-                        htmlDataUri: msg.htmlDataUri,
+                        message: 'MESSAGE_H2C_SCREENSHOT_READY',
                         tabId: msg.tabId,
-                        tabUrl: msg.tabUrl,
+                        imageDataUri: canvas.toDataURL(),
+                        backgroundColor: findBgColor(),
                     });
                 });
-            } else if (msg.message === 'MESSAGE_GET_DOCUMENT_BG_COLOR') {
-                sendResponse({backgroundColor: findBgColor()});
-            } else {
-                console.debug("Got message", msg.message);
             }
         });
     }
@@ -49,6 +49,24 @@
             }
         }
         return color;
+    }
+
+    function initFormFillingListener() {
+        const evName = 'keydown';
+        window.addEventListener(evName, function lookForFormFilling(event) {
+            const keyCode = event.keyCode;
+            if (keyCode >= 48 && keyCode <= 90 && event.target.tagName) {
+                const tagUpper = event.target.tagName.toUpperCase();
+                const inputOk = tagUpper === 'INPUT' || tagUpper === 'TEXTAREA';
+                const contentEditable = event.target.isContentEditable === true;
+                const pdf = event.target.type === "application/pdf";
+                if (inputOk || contentEditable || pdf) {
+                    console.log("form filling noticed");
+                    formFilled = true;
+                    window.removeEventListener(evName, lookForFormFilling);
+                }
+            }
+        });
     }
 
 })();

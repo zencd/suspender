@@ -37,6 +37,17 @@
     "persistent": true
   },
   "content_scripts": [
+    {
+      "js": [
+        "html2canvas.min.js",
+        "content.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_idle"
+    }
   ],
   "commands": {
     "command-suspend-current-tab": {

@@ -118,3 +118,16 @@ https://developer.chrome.com/extensions/user_interface
           event.target.tagName.toUpperCase() === 'FORM' ||
           event.target.isContentEditable === true ||
           event.target.type === "application/pdf"
+
+## detect background script is connectible
+    
+    try {
+      var port = chrome.runtime.connect();
+      if (port) {
+        port.disconnect();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }

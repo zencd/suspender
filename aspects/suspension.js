@@ -48,12 +48,12 @@ function findOldTabsAndSuspendThem() {
 }
 
 export function suspendTab(tab, isActiveTab) {
-    if (!isResourcesLoaded()) {
-        console.info("internal resources not loaded yet - aborting");
+    if (!CommonUtils.isUrlSuspendable(tab.url)) {
         return;
     }
 
-    if (!CommonUtils.isUrlSuspendable(tab.url)) {
+    if (!isResourcesLoaded()) {
+        console.info("internal resources not loaded yet - aborting");
         return;
     }
 
@@ -70,34 +70,45 @@ function suspendForegroundTab(tab) {
     const screenshotId = Utils.uidString();
     captureVisibleTab_Scale_Persist(tab, screenshotId);
 
-    const file = 'content_fg_tab.js';
-    chrome.tabs.executeScript(tab.id, {
-        file: file,
-        runAt: INJECT_CONTENT_SCRIPT_AT
-    }, (injected) => {
-        chrome.tabs.executeScript(tab.id, {
-            code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
-        });
+    chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_PAGE_INFO}, function (response) {
+        console.log("response", response);
+        const bg = response.backgroundColor;
+        suspendTabPhase2(tab.id, screenshotId, bg, null);
     });
+
+    // const file = 'content_fg_tab.js';
+    // chrome.tabs.executeScript(tab.id, {
+    //     file: file,
+    //     runAt: INJECT_CONTENT_SCRIPT_AT
+    // }, (injected) => {
+    //     chrome.tabs.executeScript(tab.id, {
+    //         code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
+    //     });
+    // });
 }
 
 function suspendBackgroundTab(tab) {
-    const screenshotId = Utils.uidString();
+    const msg = {
+        tabId: tab.id,
+        message: CommonUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
+    };
+    chrome.tabs.sendMessage(tab.id, msg);
+    // the async answer gonna come to the message listener
 
-    const files = ['html2canvas.min.js', 'content_bg_tab.js'];
-    chrome.tabs.executeScript(tab.id, {
-        file: files[0],
-        runAt: INJECT_CONTENT_SCRIPT_AT
-    }, (injected1) => {
-        chrome.tabs.executeScript(tab.id, {
-            file: files[1],
-            runAt: INJECT_CONTENT_SCRIPT_AT
-        }, (injected2) => {
-            chrome.tabs.executeScript(tab.id, {
-                code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
-            });
-        });
-    });
+    // const files = ['html2canvas.min.js', 'content_bg_tab.js'];
+    // chrome.tabs.executeScript(tab.id, {
+    //     file: files[0],
+    //     runAt: INJECT_CONTENT_SCRIPT_AT
+    // }, (injected1) => {
+    //     chrome.tabs.executeScript(tab.id, {
+    //         file: files[1],
+    //         runAt: INJECT_CONTENT_SCRIPT_AT
+    //     }, (injected2) => {
+    //         chrome.tabs.executeScript(tab.id, {
+    //             code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
+    //         });
+    //     });
+    // });
 }
 
 export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageDataUri) {
@@ -130,7 +141,7 @@ function scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, scaleDown) {
                 content: imageDataUri2,
             },
         };
-        chrome.storage.local.set(storageItems, ()=>{});
+        chrome.storage.local.set(storageItems);
     });
 }
 
