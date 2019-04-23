@@ -8,6 +8,8 @@ const tabs = new TabList();
 
 let currentTab = null;
 
+const contentScriptManifest = parseContentScriptManifest();
+
 initTabsAspect();
 
 function initTabsAspect() {
@@ -36,6 +38,7 @@ function inspectExistingTabs() {
             if (window.focused && chrTab.active) {
                 currentTab = myTab;
             }
+            injectContentScriptIntoTab(chrTab);
         }
     }
 
@@ -48,6 +51,25 @@ function inspectExistingTabs() {
             }
         }
     });
+}
+
+function injectContentScriptIntoTab(chrTab) {
+    if (CommonUtils.isUrlSuspendable(chrTab.url)) {
+        console.debug("injecting CS into existing tab", chrTab.url);
+        Utils.injectScriptsIntoTab(chrTab.id, contentScriptManifest.runAt, contentScriptManifest.files);
+    }
+}
+
+function parseContentScriptManifest() {
+    const css = chrome.runtime.getManifest().content_scripts;
+    if (css.length !== 1) {
+        console.warn("expecting a single content script entry in manifest.json");
+    }
+    const cs0 = css[0];
+    return {
+        files: cs0.js,
+        runAt: cs0.run_at,
+    }
 }
 
 export function discardDataUriTabs() {
