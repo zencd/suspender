@@ -26,12 +26,8 @@ export class Utils {
         return color;
     }
 
-    static toggleCssClass($elem, condition, className) {
-        if (condition) {
-            $elem.classList.add(className);
-        } else {
-            $elem.classList.remove(className);
-        }
+    static setCssClass($elem, addOrRemove, className) {
+        (addOrRemove ? $elem.classList.add : $elem.classList.remove)(className);
     }
 
     static getCurrentTabFromBackgroundScript(onTab) {

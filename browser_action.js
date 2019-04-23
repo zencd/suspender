@@ -11,7 +11,7 @@
     const tab = extBg.getCurrentTab();
     if (tab) {
         const suspendable = extBg.CommonUtils.isUrlSuspendable(tab.url);
-        extBg.Utils.toggleCssClass($suspendTab, !suspendable, 'disabled');
+        extBg.Utils.setCssClass($suspendTab, !suspendable, 'disabled');
     }
 
     menuClicked($suspendTab, () => extBg.suspendCurrentTab());

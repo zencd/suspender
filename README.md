@@ -44,6 +44,7 @@
 - https://support.google.com/chrome/thread/2047906 "The message port closed"
 - currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
 - Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
+- uninstall the ext, install it again - "unsuspend window" has no effect as db removed
 
 ## done
 
