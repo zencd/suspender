@@ -42,15 +42,7 @@ function inspectExistingTabs() {
         }
     }
 
-    chrome.windows.getAll({'populate': true}, function (windows) {
-        for (let i in windows) {
-            if (windows.hasOwnProperty(i)) {
-                const window = windows[i];
-                // console.log("window", window);
-                inspectWindow(window);
-            }
-        }
-    });
+    Utils.iteratePopulatedWindows(inspectWindow);
 }
 
 function injectContentScriptIntoTab(chrTab) {
@@ -76,7 +68,7 @@ export function discardDataUriTabs() {
     const tt = getTabs().getAllTabs();
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
-        if (tab.url && Utils.isDataUri(tab.url)) {
+        if (Utils.isDataUri(tab.url)) {
             chrome.tabs.discard(tab.id, function (resTab) {
                 console.log("discarded tab", resTab);
             });

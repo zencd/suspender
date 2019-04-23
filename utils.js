@@ -5,6 +5,16 @@
  */
 export class Utils {
 
+    static iteratePopulatedWindows(onWindow) {
+        chrome.windows.getAll({'populate': true}, function (windows) {
+            for (let i in windows) {
+                if (windows.hasOwnProperty(i)) {
+                    onWindow(windows[i]);
+                }
+            }
+        });
+    }
+
     static findBgColor(document) {
         let color = 'rgb(255,255,255)';
         if (document.body) {
