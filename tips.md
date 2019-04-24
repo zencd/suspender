@@ -132,6 +132,10 @@ https://developer.chrome.com/extensions/user_interface
       return false;
     }
 
+## modularize
+
+https://stackoverflow.com/questions/14572448/how-do-you-modularize-your-chrome-applications-with-browserify
+
 # Chrome Apps & Extensions Developer Tool
 
 https://chrome.google.com/webstore/detail/chrome-apps-extensions-de/ohmmkhmmmpcnpikjeljgnaoabkaalbgc
