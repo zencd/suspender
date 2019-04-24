@@ -55,6 +55,12 @@
       "suggested_key": {
         "default": "Alt+S"
       }
+    },
+    "command-reload-ext": {
+      "description": "Reload extension",
+      "suggested_key": {
+        "default": ""
+      }
     }
   }
 }

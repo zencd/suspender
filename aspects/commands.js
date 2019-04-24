@@ -16,6 +16,9 @@ function initCommandListener() {
             Utils.getCurrentTabFromBackgroundScript((chrTab) => {
                 suspendTab(chrTab, true);
             });
+        } else if (command === 'command-reload-ext') {
+            console.log("reloading BTS");
+            chrome.runtime.reload();
         }
     });
 }

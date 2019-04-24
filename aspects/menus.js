@@ -113,6 +113,13 @@ function initContextMenu() {
             suspendTab(tab, false);
         }
     });
+    makeContextMenu({
+        title: "Reload ext",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            chrome.runtime.reload();
+        }
+    });
 }
 
 function makeContextMenu(params) {
