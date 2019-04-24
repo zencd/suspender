@@ -23,7 +23,3 @@ export function getOptions() {
 
 export function addThisSiteToWhitelist() {
 }
-
-export function showOptions() {
-    chrome.tabs.create({url: EXT_URLS.optionsHtml})
-}

@@ -17,7 +17,7 @@
     menuClicked($suspendTab, () => extBg.suspendCurrentTab());
     menuClicked($suspendWindow, () => extBg.suspendCurrentWindow());
     menuClicked($unsuspendWindow, () => extBg.unsuspendCurrentWindow());
-    menuClicked($showOptions, () => extBg.showOptions());
+    menuClicked($showOptions, () => chrome.runtime.openOptionsPage());
 
     function menuClicked($elem, handler) {
         $elem.onclick = () => {

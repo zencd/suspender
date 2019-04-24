@@ -27,7 +27,11 @@ export class Utils {
     }
 
     static setCssClass($elem, addOrRemove, className) {
-        (addOrRemove ? $elem.classList.add : $elem.classList.remove)(className);
+        if (addOrRemove) {
+            $elem.classList.add(className);
+        } else {
+            $elem.classList.remove(className);
+        }
     }
 
     static getCurrentTabFromBackgroundScript(onTab) {

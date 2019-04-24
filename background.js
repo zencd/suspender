@@ -2,7 +2,6 @@
 
 import {Utils} from './utils.js';
 import {CommonUtils} from './common.js';
-import {showOptions} from './aspects/opts.js';
 import {getCurrentTab} from './aspects/tabs.js';
 import {
     suspendTabPhase2,
@@ -26,7 +25,6 @@ extBg = {
     urls: EXT_URLS,
     Utils: Utils,
     CommonUtils: CommonUtils,
-    showOptions: showOptions,
     suspendCurrentTab: suspendCurrentTab,
     suspendCurrentWindow: suspendCurrentWindow,
     unsuspendCurrentWindow: unsuspendCurrentWindow,

@@ -23,7 +23,6 @@
 
 - pre-build parking html template for the zip version
 - implement error handling/reporting?
-- browser action: show options: try to switch to existing tab first
 - the 19px browser_action icon gets auto resized on Windows
 - suspend current tab: it's unclear the process has started, with a shortcut especially
 - a feature to move really old tabs to bookmarks
@@ -48,6 +47,7 @@
 
 ## done
 
++ browser action: show options: try to switch to existing tab first
 + parking: wait till screenshot get appeared in DB (because it is persisted asynchronously now)
 + don't wait till screenshot is finished to store into DB
 + minimize permissions
