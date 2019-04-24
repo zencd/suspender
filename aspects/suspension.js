@@ -207,7 +207,6 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
             '$START_TIME$': extBg.startTime,
         };
         const pht = await getParkHtmlText();
-        console.log("got pht", typeof pht, pht.length);
         const htmlStr = Utils.expandStringTemplate(pht, tplVars);
         const b64 = Utils.b64EncodeUnicode(htmlStr);
         const htmlDataUri = 'data:text/html;base64,' + b64;
@@ -221,18 +220,15 @@ export function suspendWindow(windowId) {
 }
 
 export function unsuspendWindow(windowId) {
-    // todo start iterating my tab objects, not chrome's
-    chrome.windows.get(windowId, {'populate': true}, function (window) {
-        const tabs = window.tabs;
-        for (let i in tabs) {
-            if (tabs.hasOwnProperty(i)) {
-                const chrTab = tabs[i];
-                if (Utils.isDataUri(chrTab.url)) {
-                    unsuspendTab(chrTab);
-                }
+    const tt = getTabs().getAllTabs();
+    for (let i = 0; i < tt.length; i++) {
+        const tab = tt[i];
+        if (tab.windowId === windowId) {
+            if (Utils.isDataUri(tab.url)) {
+                unsuspendTab(tab);
             }
         }
-    });
+    }
 }
 
 export function suspendCurrentWindow() {
