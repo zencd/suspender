@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    console.log('content.js init');
+    console.log('BTS: content.js init');
 
     let formFilled = false;
 
@@ -15,8 +15,8 @@
                     backgroundColor: findBgColor(),
                 });
             } else if (msg.message === 'MESSAGE_TAKE_H2C_SCREENSHOT') {
-                console.log("formFilled", formFilled);
-                console.log("msg.suspendFilledForms", msg.suspendFilledForms);
+                console.log("BTS: formFilled", formFilled);
+                console.log("BTS: msg.suspendFilledForms", msg.suspendFilledForms);
                 if (!formFilled || msg.suspendFilledForms === true) {
                     logToBg("gonna suspend tab", "formFilled:", formFilled, "suspendFilledForms:", msg.suspendFilledForms, document.location.href);
                     takeScreenshot(canvas => {
@@ -29,7 +29,7 @@
                     });
                 } else {
                     logToBg("tab won't be suspended because of a form", document.location.href);
-                    console.debug("won't suspend this tab: form filling noticed");
+                    console.debug("BTS: won't suspend this tab: form filling noticed");
                 }
             }
         });
@@ -71,7 +71,7 @@
                 const tagUpper = event.target.tagName.toUpperCase();
                 if (tagUpper === 'INPUT' || tagUpper === 'TEXTAREA' || event.target.isContentEditable === true || event.target.type === "application/pdf") {
                     formFilled = true;
-                    console.debug("form filling noticed");
+                    console.debug("BTS: form filling noticed");
                     window.removeEventListener(evName, lookForFormFilling);
                 }
             }
