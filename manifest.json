@@ -59,7 +59,7 @@
     "command-reload-ext": {
       "description": "Reload extension",
       "suggested_key": {
-        "default": ""
+        "default": "Alt+R"
       }
     }
   }

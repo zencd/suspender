@@ -6,7 +6,7 @@ import {EXT_URLS} from '../background.js';
 import {getTabs} from './tabs.js';
 import {getOptions} from './opts.js';
 import {addToSuspensionMap} from './webrequest.js';
-import {isResourcesLoaded, getParkCssText, getParkHtmlText} from './resources.js';
+import {getParkCssText, getParkHtmlText} from './resources.js';
 
 const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
@@ -49,11 +49,6 @@ function findOldTabsAndSuspendThem() {
 
 export function suspendTab(tab, isActiveTab) {
     if (!CommonUtils.isUrlSuspendable(tab.url)) {
-        return;
-    }
-
-    if (!isResourcesLoaded()) {
-        console.info("internal resources not loaded yet - aborting");
         return;
     }
 
@@ -194,7 +189,7 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
     const bgDarkenStr = bgDarkenRgb.join(',');
 
     const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
-    CommonUtils.loadAndProcessFavicon(faviconUrl, function (faviconDataUri) {
+    CommonUtils.loadAndProcessFavicon(faviconUrl, async (faviconDataUri) => {
         // todo do replace more effectively, probably via joining a set of strings
         let tplVars = {
             '$BG_COLOR$': bgColor,
@@ -204,14 +199,16 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
             '$LINK_TEXT$': Utils.toReadableUrl(pageUrl),
             // '$IFRAME_URL$': EXT_URLS.parkFrame,
             //'$CSS_URL$': '',
-            '$CSS_TEXT$': getParkCssText(),
+            '$CSS_TEXT$': await getParkCssText(),
             '$SCREENSHOT_ID$': screenshotId,
             '$FAVICON_DATA_URI$': faviconDataUri,
             // '$DATE$': Utils.formatHumanReadableDateTime(),
             '$PARK_JS_URL$': EXT_URLS.parkJs,
             '$START_TIME$': extBg.startTime,
         };
-        const htmlStr = Utils.expandStringTemplate(getParkHtmlText(), tplVars);
+        const pht = await getParkHtmlText();
+        console.log("got pht", typeof pht, pht.length);
+        const htmlStr = Utils.expandStringTemplate(pht, tplVars);
         const b64 = Utils.b64EncodeUnicode(htmlStr);
         const htmlDataUri = 'data:text/html;base64,' + b64;
         callback(htmlDataUri);

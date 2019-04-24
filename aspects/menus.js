@@ -120,6 +120,13 @@ function initContextMenu() {
             chrome.runtime.reload();
         }
     });
+    makeContextMenu({
+        title: "Open DevTools",
+        contexts: contexts,
+        onclick: (info, tab) => {
+            chrome.developerPrivate.openDevTools();
+        }
+    });
 }
 
 function makeContextMenu(params) {

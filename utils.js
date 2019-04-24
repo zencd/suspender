@@ -215,6 +215,33 @@ export class Utils {
     }
 }
 
+export class ResourceOnDemand {
+    constructor(url, filter) {
+        this.url = url;
+        this.filter = filter;
+        this.value = null;
+    }
+
+    get() {
+        const self = this;
+        if (self.value) {
+            return self.value;
+        } else {
+            return new Promise((resolve, reject) => {
+                fetch(self.url).then((response) => {
+                    response.text().then((text) => {
+                        if (self.filter) {
+                            text = self.filter(text);
+                        }
+                        self.value = text;
+                        resolve(text);
+                    });
+                });
+            });
+        }
+    }
+}
+
 if (window.qs === undefined) {
     window.qs = Utils.qs;
 }

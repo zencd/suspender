@@ -3,6 +3,7 @@
 import {Utils} from './utils.js';
 import {CommonUtils} from './common.js';
 import {getCurrentTab} from './aspects/tabs.js';
+import {} from './aspects/resources.js';
 import {
     suspendTabPhase2,
     suspendCurrentTab,

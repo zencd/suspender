@@ -131,3 +131,7 @@ https://developer.chrome.com/extensions/user_interface
     } catch (e) {
       return false;
     }
+
+# Chrome Apps & Extensions Developer Tool
+
+https://chrome.google.com/webstore/detail/chrome-apps-extensions-de/ohmmkhmmmpcnpikjeljgnaoabkaalbgc
