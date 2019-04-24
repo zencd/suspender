@@ -216,7 +216,14 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
 
 
 export function suspendWindow(windowId) {
-    // todo start iterating my tab objects, not chrome's
+    console.debug("suspendWindow", "windowId:", windowId);
+    const tt = getTabs().getAllTabs();
+    for (let i = 0; i < tt.length; i++) {
+        const tab = tt[i];
+        if (tab.windowId === windowId) {
+            suspendTab(tab);
+        }
+    }
 }
 
 export function unsuspendWindow(windowId) {
