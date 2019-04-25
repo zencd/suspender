@@ -2,5 +2,6 @@
 
 TARGET=dist/chrome.zip
 mkdir -p dist
-zip $TARGET *.js *.css *.html *.json web/* icons/* _locales/*/*
+rm -f $TARGET
+zip $TARGET *.js *.css *.html manifest.json _locales/*/* aspects/* icons/* web/*
 unzip -l $TARGET

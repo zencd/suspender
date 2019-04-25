@@ -70,16 +70,6 @@ function suspendForegroundTab(tab) {
         const bg = response.backgroundColor;
         suspendTabPhase2(tab.id, screenshotId, bg, null);
     });
-
-    // const file = 'content_fg_tab.js';
-    // chrome.tabs.executeScript(tab.id, {
-    //     file: file,
-    //     runAt: INJECT_CONTENT_SCRIPT_AT
-    // }, (injected) => {
-    //     chrome.tabs.executeScript(tab.id, {
-    //         code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
-    //     });
-    // });
 }
 
 function suspendBackgroundTab(tab) {
@@ -92,21 +82,6 @@ function suspendBackgroundTab(tab) {
     chrome.tabs.sendMessage(tab.id, msg);
     // the async answer gonna come to the message listener
     // although the answer may not come if the tab cannot be suspended
-
-    // const files = ['html2canvas.min.js', 'content_bg_tab.js'];
-    // chrome.tabs.executeScript(tab.id, {
-    //     file: files[0],
-    //     runAt: INJECT_CONTENT_SCRIPT_AT
-    // }, (injected1) => {
-    //     chrome.tabs.executeScript(tab.id, {
-    //         file: files[1],
-    //         runAt: INJECT_CONTENT_SCRIPT_AT
-    //     }, (injected2) => {
-    //         chrome.tabs.executeScript(tab.id, {
-    //             code: '__BTS_continueCapturing(' + tab.id + ',"' + screenshotId + '");'
-    //         });
-    //     });
-    // });
 }
 
 export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageDataUri) {
