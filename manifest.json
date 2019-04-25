@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Better Suspender",
   "version": "1.0.14",
-  "description": "Reduce Chrome's memory usage extensively suspending certain unused tabs automatically.",
+  "description": "Reduce Chrome's memory usage extensively suspending unused tabs automatically.",
   "author": "zeencd@gmail.com",
   //"homepage_url": "http://extensionizr.com",
   "icons": {
@@ -25,13 +25,7 @@
     "default_popup": "browser_action.html"
   },
   "permissions": [
-    "tabs",
-    "<all_urls>",
-    "contextMenus",
-    "webRequest",
-    "webRequestBlocking",
-    "webNavigation",
-    "storage",
+    "tabs", "<all_urls>", "contextMenus", "webRequest", "webRequestBlocking", "webNavigation", "storage",
     "unlimitedStorage"
   ],
   "web_accessible_resources": [
@@ -47,10 +41,7 @@
         "lib/html2canvas.min.js",
         "content.js"
       ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
+      "matches": ["http://*/*", "https://*/*"],
       "run_at": "document_idle"
     }
   ],

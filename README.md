@@ -14,6 +14,7 @@
 - check how redirect to data uri works offline
 - try inject large lib H2C asynchronously
 - inject content scripts into existing tabs
+- after laptop's lid opened: make sure to add some additional timeout
 
 ## todo p2
 

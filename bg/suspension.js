@@ -24,31 +24,41 @@ function initTabWatchTimer() {
 }
 
 function findOldTabsAndSuspendThem() {
-    const options = getOptions();
-    const now = new Date();
+    const now = new Date() - 0;
     const tt = getTabs().getAllTabs();
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
-        const diffSec = (now - tab.lastSeen) / 1000;
-        const timeoutOk = tab.lastSeen && (diffSec >= options.suspendTimeout) && (options.suspendTimeout > 0);
-        const schemaOk = BtsUtils.isUrlSuspendable(tab.url);
-        const activeTabOk = options.suspendActive || !tab.active;
-        const pinnedOk = options.suspendPinned || !tab.pinned;
-        const audibleOk = options.suspendAudible || !tab.audible;
-        const doSuspend = timeoutOk && activeTabOk && !tab.suspended && schemaOk && pinnedOk && audibleOk;
+        const doSuspend = isTabSuspendable(tab, true, now);
         // const doSuspend = (tab.url === 'https://zencd.github.io/charted/');
         // console.log("tab", tab.url, "suspending?", doSuspend);
         if (doSuspend) {
-            console.log("suspending tab", tab);
             suspendTab(tab, false);
         }
     }
 }
 
+function isTabSuspendable(tab, considerTime, now) {
+    const options = getOptions();
+    let timeoutOk = true;
+    if (considerTime) {
+        const diffSec = (now - tab.lastSeen) / 1000;
+        timeoutOk = tab.lastSeen && (diffSec >= options.suspendTimeout) && (options.suspendTimeout > 0);
+    }
+    const schemaOk = BtsUtils.isUrlSuspendable(tab.url);
+    const activeTabOk = options.suspendActive || !tab.active;
+    const pinnedOk = options.suspendPinned || !tab.pinned;
+    const audibleOk = options.suspendAudible || !tab.audible;
+    const urlOk = BtsUtils.isUrlSuspendable(tab.url);
+    return urlOk && timeoutOk && activeTabOk && !tab.suspended && schemaOk && pinnedOk && audibleOk;
+}
+
 export function suspendTab(tab, isActiveTab) {
     if (!BtsUtils.isUrlSuspendable(tab.url)) {
+        // todo make it client's responsibility: see isTabSuspendable/isUrlSuspendable
         return;
     }
+
+    console.log("suspending tab", tab);
 
     extBg.startTime = new Date() - 0; // for debug only
 
@@ -194,7 +204,9 @@ export function suspendWindow(windowId) {
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
         if (tab.windowId === windowId) {
-            suspendTab(tab);
+            if (isTabSuspendable(tab, false)) {
+                suspendTab(tab);
+            }
         }
     }
 }
