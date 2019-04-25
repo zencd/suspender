@@ -95,7 +95,7 @@ class StorageOptions {
     }
 }
 
-export class Options extends StorageOptions {
+export class BtsOptions extends StorageOptions {
     constructor(onPersisted) {
         super('options.', chrome.storage.sync, onPersisted);
         this.suspendTimeout = 3600; // seconds

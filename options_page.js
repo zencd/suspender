@@ -2,9 +2,9 @@
 
 import {CommonUtils} from './common.js';
 import {qs, qsa} from './utils.js';
-import {Options} from './options_lib.js';
+import {BtsOptions} from './options_lib.js';
 
-const options = new Options(onOptionsPersisted);
+const options = new BtsOptions(onOptionsPersisted);
 
 let notifierFadeOutTimer;
 

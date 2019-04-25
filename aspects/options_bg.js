@@ -1,8 +1,8 @@
 'use strict';
 
-import {Options} from '../options_lib.js';
+import {BtsOptions} from '../options_lib.js';
 
-const options = new Options();
+const options = new BtsOptions();
 
 initOptionsAspect();
 
