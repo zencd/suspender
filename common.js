@@ -3,6 +3,8 @@
 import {Utils} from "./utils.js";
 import {getTabs} from "./aspects/tabs.js";
 
+const SUSPENDED_FAVICON_OPACITY = 0.4;
+
 /**
  * Extension specific utils.
  */
@@ -12,8 +14,6 @@ export class CommonUtils {
     static MESSAGE_TAKE_H2C_SCREENSHOT = 'MESSAGE_TAKE_H2C_SCREENSHOT';
     static MESSAGE_H2C_SCREENSHOT_READY = 'MESSAGE_H2C_SCREENSHOT_READY';
     static MESSAGE_LOG_TO_BG = 'MESSAGE_LOG_TO_BG';
-
-    static SUSPENDED_FAVICON_OPACITY = 0.4;
 
     static isUrlSuspendable(url) {
         return url && (url.startsWith('http://') || url.startsWith('https://'));
@@ -48,7 +48,7 @@ export class CommonUtils {
         img.onload = function () {
             $canvas.width = img.width;
             $canvas.height = img.height;
-            ctx.globalAlpha = CommonUtils.SUSPENDED_FAVICON_OPACITY;
+            ctx.globalAlpha = SUSPENDED_FAVICON_OPACITY;
             ctx.drawImage(img, 0, 0);
             const dataUri = $canvas.toDataURL("image/png");
             onLoad(dataUri);
