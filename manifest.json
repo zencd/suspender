@@ -38,7 +38,7 @@
     "web/*"
   ],
   "background": {
-    "page": "background.html",
+    "page": "background/background.html",
     "persistent": true
   },
   "content_scripts": [

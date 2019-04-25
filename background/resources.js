@@ -1,7 +1,7 @@
 "use strict";
 
-import {Utils, ResourceOnDemand} from '../utils.js';
-import {EXT_URLS} from '../background.js';
+import {Utils, ResourceOnDemand} from '../lib/Utils.js';
+import {EXT_URLS} from './background.js';
 
 let parkHtmlResource = null;
 let parkCssResource = null;

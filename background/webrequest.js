@@ -1,8 +1,8 @@
 "use strict";
 
-import {EXT_URLS} from '../background.js';
+import {EXT_URLS} from './background.js';
 import {getTabs} from './tabs.js';
-import {Utils} from '../utils.js';
+import {Utils} from '../lib/Utils.js';
 
 const redirects = {}; // url => object
 

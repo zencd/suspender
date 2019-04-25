@@ -1,7 +1,7 @@
 "use strict";
 
-import {Utils} from "./utils.js";
-import {getTabs} from "./aspects/tabs.js";
+import {Utils} from "../lib/Utils.js";
+import {getTabs} from "./tabs.js";
 
 const SUSPENDED_FAVICON_OPACITY = 0.4;
 

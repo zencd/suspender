@@ -1,8 +1,8 @@
 'use strict';
 
-import {CommonUtils} from './common.js';
-import {qs, qsa} from './utils.js';
-import {BtsOptions} from './options_lib.js';
+import {CommonUtils} from './background/common.js';
+import {qs, qsa} from './lib/Utils.js';
+import {BtsOptions} from './lib/BtsOptions.js';
 
 const options = new BtsOptions(onOptionsPersisted);
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import {CommonUtils} from "../common.js";
+import {CommonUtils} from "./common.js";
 import {addThisSiteToWhitelist} from './options_bg.js';
 import {discardDataUriTabs} from './tabs.js';
 import {suspendTab, suspendWindow, unsuspendWindow} from './suspension.js';

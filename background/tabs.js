@@ -1,8 +1,8 @@
 "use strict";
 
-import {Utils} from '../utils.js';
-import {CommonUtils} from '../common.js';
-import {TabList} from '../TabList.js';
+import {Utils} from '../lib/Utils.js';
+import {CommonUtils} from './common.js';
+import {TabList} from '../lib/TabList.js';
 
 const tabs = new TabList();
 

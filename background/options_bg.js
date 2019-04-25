@@ -1,6 +1,6 @@
 'use strict';
 
-import {BtsOptions} from '../options_lib.js';
+import {BtsOptions} from '../lib/BtsOptions.js';
 
 const options = new BtsOptions();
 

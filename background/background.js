@@ -1,15 +1,15 @@
 "use strict";
 
-import {Utils} from './utils.js';
+import {Utils} from '../lib/Utils.js';
 import {CommonUtils} from './common.js';
-import {getCurrentTab} from './aspects/tabs.js';
-import {} from './aspects/resources.js';
+import {getCurrentTab} from './tabs.js';
+import {} from './resources.js';
 import {
     suspendTabPhase2,
     suspendCurrentTab,
     suspendCurrentWindow,
     unsuspendCurrentWindow
-} from './aspects/suspension.js';
+} from './suspension.js';
 
 const console = chrome.extension.getBackgroundPage().console; // really needed?
 

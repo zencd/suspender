@@ -1,6 +1,6 @@
 "use strict";
 
-import {Utils} from '../utils.js';
+import {Utils} from '../lib/Utils.js';
 import {suspendTab} from './suspension.js';
 
 initCommandsAspect();

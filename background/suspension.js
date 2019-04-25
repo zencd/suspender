@@ -1,8 +1,8 @@
 "use strict";
 
-import {Utils} from '../utils.js';
-import {CommonUtils} from '../common.js';
-import {EXT_URLS} from '../background.js';
+import {Utils} from '../lib/Utils.js';
+import {CommonUtils} from './common.js';
+import {EXT_URLS} from './background.js';
 import {getTabs} from './tabs.js';
 import {getOptions} from './options_bg.js';
 import {addRedirect} from './webrequest.js';
