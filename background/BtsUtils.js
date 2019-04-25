@@ -8,7 +8,7 @@ const SUSPENDED_FAVICON_OPACITY = 0.4;
 /**
  * Extension specific utils.
  */
-export class CommonUtils {
+export class BtsUtils {
 
     static MESSAGE_GET_PAGE_INFO = 'MESSAGE_GET_PAGE_INFO';
     static MESSAGE_TAKE_H2C_SCREENSHOT = 'MESSAGE_TAKE_H2C_SCREENSHOT';

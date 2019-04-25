@@ -1,7 +1,7 @@
 "use strict";
 
 import {Utils} from '../lib/Utils.js';
-import {CommonUtils} from './common.js';
+import {BtsUtils} from './BtsUtils.js';
 import {TabList} from '../lib/TabList.js';
 
 const tabs = new TabList();
@@ -46,7 +46,7 @@ function inspectExistingTabs() {
 }
 
 function injectContentScriptIntoTab(tab) {
-    if (CommonUtils.isUrlSuspendable(tab.url)) {
+    if (BtsUtils.isUrlSuspendable(tab.url)) {
         console.debug("injecting CS into existing tab", tab.url);
         Utils.injectScriptsIntoTab(tab.id, csInfo.runAt, csInfo.files);
     }

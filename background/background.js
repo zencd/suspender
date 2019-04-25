@@ -1,7 +1,7 @@
 "use strict";
 
 import {Utils} from '../lib/Utils.js';
-import {CommonUtils} from './common.js';
+import {BtsUtils} from './BtsUtils.js';
 import {getCurrentTab} from './tabs.js';
 import {} from './resources.js';
 import {
@@ -25,7 +25,7 @@ export const EXT_URLS = {
 extBg = {
     urls: EXT_URLS,
     Utils: Utils,
-    CommonUtils: CommonUtils,
+    CommonUtils: BtsUtils,
     suspendCurrentTab: suspendCurrentTab,
     suspendCurrentWindow: suspendCurrentWindow,
     unsuspendCurrentWindow: unsuspendCurrentWindow,
@@ -41,11 +41,11 @@ function initAll() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-        if (msg.message === CommonUtils.MESSAGE_H2C_SCREENSHOT_READY) {
+        if (msg.message === BtsUtils.MESSAGE_H2C_SCREENSHOT_READY) {
             const screenshotId = Utils.uidString();
             const bg = msg.backgroundColor;
             suspendTabPhase2(msg.tabId, screenshotId, bg, msg.imageDataUri);
-        } else if (msg.message === CommonUtils.MESSAGE_LOG_TO_BG) {
+        } else if (msg.message === BtsUtils.MESSAGE_LOG_TO_BG) {
             console.log.apply(null, msg.args);
         }
     });

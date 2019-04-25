@@ -1,6 +1,6 @@
 "use strict";
 
-import {CommonUtils} from "./common.js";
+import {BtsUtils} from "./BtsUtils.js";
 import {addThisSiteToWhitelist} from './options_bg.js';
 import {discardDataUriTabs} from './tabs.js';
 import {suspendTab, suspendWindow, unsuspendWindow} from './suspension.js';
@@ -95,7 +95,7 @@ function initContextMenu() {
         title: "Debug Tabs",
         contexts: contexts,
         onclick: (info, tab) => {
-            CommonUtils.debugTabs();
+            BtsUtils.debugTabs();
         }
     });
     makeContextMenu({

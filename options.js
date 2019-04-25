@@ -1,6 +1,6 @@
 'use strict';
 
-import {CommonUtils} from './background/common.js';
+import {BtsUtils} from './background/BtsUtils.js';
 import {qs, qsa} from './lib/Utils.js';
 import {BtsOptions} from './lib/BtsOptions.js';
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-CommonUtils.makeSpecialLinkClickable(qs('#open-keyboard-shortcuts'), true);
+BtsUtils.makeSpecialLinkClickable(qs('#open-keyboard-shortcuts'), true);
 
 function onOptionsPersisted() {
     clearTimeout(notifierFadeOutTimer);

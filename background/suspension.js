@@ -1,7 +1,7 @@
 "use strict";
 
 import {Utils} from '../lib/Utils.js';
-import {CommonUtils} from './common.js';
+import {BtsUtils} from './BtsUtils.js';
 import {EXT_URLS} from './background.js';
 import {getTabs} from './tabs.js';
 import {getOptions} from './options_bg.js';
@@ -33,7 +33,7 @@ function findOldTabsAndSuspendThem() {
         const tab = tt[i];
         const diffSec = (now - tab.lastSeen) / 1000;
         const timeoutOk = tab.lastSeen && (diffSec >= options.suspendTimeout) && (options.suspendTimeout > 0);
-        const schemaOk = CommonUtils.isUrlSuspendable(tab.url);
+        const schemaOk = BtsUtils.isUrlSuspendable(tab.url);
         const activeTabOk = options.suspendActive || !tab.active;
         const pinnedOk = options.suspendPinned || !tab.pinned;
         const audibleOk = options.suspendAudible || !tab.audible;
@@ -48,7 +48,7 @@ function findOldTabsAndSuspendThem() {
 }
 
 export function suspendTab(tab, isActiveTab) {
-    if (!CommonUtils.isUrlSuspendable(tab.url)) {
+    if (!BtsUtils.isUrlSuspendable(tab.url)) {
         return;
     }
 
@@ -65,7 +65,7 @@ function suspendForegroundTab(tab) {
     const screenshotId = Utils.uidString();
     captureVisibleTab_Scale_Persist(tab, screenshotId);
 
-    chrome.tabs.sendMessage(tab.id, {message: CommonUtils.MESSAGE_GET_PAGE_INFO}, function (response) {
+    chrome.tabs.sendMessage(tab.id, {message: BtsUtils.MESSAGE_GET_PAGE_INFO}, function (response) {
         console.log("response", response);
         const bg = response.backgroundColor;
         suspendTabPhase2(tab.id, screenshotId, bg, null);
@@ -75,7 +75,7 @@ function suspendForegroundTab(tab) {
 function suspendBackgroundTab(tab) {
     const msg = {
         tabId: tab.id,
-        message: CommonUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
+        message: BtsUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
         suspendFilledForms: getOptions().suspendFilledForms,
     };
     console.log("sending msg to tab", msg);
@@ -108,7 +108,7 @@ function captureVisibleTab_Scale_Persist(tab, screenshotId) {
 
 function scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, scaleDown) {
     const nowMillis = new Date() - 0; // GMT epoch millis
-    CommonUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
+    BtsUtils.scaleDownRetinaImage(scaleDown, imageDataUri, (imageDataUri2) => {
         const storageItems = {
             ['screenshot.id=' + screenshotId]: {
                 created: nowMillis,
@@ -163,8 +163,8 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
     const bgDarkenRgb = Utils.alterBrightness(bgRgb, -0.75);
     const bgDarkenStr = bgDarkenRgb.join(',');
 
-    const faviconUrl = CommonUtils.getChromeFaviconUrl(pageUrl);
-    CommonUtils.loadAndProcessFavicon(faviconUrl, async (faviconDataUri) => {
+    const faviconUrl = BtsUtils.getChromeFaviconUrl(pageUrl);
+    BtsUtils.loadAndProcessFavicon(faviconUrl, async (faviconDataUri) => {
         // todo do replace more effectively, probably via joining a set of strings
         let tplVars = {
             '$BG_COLOR$': bgColor,
