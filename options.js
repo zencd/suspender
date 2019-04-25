@@ -1,6 +1,6 @@
 'use strict';
 
-import {BtsUtils} from './background/BtsUtils.js';
+import {BtsUtils} from './bg/BtsUtils.js';
 import {qs, qsa} from './lib/Utils.js';
 import {BtsOptions} from './lib/BtsOptions.js';
 
