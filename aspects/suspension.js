@@ -5,7 +5,7 @@ import {CommonUtils} from '../common.js';
 import {EXT_URLS} from '../background.js';
 import {getTabs} from './tabs.js';
 import {getOptions} from './opts.js';
-import {addToSuspensionMap} from './webrequest.js';
+import {addRedirect} from './webrequest.js';
 import {getParkCssText, getParkHtmlText} from './resources.js';
 
 const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
@@ -162,7 +162,7 @@ function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
         };
         chrome.storage.local.set(storageItems, () => {
         });
-        addToSuspensionMap(redirUrl, tab.id, htmlDataUri, nowMillis);
+        addRedirect(redirUrl, tab.id, htmlDataUri, nowMillis);
         console.log("redirecting to temp page at", (new Date() - extBg.startTime));
         chrome.tabs.update(tab.id, {url: redirUrl});
     });

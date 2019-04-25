@@ -3,7 +3,7 @@
 import {EXT_URLS} from '../background.js';
 import {getTabs} from './tabs.js';
 
-const suspensionMap = {};
+const redirects = {}; // url => object
 
 initWebRequestAspect();
 
@@ -22,8 +22,8 @@ function initWebRequestListeners() {
     );
 }
 
-export function addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis) {
-    suspensionMap[redirUrl] = {
+export function addRedirect(redirUrl, tabId, htmlDataUri, nowMillis) {
+    redirects[redirUrl] = {
         tabId: tabId,
         htmlDataUri: htmlDataUri,
         date: nowMillis,
@@ -31,12 +31,12 @@ export function addToSuspensionMap(redirUrl, tabId, htmlDataUri, nowMillis) {
 }
 
 function onBeforeRequest(details) {
-    const suspensionInfo = suspensionMap[details.url];
-    if (suspensionInfo) {
-        const dataUri = suspensionInfo.htmlDataUri;
-        const tabId = suspensionInfo.tabId;
+    const redir = redirects[details.url];
+    if (redir) {
+        const dataUri = redir.htmlDataUri;
+        const tabId = redir.tabId;
         if (dataUri) {
-            delete suspensionMap[details.url];
+            delete redirects[details.url];
             const myTab = getTabs().getTab(tabId);
             if (myTab) {
                 myTab.suspended = true;
