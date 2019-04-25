@@ -28,7 +28,7 @@ function findOldTabsAndSuspendThem() {
     const tt = getTabs().getAllTabs();
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
-        const doSuspend = isTabSuspendable(tab, true, now);
+        const doSuspend = isTabSuspendable(tab, true, true, now);
         // const doSuspend = (tab.url === 'https://zencd.github.io/charted/');
         // console.log("tab", tab.url, "suspending?", doSuspend);
         if (doSuspend) {
@@ -37,15 +37,18 @@ function findOldTabsAndSuspendThem() {
     }
 }
 
-function isTabSuspendable(tab, considerTime, now) {
+function isTabSuspendable(tab, considerActiveTab, considerTime, now) {
     const options = getOptions();
     let timeoutOk = true;
     if (considerTime) {
         const diffSec = (now - tab.lastSeen) / 1000;
         timeoutOk = tab.lastSeen && (diffSec >= options.suspendTimeout) && (options.suspendTimeout > 0);
     }
+    let activeTabOk = true;
+    if (considerActiveTab) {
+        activeTabOk = options.suspendActive || !tab.active;
+    }
     const schemaOk = BtsUtils.isUrlSuspendable(tab.url);
-    const activeTabOk = options.suspendActive || !tab.active;
     const pinnedOk = options.suspendPinned || !tab.pinned;
     const audibleOk = options.suspendAudible || !tab.audible;
     const urlOk = BtsUtils.isUrlSuspendable(tab.url);
@@ -204,7 +207,7 @@ export function suspendWindow(windowId) {
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
         if (tab.windowId === windowId) {
-            if (isTabSuspendable(tab, false)) {
+            if (isTabSuspendable(tab, false, false)) {
                 suspendTab(tab);
             }
         }
