@@ -12,8 +12,6 @@ const OLD_TAB_CHECK_INTERVAL_MILLIS = 64 * 1000;
 
 const JPEG_QUALITY = 40;
 
-const INJECT_CONTENT_SCRIPT_AT = 'document_idle';
-
 initSuspensionAspect();
 
 function initSuspensionAspect() {
