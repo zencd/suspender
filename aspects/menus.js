@@ -1,6 +1,5 @@
 "use strict";
 
-import {Utils} from '../utils.js';
 import {CommonUtils} from "../common.js";
 import {addThisSiteToWhitelist} from './opts.js';
 import {discardDataUriTabs} from './tabs.js';

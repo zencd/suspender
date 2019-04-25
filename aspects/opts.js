@@ -1,8 +1,6 @@
 'use strict';
 
-import {Utils} from '../utils.js';
 import {Options} from '../options_lib.js';
-import {EXT_URLS} from "../background.js";
 
 const options = new Options();
 
