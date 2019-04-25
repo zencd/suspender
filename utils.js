@@ -241,3 +241,7 @@ export class ResourceOnDemand {
         }
     }
 }
+
+export const qs = Utils.qs;
+
+export const qsa = Utils.qsa;
