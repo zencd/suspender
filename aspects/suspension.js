@@ -162,7 +162,7 @@ function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
         };
         chrome.storage.local.set(storageItems, () => {
         });
-        addRedirect(redirUrl, tab.id, htmlDataUri, nowMillis);
+        addRedirect(redirUrl, tab.id, htmlDataUri);
         console.log("redirecting to temp page at", (new Date() - extBg.startTime));
         chrome.tabs.update(tab.id, {url: redirUrl});
     });

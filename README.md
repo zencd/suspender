@@ -47,6 +47,7 @@
 
 ## done
 
++ a job to remove possible stale redirects 
 + browser action: show options: try to switch to existing tab first
 + parking: wait till screenshot get appeared in DB (because it is persisted asynchronously now)
 + don't wait till screenshot is finished to store into DB

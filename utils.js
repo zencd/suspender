@@ -5,6 +5,10 @@
  */
 export class Utils {
 
+    static minutes(amount) {
+        return amount * 60 * 1000;
+    }
+
     static iteratePopulatedWindows(onWindow) {
         chrome.windows.getAll({'populate': true}, function (windows) {
             for (let i in windows) {

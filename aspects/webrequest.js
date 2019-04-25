@@ -2,6 +2,7 @@
 
 import {EXT_URLS} from '../background.js';
 import {getTabs} from './tabs.js';
+import {Utils} from '../utils.js';
 
 const redirects = {}; // url => object
 
@@ -9,6 +10,7 @@ initWebRequestAspect();
 
 function initWebRequestAspect() {
     initWebRequestListeners();
+    initRedirectInspectorJob();
 }
 
 function initWebRequestListeners() {
@@ -22,11 +24,11 @@ function initWebRequestListeners() {
     );
 }
 
-export function addRedirect(redirUrl, tabId, htmlDataUri, nowMillis) {
+export function addRedirect(redirUrl, tabId, htmlDataUri) {
     redirects[redirUrl] = {
         tabId: tabId,
         htmlDataUri: htmlDataUri,
-        date: nowMillis,
+        date: new Date() - 0,
     };
 }
 
@@ -46,4 +48,24 @@ function onBeforeRequest(details) {
         }
     }
     return {};
+}
+
+/**
+ * periodically inspects redirects which never happened
+ * aimed to avoid memory leaks
+ */
+function initRedirectInspectorJob() {
+    const now = new Date() - 0;
+    setInterval(() => {
+        console.debug("initRedirectInspectorJob...");
+        for (let url in redirects) {
+            if (redirects.hasOwnProperty(url)) {
+                const redir = redirects[url];
+                if (redir.date + Utils.minutes(5) > now) {
+                    console.debug("initRedirectInspectorJob: removed a stale redirect");
+                    delete redirects[url];
+                }
+            }
+        }
+    }, Utils.minutes(30));
 }
