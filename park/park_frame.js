@@ -2,7 +2,7 @@
 
 const extBg = chrome.extension.getBackgroundPage()['extBg'];
 let numTries = 0; // num of attempts to obtain screenshot
-console.log("park-frame.js started at", (new Date() - extBg.startTime));
+console.log("park_frame.js started at", (new Date() - extBg.startTime));
 addMessageListener();
 
 function fetchAndSetImage(screenshotId) {

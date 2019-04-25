@@ -57,9 +57,9 @@
     }
 
     function getFrameUrl() {
-        // return url like "chrome-extension://xxx/park/park-frame.html"
+        // return url like "chrome-extension://xxx/park/park_frame.html"
         const $script = document.querySelector('script[src^="chrome-extension:"]');
-        return $script.src.substring(0, $script.src.indexOf('/', 20)) + '/park/park-frame.html';
+        return $script.src.substring(0, $script.src.indexOf('/', 20)) + '/park/park_frame.html';
     }
 
     const $screenshot = document.querySelector('.screenshot');

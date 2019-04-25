@@ -1,1 +1,0 @@
-console.log("park-empty.js started at", new Date() - startTime);

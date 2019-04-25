@@ -16,7 +16,7 @@ const console = chrome.extension.getBackgroundPage().console; // really needed?
 export const EXT_URLS = {
     parkHtml: chrome.runtime.getURL('park/park.html'),
     parkCss: chrome.runtime.getURL('park/park.css'),
-    parkFrame: chrome.runtime.getURL('park/park-frame.html'),
+    parkFrame: chrome.runtime.getURL('park/park_frame.html'),
     parkJs: chrome.runtime.getURL('park/park.js'),
     tempParkPage: chrome.runtime.getURL('/park.html'),
     optionsHtml: chrome.runtime.getURL('/options.html'),
