@@ -1,7 +1,11 @@
 'use strict';
 
 import {CommonUtils} from './common.js';
+import {Utils} from './utils.js';
 import {Options} from './options_lib.js';
+
+const qs = Utils.qs;
+const qsa = Utils.qsa;
 
 const options = new Options(onOptionsPersisted);
 

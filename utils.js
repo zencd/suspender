@@ -241,11 +241,3 @@ export class ResourceOnDemand {
         }
     }
 }
-
-if (window.qs === undefined) {
-    window.qs = Utils.qs;
-}
-
-if (window.qsa === undefined) {
-    window.qsa = Utils.qsa;
-}
