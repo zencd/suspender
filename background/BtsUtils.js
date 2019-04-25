@@ -6,7 +6,7 @@ import {getTabs} from "./tabs.js";
 const SUSPENDED_FAVICON_OPACITY = 0.4;
 
 /**
- * Extension specific utils.
+ * Extension specific utils and constants.
  */
 export class BtsUtils {
 
