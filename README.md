@@ -3,9 +3,6 @@
 ## todo p1
 
 - implement chrome.windows.onFocusChanged
-- suspend all
-- remove screenshots from storage when tab closed
-- remove a tab - it still stays in the tab list (debug tabs)
 - don't suspend tabs which needs "Confirm Form Resubmission" (POST)
 - call chrome.tabs.discard() on suspended tabs after timeout
 - encode variables passed to template `park.html`
@@ -13,7 +10,6 @@
 - whitelist
 - check how redirect to data uri works offline
 - try inject large lib H2C asynchronously
-- inject content scripts into existing tabs
 - after laptop's lid opened: make sure to add some additional timeout
 
 ## todo p2
@@ -22,32 +18,32 @@
 
 ## todo p3
 
+- all jobs: start using an "already running" flag to prevent interference
 - pre-build parking html template for the zip version
 - implement error handling/reporting?
-- the 19px browser_action icon gets auto resized on Windows
 - suspend current tab: it's unclear the process has started, with a shortcut especially
 - a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
-- there is a Chrome's feature: multi-tab selection
-- try use Chrome's image caching to pick screenshot from cache first, and then from `storage` if missed
+- check: Chrome's feature: multi-tab selection
 - consider onSuspend event: https://developer.chrome.com/extensions/runtime#event-onSuspend
-- use requestIdleCallback() for bg tasks
-- learn about: queueMicrotask() https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
 - maybe there is a better place for 500KB objects than local storage
 - maybe check `suspensionMap` periodically for old entries to avoid memory leaks
-- try find safe colors for gradient - currently it looks distinguishably stepped
+- try find safe colors for gradient (maybe prebuilt image) - currently it looks distinguishably stepped
+- try obtain favicon from the actual html first
 
 ## bugs
 
-- https://support.google.com/chrome/thread/2047906 "The message port closed"
-- currently using domain root's favicon, but pages could use their own ones: https://vk.com/im?sel=c26
-- Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
 - uninstall the ext, install it again - "unsuspend window" has no effect as db removed
 
 ## done
 
++ wont fix: remove screenshots from storage when tab closed
++ inject content scripts into existing tabs
++ Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
++ https://support.google.com/chrome/thread/2047906 "The message port closed"
++ suspend all
 + a job to remove possible stale redirects 
 + browser action: show options: try to switch to existing tab first
 + parking: wait till screenshot get appeared in DB (because it is persisted asynchronously now)

@@ -15,10 +15,10 @@
   "browser_action": {
     "default_icon": {
       "16": "icons/a/zz16c.png",
-      "19": "icons/zz19.png",
-      "20": "icons/zz20.png",
-      "32": "icons/a/zz32.png",
-      "38": "icons/zz38.png",
+      //"19": "icons/zz19.png",
+      //"20": "icons/zz20.png",
+      "32": "icons/a/zz32c.png",
+      //"38": "icons/zz38.png",
       "40": "icons/zz40.png"
     },
     "default_title": "Better Suspender",
