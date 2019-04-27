@@ -2,6 +2,7 @@
 
 ## todo p1
 
+- test it with multiple windows
 - implement chrome.windows.onFocusChanged
 - don't suspend tabs which needs "Confirm Form Resubmission" (POST)
 - call chrome.tabs.discard() on suspended tabs after timeout
@@ -21,17 +22,16 @@
 - all jobs: start using an "already running" flag to prevent interference
 - pre-build parking html template for the zip version
 - implement error handling/reporting?
-- suspend current tab: it's unclear the process has started, with a shortcut especially
+- idea: add some visual indication the suspension process has started
 - a feature to move really old tabs to bookmarks
 - check for presence of TGS because it hooks on discard()
 - make unique extension icons
 - when user unfreezes a tab make sure the content is still there, and warn maybe
 - check: Chrome's feature: multi-tab selection
-- consider onSuspend event: https://developer.chrome.com/extensions/runtime#event-onSuspend
 - maybe there is a better place for 500KB objects than local storage
-- maybe check `suspensionMap` periodically for old entries to avoid memory leaks
 - try find safe colors for gradient (maybe prebuilt image) - currently it looks distinguishably stepped
 - try obtain favicon from the actual html first
+- park.js starts executing in 60+ ms - try reduce it
 
 ## bugs
 
@@ -39,6 +39,8 @@
 
 ## done
 
++ not needed: consider onSuspend event: https://developer.chrome.com/extensions/runtime#event-onSuspend
++ maybe check `suspensionMap` periodically for old entries to avoid memory leaks
 + wont fix: remove screenshots from storage when tab closed
 + inject content scripts into existing tabs
 + Unchecked runtime.lastError: Cannot access contents of url "http://127.0.0.1:5000/". Extension manifest must request permission to access this host.
