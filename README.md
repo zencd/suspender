@@ -19,6 +19,7 @@
 
 ## todo p3
 
+- find favicon via tag like <link rel="icon" href="https://***/4c23c.ico">
 - all jobs: start using an "already running" flag to prevent interference
 - pre-build parking html template for the zip version
 - implement error handling/reporting?
