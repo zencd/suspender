@@ -13,11 +13,9 @@
         Options
         <span class="version"></span>
     </h1>
-    <dl>
-        <dt>
-            <label for="suspend-timeout">Suspend tabs after</label>
-        </dt>
-        <dd>
+
+    <div class="option-row">
+        <label for="suspend-timeout">Suspend tabs after:
             <select id="suspend-timeout" data-storage-name="suspendTimeout">
                 <option value="0">Never</option>
                 <option value="60">1 min</option>
@@ -31,82 +29,44 @@
                 <option value="172800">2 day</option>
                 <option value="604800">7 day</option>
             </select>
-        </dd>
+        </label>
+    </div>
 
-        <dt>
-            <label for="suspend-pinned">Suspend pinned tabs</label>
-        </dt>
-        <dd>
+    <div class="option-row">
+        <label for="suspend-pinned">
             <input type="checkbox" id="suspend-pinned" data-storage-name="suspendPinned">
-        </dd>
+            Suspend pinned tabs</label>
+    </div>
 
-<!--
-        <dt>
-            <label for="suspend-unsaved-form">Suspend tabs that contain unsaved form inputs</label>
-        </dt>
-        <dd>
-            <input type="checkbox" id="suspend-unsaved-form" data-storage-name="suspendUnsavedForm" disabled>
-        </dd>
--->
-
-        <dt>
-            <label for="suspend-active">Suspend active tabs</label>
-        </dt>
-        <dd>
+    <div class="option-row">
+        <label for="suspend-active">
             <input type="checkbox" id="suspend-active" data-storage-name="suspendActive">
-        </dd>
+            Suspend active tabs</label>
+    </div>
 
-        <dt>
-            <label for="suspend-audible">Suspend audible tabs</label>
-        </dt>
-        <dd>
+    <div class="option-row">
+        <label for="suspend-audible">
             <input type="checkbox" id="suspend-audible" data-storage-name="suspendAudible">
-        </dd>
+            Suspend audible tabs</label>
+    </div>
 
-        <dt>
-            <label for="suspend-forms">Suspend filled forms</label>
-        </dt>
-        <dd>
+    <div class="option-row">
+        <label for="suspend-forms">
             <input type="checkbox" id="suspend-forms" data-storage-name="suspendFilledForms">
-        </dd>
+            Suspend filled forms</label>
+    </div>
 
-        <!--
-        <dt>
-            <label for="suspend-offline">Suspend tabs when offline</label>
-        </dt>
-        <dd>
-            <input type="checkbox" id="suspend-offline" data-storage-name="suspendOffline" disabled>
-        </dd>
+    <div class="option-row">
+        <label for="white-list">White list</label>
+        <br>
+        <textarea id="white-list"></textarea>
+    </div>
 
-                <dt>
-                    <label for="power-source">Suspend tabs when connected to power source</label>
-                </dt>
-                <dd>
-                    <input type="checkbox" id="power-source">
-                </dd>
+    <div class="option-row">
+        <a href="chrome://extensions/shortcuts" id="open-keyboard-shortcuts">Keyboard Shortcuts</a>
+    </div>
 
-        <dt>
-            <label for="unsuspend-on-view">Automatically unsuspend tab when it is viewed</label>
-        </dt>
-        <dd>
-            <input type="checkbox" id="unsuspend-on-view" data-storage-name="unsuspendOnView" disabled>
-        </dd>
-        -->
 
-        <dt>
-            <label for="white-list">White list</label>
-        </dt>
-        <dd>
-            <textarea id="white-list"></textarea>
-        </dd>
-
-        <dt>
-            Shortcuts
-        </dt>
-        <dd>
-            <a href="chrome://extensions/shortcuts" id="open-keyboard-shortcuts">Shortcuts</a>
-        </dd>
-    </dl>
 </div>
 
 <div class="notify">

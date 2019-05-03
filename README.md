@@ -9,8 +9,6 @@
 - encode variables passed to template `park.html`
 - implement a job to cleanup unused local storage objects
 - whitelist
-- check how redirect to data uri works offline
-- try inject large lib H2C asynchronously
 - after laptop's lid opened: make sure to add some additional timeout
 
 ## todo p2
@@ -19,6 +17,7 @@
 
 ## todo p3
 
+- try inject large lib H2C asynchronously
 - all jobs: start using an "already running" flag to prevent interference
 - pre-build parking html template for the zip version
 - implement error handling/reporting?
@@ -39,6 +38,7 @@
 
 ## done
 
++ check how redirect to data uri works offline (works ok)
 + not needed: consider onSuspend event: https://developer.chrome.com/extensions/runtime#event-onSuspend
 + maybe check `suspensionMap` periodically for old entries to avoid memory leaks
 + wont fix: remove screenshots from storage when tab closed

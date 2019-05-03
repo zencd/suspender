@@ -12,13 +12,17 @@ html, body {
 }
 
 h1 {
-	margin-bottom: 40px;
+	margin-bottom: 30px;
     color: #444;
 }
 
 .version {
     font-weight: normal;
     font-size: 14px;
+}
+
+.option-row {
+    margin-top: 20px;
 }
 
 dt {
