@@ -14,7 +14,7 @@ disableLabelsForDisabledElements();
 
 const manifest = chrome.runtime.getManifest();
 document.title = manifest.name;
-qs('h1').childNodes[0].nodeValue = manifest.name + ' '; // set text node
+qs('h1 .text').innerText = manifest.name + ' ';
 qs('.version').innerText = '' + manifest.version;
 
 document.addEventListener('DOMContentLoaded', function () {

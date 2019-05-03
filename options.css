@@ -25,6 +25,11 @@ h1 {
     margin-top: 20px;
 }
 
+#white-list {
+    height: 45px;
+    width: 300px;
+}
+
 dt {
     font: 16px sans-serif;
     margin-top: 20px;
