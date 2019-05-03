@@ -76,10 +76,16 @@ function suspendForegroundTab(tab) {
     const screenshotId = Utils.uidString();
     captureVisibleTab_Scale_Persist(tab, screenshotId);
 
-    chrome.tabs.sendMessage(tab.id, {message: BtsUtils.MESSAGE_GET_PAGE_INFO}, function (response) {
-        console.log("response", response);
-        const bg = response.backgroundColor;
-        suspendTabPhase2(tab.id, screenshotId, bg, null);
+    const msg = {message: BtsUtils.MESSAGE_GET_PAGE_INFO};
+    console.debug("sending msg to tab", tab.id, msg);
+    chrome.tabs.sendMessage(tab.id, msg, function (response) {
+        if (response) {
+            console.debug("response", response);
+            const bg = response.backgroundColor;
+            suspendTabPhase2(tab.id, screenshotId, bg, null);
+        } else {
+            console.debug("tab cannot be suspended: the tab failed to respond, 'no internet' may be a cause");
+        }
     });
 }
 
@@ -89,7 +95,7 @@ function suspendBackgroundTab(tab) {
         message: BtsUtils.MESSAGE_TAKE_H2C_SCREENSHOT,
         suspendFilledForms: getOptions().suspendFilledForms,
     };
-    console.log("sending msg to tab", msg);
+    console.debug("sending msg to tab", tab.id, msg);
     chrome.tabs.sendMessage(tab.id, msg);
     // the async answer gonna come to the message listener
     // although the answer may not come if the tab cannot be suspended
