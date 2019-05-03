@@ -17,6 +17,7 @@
 
 ## todo p3
 
+- find favicon via tag like <link rel="icon" href="https://***/4c23c.ico">
 - try inject large lib H2C asynchronously
 - all jobs: start using an "already running" flag to prevent interference
 - pre-build parking html template for the zip version
