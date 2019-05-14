@@ -8,10 +8,10 @@ import {suspendTab, suspendWindow, unsuspendWindow} from './suspension.js';
 initMenus();
 
 function initMenus() {
-    chrome.runtime.onInstalled.addListener(function () {
-        initContextMenu();
-        initBrowserActionMenu();
-    });
+    initContextMenu();
+    initBrowserActionMenu();
+    // chrome.runtime.onInstalled.addListener(function () {
+    // });
 }
 
 function initBrowserActionMenu() {

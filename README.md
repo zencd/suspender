@@ -14,6 +14,7 @@
 ## todo p2
 
 - parked page: selecting text with mouse leads to tab unsuspended
+- open an url with no internet, reload ext => Unchecked runtime.lastError: Cannot access contents of url "chrome-error://chromewebdata/". Extension manifest must request permission to access this host.
 
 ## todo p3
 
