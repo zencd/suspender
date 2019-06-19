@@ -18,8 +18,9 @@
                 console.log("BTS: formFilled", formFilled);
                 console.log("BTS: msg.suspendFilledForms", msg.suspendFilledForms);
                 if (!formFilled || msg.suspendFilledForms === true) {
-                    logToBg("gonna suspend tab", "formFilled:", formFilled, "suspendFilledForms:", msg.suspendFilledForms, document.location.href);
+                    logToBg("gonna suspend tab", "formFilled:", formFilled, "suspendFilledForms:", msg.suspendFilledForms, document.location.href, new Date());
                     takeScreenshot(canvas => {
+                        logToBg("h2c screenshot taken");
                         chrome.runtime.sendMessage(null, {
                             message: 'MESSAGE_H2C_SCREENSHOT_READY',
                             tabId: msg.tabId,

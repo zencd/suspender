@@ -11,7 +11,7 @@ import {
     unsuspendCurrentWindow
 } from './suspension.js';
 
-const console = chrome.extension.getBackgroundPage().console; // really needed?
+// const console = chrome.extension.getBackgroundPage().console; // really needed?
 
 export const EXT_URLS = {
     parkHtml: chrome.runtime.getURL('park/park.html'),
@@ -41,6 +41,7 @@ function initAll() {
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+        console.debug("BG got message:", msg);
         if (msg.message === BtsUtils.MESSAGE_H2C_SCREENSHOT_READY) {
             const screenshotId = Utils.uidString();
             const bg = msg.backgroundColor;

@@ -91,21 +91,24 @@ export class BtsUtils {
 
     }
 
-    static debugTabs() {
+    static debugTabs(title) {
         const tt = getTabs().getAllTabs();
-        console.log("===== DEBUG " + tt.length + " TABS =====");
+        console.log("===== DEBUG " + tt.length + " TABS #" + getTabs().uid + " " + title + " =====");
         for (let i = 0; i < tt.length; i++) {
             const tab = tt[i];
             const ls = Math.floor((new Date() - tab.lastSeen) / 1000);
-            console.log("" + (i + 1) + ".", tab.id, Utils.limit(tab.url, 60));
+            console.log("" + (i + 1) + ".", tab.id, Utils.limit(tab.url, 80));
             console.log(" ", (tab.suspended ? 'Su' : '_'), (tab.active ? 'Ac' : '_'), (tab.pinned ? 'Pi' : '_'), (tab.audible ? 'Au' : '_'), (tab.discarded ? 'Di' : '_'), ls, "s");
-            console.log(" ", tab);
+            console.log(" url:", tab.url);
+            console.log(" title:", tab.title);
+            console.log(" ", Utils.toStringStringDict(tab));
             if (!tab.url) {
                 chrome.tabs.get(tab.id, (chrTab) => {
                     console.warn("BAD TAB", chrTab);
                 });
             }
         }
+        console.log("===== DEBUG TABS END =====");
     }
 
 }

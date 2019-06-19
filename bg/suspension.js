@@ -26,12 +26,14 @@ function initTabWatchTimer() {
 function findOldTabsAndSuspendThem() {
     const now = new Date() - 0;
     const tt = getTabs().getAllTabs();
+    BtsUtils.debugTabs("findOldTabsAndSuspendThem");
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
         const doSuspend = isTabSuspendable(tab, true, true, now);
         // const doSuspend = (tab.url === 'https://zencd.github.io/charted/');
-        // console.log("tab", tab.url, "suspending?", doSuspend);
+        // console.log("tab", tab.url, "suspending?", doSuspend, tab.title);
         if (doSuspend) {
+            console.log("tab", tab.title, tab);
             suspendTab(tab, false);
         }
     }
@@ -61,7 +63,7 @@ export function suspendTab(tab, isActiveTab) {
         return;
     }
 
-    console.log("suspending tab", tab);
+    console.log("suspending tab", Utils.toStringStringDict(tab));
 
     extBg.startTime = new Date() - 0; // for debug only
 
@@ -102,7 +104,9 @@ function suspendBackgroundTab(tab) {
 }
 
 export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageDataUri) {
+    BtsUtils.debugTabs("suspendTabPhase2");
     const tab = getTabs().getTab(tabId);
+    console.log("suspendTabPhase2:", Utils.toStringStringDict(tab));
     if (tab) {
         if (imageDataUri) { // H2C
             scaleAndStoreScreenshot(tab, screenshotId, imageDataUri, false);
@@ -209,6 +213,7 @@ function getSuspendedPageContent(screenshotId, pageUrl, pageTitle, bgColor, call
 
 export function suspendWindow(windowId) {
     console.debug("suspendWindow", "windowId:", windowId);
+    BtsUtils.debugTabs("suspendWindow " + windowId);
     const tt = getTabs().getAllTabs();
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
