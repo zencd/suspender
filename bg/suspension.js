@@ -26,7 +26,7 @@ function initTabWatchTimer() {
 function findOldTabsAndSuspendThem() {
     const now = new Date() - 0;
     const tt = getTabs().getAllTabs();
-    BtsUtils.debugTabs("findOldTabsAndSuspendThem");
+    // BtsUtils.debugTabs("findOldTabsAndSuspendThem");
     for (let i = 0; i < tt.length; i++) {
         const tab = tt[i];
         const doSuspend = isTabSuspendable(tab, true, true, now);

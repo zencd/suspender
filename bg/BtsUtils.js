@@ -15,8 +15,12 @@ export class BtsUtils {
     static MESSAGE_H2C_SCREENSHOT_READY = 'MESSAGE_H2C_SCREENSHOT_READY';
     static MESSAGE_LOG_TO_BG = 'MESSAGE_LOG_TO_BG';
 
+    static PROTO_PREFIX_HTTP = 'http://';
+    static PROTO_PREFIX_HTTPS = 'https://';
+    static PROTO_PREFIX_FILE = 'file:///';
+
     static isUrlSuspendable(url) {
-        return url && (url.startsWith('http://') || url.startsWith('https://'));
+        return url && (url.startsWith(this.PROTO_PREFIX_HTTP) || url.startsWith(this.PROTO_PREFIX_HTTPS) || url.startsWith(this.PROTO_PREFIX_FILE));
     }
 
     static scaleDownRetinaImage(scaleDown, origDataUri, onResult) {
