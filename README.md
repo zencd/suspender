@@ -33,7 +33,7 @@
 - try find safe colors for gradient (maybe prebuilt image) - currently it looks distinguishably stepped
 - try obtain favicon from the actual html first
 - park.js starts executing in 60+ ms - try reduce it
-- parking page: the "file" protocol does not allow following a link - make sure it works ok
++ parking page: make sure the "file" protocol works ok
 
 ## bugs
 

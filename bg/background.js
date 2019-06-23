@@ -8,10 +8,13 @@ import {
     suspendTabPhase2,
     suspendCurrentTab,
     suspendCurrentWindow,
-    unsuspendCurrentWindow
+    unsuspendCurrentWindow,
+    captureVisibleTab_Scale_Persist
 } from './suspension.js';
 
 // const console = chrome.extension.getBackgroundPage().console; // really needed?
+
+const SCREENSHOT_THREAD_INTERVAL = Utils.getRandomInt(60, 70) * 1000;
 
 export const EXT_URLS = {
     parkHtml: chrome.runtime.getURL('park/park.html'),
@@ -37,17 +40,23 @@ initAll();
 
 function initAll() {
     initMessageListener();
+    initScreenshotThread();
 }
 
 function initMessageListener() {
     chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
         console.debug("BG got message:", msg);
         if (msg.message === BtsUtils.MESSAGE_H2C_SCREENSHOT_READY) {
-            const screenshotId = Utils.uidString();
-            const bg = msg.backgroundColor;
-            suspendTabPhase2(msg.tabId, screenshotId, bg, msg.imageDataUri);
+            suspendTabPhase2(msg.tabId, Utils.uidString(), msg.backgroundColor, msg.imageDataUri);
         } else if (msg.message === BtsUtils.MESSAGE_LOG_TO_BG) {
             console.log.apply(null, msg.args);
         }
     });
+}
+
+function initScreenshotThread() {
+    function onePass() {
+        console.debug("taking periodic screenshot of an active tab");
+    }
+    setInterval(onePass, SCREENSHOT_THREAD_INTERVAL);
 }

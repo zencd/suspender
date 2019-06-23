@@ -117,7 +117,7 @@ export function suspendTabPhase2(tabId, screenshotId, backgroundColor, imageData
     }
 }
 
-function captureVisibleTab_Scale_Persist(tab, screenshotId) {
+export function captureVisibleTab_Scale_Persist(tab, screenshotId) {
     // XXX png takes 3+ MB on retina and 1+ sec time, so should not use it in that case
     const imageFormat = (window.devicePixelRatio > 1) ? "jpeg" : "png";
     const opts = {format: imageFormat, quality: JPEG_QUALITY};
