@@ -57,6 +57,7 @@ function initMessageListener() {
 function initScreenshotThread() {
     function onePass() {
         console.debug("taking periodic screenshot of an active tab");
+        //captureVisibleTab_Scale_Persist();
     }
     setInterval(onePass, SCREENSHOT_THREAD_INTERVAL);
 }

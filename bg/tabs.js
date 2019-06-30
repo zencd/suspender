@@ -111,8 +111,14 @@ function initTabListeners() {
         // Fired when a tab is updated.
         console.debug("onUpdated", tabId, changeInfo, tab);
         const myTab = tabs.getOrCreateTab(tabId);
+
+        const theUrl = tab.url;
+        if (myTab.suspended && Utils.isBase64Url(theUrl)) {
+            console.debug("deleting Url", theUrl);
+            chrome.history.deleteUrl({url: theUrl});
+        }
+
         myTab.updateFromChromeTab(tab);
-        // console.log("onUpdated: myTab after all", myTab);
     });
     chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
         // Fired when a tab is replaced with another tab due to prerendering or instant.

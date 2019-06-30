@@ -26,7 +26,7 @@
   },
   "permissions": [
     "tabs", "<all_urls>", "contextMenus", "webRequest", "webRequestBlocking", "webNavigation", "storage",
-    "unlimitedStorage"
+    "unlimitedStorage", "history"
   ],
   "web_accessible_resources": [
     "park/*"

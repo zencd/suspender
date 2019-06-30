@@ -160,6 +160,8 @@ function storeSuspendedTabAndRedirect(tab, screenshotId, backgroundColor) {
         });
         addRedirect(redirUrl, tab.id, htmlDataUri);
         console.log("redirecting to temp page at", (new Date() - extBg.startTime));
+        const myTab = getTabs().getOrCreateTab(tab.id);
+        myTab.suspended = true; // XXX do it before the redirect
         chrome.tabs.update(tab.id, {url: redirUrl});
     });
 }
