@@ -72,3 +72,27 @@ label.disabled {
         opacity: 0
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    html, body {
+        background-color: #292929;
+    }
+    .wrapper {
+        background-color: #222;
+        color: #aaa;
+    }
+    h1 {
+        color: #aaa;
+    }
+    input[type=checkbox], textarea, select {
+        background-color: #555;
+        color: #000;
+        accent-color: desired-color;
+    }
+    a {
+        color: lightskyblue;
+    }
+    .notify {
+        color: #aaa;
+    }
+}
